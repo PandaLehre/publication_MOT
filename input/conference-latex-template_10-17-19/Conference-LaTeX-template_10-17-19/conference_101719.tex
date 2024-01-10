@@ -11,25 +11,43 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{Multi-Object Tracking without dynamic models and hard association metrics*\\
-% {\footnotesize \textsuperscript{*}Note: Sub-titles are not captured in Xplore and
-% should not be used}
+\title{Conference Paper Title*\\
+{\footnotesize \textsuperscript{*}Note: Sub-titles are not captured in Xplore and
+should not be used}
 \thanks{Identify applicable funding agency here. If none, delete this.}
 }
 
-\author{\IEEEauthorblockN{1\textsuperscript{st} Matthias Drüppel}
+\author{\IEEEauthorblockN{1\textsuperscript{st} Given Name Surname}
 \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
 \textit{name of organization (of Aff.)}\\
 City, Country \\
 email address or ORCID}
 \and
-\IEEEauthorblockN{2\textsuperscript{nd} Christian Bader}
+\IEEEauthorblockN{2\textsuperscript{nd} Given Name Surname}
 \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
 \textit{name of organization (of Aff.)}\\
 City, Country \\
 email address or ORCID}
 \and
-\IEEEauthorblockN{3\textsuperscript{rd} Christian Alexander Holz}
+\IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
+\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+\textit{name of organization (of Aff.)}\\
+City, Country \\
+email address or ORCID}
+\and
+\IEEEauthorblockN{4\textsuperscript{th} Given Name Surname}
+\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+\textit{name of organization (of Aff.)}\\
+City, Country \\
+email address or ORCID}
+\and
+\IEEEauthorblockN{5\textsuperscript{th} Given Name Surname}
+\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+\textit{name of organization (of Aff.)}\\
+City, Country \\
+email address or ORCID}
+\and
+\IEEEauthorblockN{6\textsuperscript{th} Given Name Surname}
 \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
 \textit{name of organization (of Aff.)}\\
 City, Country \\
@@ -39,47 +57,18 @@ email address or ORCID}
 \maketitle
 
 \begin{abstract}
-In diesem Paper wird die Entwicklung innovativer Machine Learning (ML)-basierter Methoden zur Multi Object Tracking (MOT) im Kontext von Advanced Driver Assistance Systems (ADAS) untersucht.
-Angesichts der zunehmenden Komplexität und Anforderungen an präzise und effiziente Objektverfolgungssysteme in der Automobilindustrie, fokussiert sich diese Arbeit auf die Integration von ML-Techniken in etablierte Tracking-Verfahren.
-Zentrale Beiträge umfassen die Entwicklung und Evaluierung von drei spezialisierten neuronalen Netzwerken: Single Prediction Network (SPENT), Single Association Network (SANT), und Multi Association Network (MANTa).
-Diese Netzwerke zielen darauf ab, ML-Methoden mit einem traditionellen Kalman-Filter-Framework zu kombinieren und bieten einen innovativen Ansatz zur Bewältigung der MOT Herausforderungen.
-Die Vorteile eines Tracking-by-Detection (TbD) Frameworks, wie der modulare Aufbau, wurden mit den Vorteilen von Machine Learning (ML) Verfahren kombiniert.
-Die Ergebnisse zeigen ein modularen, robusten und wartbaren Tracker, welcher das Potenzial der ML-Integration in ADAS-Systeme unterstreicht. 
+This document is a model and instructions for \LaTeX.
+This and the IEEEtran.cls file define the components of your paper [title, text, heads, etc.]. *CRITICAL: Do Not Use Symbols, Special Characters, Footnotes, 
+or Math in Paper Title or Abstract.
 \end{abstract}
 
-%\begin{IEEEkeywords}
-%component, formatting, style, styling, insert
-%\end{IEEEkeywords}
+\begin{IEEEkeywords}
+component, formatting, style, styling, insert
+\end{IEEEkeywords}
 
 \section{Introduction}
-Die fortwährende Evolution von Advanced Driver Assistance Systems (ADAS) hat die Notwendigkeit einer präzisen und zuverlässigen Multi Object Tracking (MOT) ins Rampenlicht gerückt. In komplexen und dynamischen Umgebungen, wie sie im städtischen Verkehr vorkommen, ist es entscheidend, die Positionen und Bewegungen mehrerer Objekte gleichzeitig und genau zu erfassen. 
-Die Herausforderung hierbei liegt nicht nur in der Erfassung und Verfolgung einzelner Objekte, sondern auch in der Berücksichtigung ihrer Interaktionen und gegenseitigen Beeinflussungen, insbesondere bei Verdeckungen und plötzlichen Bewegungsänderungen.
-
-In dem häufig verwendeten Paradigma des Tracking-by-Detection (TbD) fusioniert ein Tracker erkannte Sensorobjekte (SO), um konsistente Objektspuren über die Zeit zu erstellen. 
-Eine Schlüsselherausforderung dabei ist, eingehende Messungen (Sensor Objekten (SO)) den entsprechenden bestehenden Spuren zuzuordnen bzw. neue Objektspuren zu Initialisieren. 
-Diese Datenassoziation wird in den meisten existierenden Methoden basiert auf Ähnlichkeitswerten durchgeführt, die zwischen den Messungen und den bestehenden Spuren berechnet werden.
-Diese Ähnlichkeitswerte können auf der letzten Erkennung beruhen oder aus historischen Erkennungen aggregiert werden.
-Für die Zustandsvorhersage haben sich bei TbD Ansätzen in vielen Anwendungen, Kalman-Filter und dessen Varianten als effektiv erwiesen.
-Diese stoßen jedoch bei komplexeren Szenarien, insbesondere bei nicht-linearen Bewegungsmustern und Interaktionen mehrerer Objekte, an ihre Grenzen.
-In dieser Arbeit stellen wir einen neuartigen MOT Ansatz vor, der Machine Learning (ML) nutzt, um diese Herausforderungen zu überwinden. 
-Wir konzentrieren uns insbesondere auf die Entwicklung und Implementierung von Neural Networks (NN), die eine präzisere und flexiblere Objektverfolgung datenbasiert ermöglichen können, ohne auf umständliche Heuristiken und Hyperparameter angewiesen zu sein.
-
-\begin{figure}[htbp]
-	\centerline{\includegraphics[width=1.0\linewidth]{MOT_Framework_Integration_SPENT_SANT.png}}
-	\caption{Schematische Darstellung der beiden integrierten Netzwerke SPENT und SANT in einen Tracking-by-Detection (TbD) Framework.}
-	\label{fig}
-\end{figure}
-
-Unser Hauptbeitrag liegt in der Entwicklung und Evaluierung des Single Prediction Network (SPENT), des Single Association Network (SANT) und des Multi Association Network (MANTa).
-Im Vergleich zum Kalman-Filter, ist SPENT in der Lage, Systemzustände einzelner Objekte vorherzusagen ohne den Bedarf eines vor der Laufzeit definierten Zustands- bzw. Beobachtungsmodells.
-SPENT bietet das Potenzial, insbesondere in Bezug auf die Anpassungsfähigkeit an verschiedene Szenarien und die Fähigkeit, Nichtlinearitäten effektiv zu handhaben.
-
-Viele herkömmliche Tracking-Systeme nutzen statische Methoden zur Datenassoziation, die oft auf einfachen Heuristiken oder festen Schwellenwerten basieren. SANT hingegen nutzt maschinelles Lernen, um diese Prozesse zu automatisieren und sich besser an unterschiedliche Szenarien anzupassen. Somit ersetzt SANT innerhalb des TbD MOT Verfahrens die Berechnung einer Abstandsmetrik sowie den Hungarian-Algorithm zur entsprechenden Zuordnung.
-
-Darüber hinaus diskutieren wir die Integration von SPENT und SANT in ein bestehendes Tracking-System und demonstrieren die Performance auf Basis mehrere Tests und Vergleiche mit etablierten Methoden.
-Diese Arbeit bietet somit wertvolle Einblicke und einen bedeutenden Fortschritt für die Entwicklung von Advanced Driver Assistance Systems (ADAS) und trägt zur Weiterentwicklung der Technologien für autonomes Fahren bei.
-
-
+This document is a model and instructions for \LaTeX.
+Please observe the conference page limits. 
 
 \section{Ease of Use}
 

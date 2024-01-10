@@ -1,0 +1,113 @@
+\documentclass[lettersize,journal]{IEEEtran}
+\usepackage{amsmath,amsfonts}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{array}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{cite}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+% updated with editorial comments 8/9/2021
+
+\begin{document}
+
+\title{Multi-Object Tracking without dynamic models and hard association metrics}
+
+\author{Christian Alexander Holz, Christian Bader, Matthias Drüppel
+% \IEEEmembership{Fellow, IEEE}, Masaki Owari
+\thanks{C. Holz is with Graduate School
+of Mathematics, Nagoya University, Nagoya,
+Japan}
+% \IEEEmembership{Fellow, IEEE}, Masaki Owari
+\thanks{C. Bader is with Graduate School
+of Mathematics, Nagoya University, Nagoya,
+Japan}
+% \IEEEmembership{Fellow, IEEE}, Masaki Owari
+\thanks{M. Drüppel is with the Center for Artificial Intelligence, DHBW Stuttgart,
+Stuttgart,
+Germany}
+}
+
+% The paper headers
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~tbd, No.~tbd, tbd~2024}%
+{Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
+
+% \IEEEpubid{0000--0000/00\$00.00~\copyright~2021 IEEE}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
+
+\maketitle
+
+\begin{abstract}
+In diesem Paper wird die Entwicklung innovativer Machine Learning (ML)-basierter Methoden zur Multi Object Tracking (MOT) im Kontext von Advanced Driver Assistance Systems (ADAS) untersucht.
+Angesichts der zunehmenden Komplexität und Anforderungen an präzise und effiziente Objektverfolgungssysteme in der Automobilindustrie, fokussiert sich diese Arbeit auf die Integration von ML-Techniken in etablierte Tracking-Verfahren.
+Zentrale Beiträge umfassen die Entwicklung und Evaluierung von drei spezialisierten neuronalen Netzwerken: Single Prediction Network (SPENT), Single Association Network (SANT), und Multi Association Network (MANTa).
+Diese Netzwerke zielen darauf ab, ML-Methoden mit einem traditionellen Kalman-Filter-Framework zu kombinieren und bieten einen innovativen Ansatz zur Bewältigung der MOT Herausforderungen.
+Die Vorteile eines Tracking-by-Detection (TbD) Frameworks, wie der modulare Aufbau, wurden mit den Vorteilen von Machine Learning (ML) Verfahren kombiniert.
+Die Ergebnisse zeigen ein modularen, robusten und wartbaren Tracker, welcher das Potenzial der ML-Integration in ADAS-Systeme unterstreicht.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Article submission, IEEE, IEEEtran, journal, \LaTeX, paper, template, typesetting.
+\end{IEEEkeywords}
+
+\section{Introduction}
+\IEEEPARstart{T}{his} \cite{Moore1965} Die fortwährende Evolution von Advanced Driver Assistance Systems (ADAS) hat die Notwendigkeit einer präzisen und zuverlässigen Multi Object Tracking (MOT) ins Rampenlicht gerückt. In komplexen und dynamischen Umgebungen, wie sie im städtischen Verkehr vorkommen, ist es entscheidend, die Positionen und Bewegungen mehrerer Objekte gleichzeitig und genau zu erfassen.
+Die Herausforderung hierbei liegt nicht nur in der Erfassung und Verfolgung einzelner Objekte, sondern auch in der Berücksichtigung ihrer Interaktionen und gegenseitigen Beeinflussungen, insbesondere bei Verdeckungen und plötzlichen Bewegungsänderungen.
+
+In dem häufig verwendeten Paradigma des Tracking-by-Detection (TbD) fusioniert ein Tracker erkannte Sensorobjekte (SO), um konsistente Objektspuren über die Zeit zu erstellen.
+Eine Schlüsselherausforderung dabei ist, eingehende Messungen (Sensor Objekten (SO)) den entsprechenden bestehenden Spuren zuzuordnen bzw. neue Objektspuren zu Initialisieren.
+Diese Datenassoziation wird in den meisten existierenden Methoden basiert auf Ähnlichkeitswerten durchgeführt, die zwischen den Messungen und den bestehenden Spuren berechnet werden.
+Diese Ähnlichkeitswerte können auf der letzten Erkennung beruhen oder aus historischen Erkennungen aggregiert werden.
+Für die Zustandsvorhersage haben sich bei TbD Ansätzen in vielen Anwendungen, Kalman-Filter und dessen Varianten als effektiv erwiesen.
+Diese stoßen jedoch bei komplexeren Szenarien, insbesondere bei nicht-linearen Bewegungsmustern und Interaktionen mehrerer Objekte, an ihre Grenzen.
+In dieser Arbeit stellen wir einen neuartigen MOT Ansatz vor, der Machine Learning (ML) nutzt, um diese Herausforderungen zu überwinden.
+Wir konzentrieren uns insbesondere auf die Entwicklung und Implementierung von Neural Networks (NN), die eine präzisere und flexiblere Objektverfolgung datenbasiert ermöglichen können, ohne auf umständliche Heuristiken und Hyperparameter angewiesen zu sein.
+
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=1.0\linewidth]{MOT_Framework_Integration_SPENT_SANT.png}}
+	\caption{Schematische Darstellung der beiden integrierten Netzwerke SPENT und SANT in einen Tracking-by-Detection (TbD) Framework.}
+	\label{fig}
+\end{figure}
+
+Unser Hauptbeitrag liegt in der Entwicklung und Evaluierung des Single Prediction Network (SPENT), des Single Association Network (SANT) und des Multi Association Network (MANTa).
+Im Vergleich zum Kalman-Filter, ist SPENT in der Lage, Systemzustände einzelner Objekte vorherzusagen ohne den Bedarf eines vor der Laufzeit definierten Zustands- bzw. Beobachtungsmodells.
+SPENT bietet das Potenzial, insbesondere in Bezug auf die Anpassungsfähigkeit an verschiedene Szenarien und die Fähigkeit, Nichtlinearitäten effektiv zu handhaben.
+
+Viele herkömmliche Tracking-Systeme nutzen statische Methoden zur Datenassoziation, die oft auf einfachen Heuristiken oder festen Schwellenwerten basieren. SANT hingegen nutzt maschinelles Lernen, um diese Prozesse zu automatisieren und sich besser an unterschiedliche Szenarien anzupassen. Somit ersetzt SANT innerhalb des TbD MOT Verfahrens die Berechnung einer Abstandsmetrik sowie den Hungarian-Algorithm zur entsprechenden Zuordnung.
+
+Darüber hinaus diskutieren wir die Integration von SPENT und SANT in ein bestehendes Tracking-System und demonstrieren die Performance auf Basis mehrere Tests und Vergleiche mit etablierten Methoden.
+Diese Arbeit bietet somit wertvolle Einblicke und einen bedeutenden Fortschritt für die Entwicklung von Advanced Driver Assistance Systems (ADAS) und trägt zur Weiterentwicklung der Technologien für autonomes Fahren bei.
+
+\section{Related work}
+
+
+
+\section{Conclusion}
+The conclusion goes here.
+
+
+\section*{Acknowledgments}
+This should be a simple paragraph before the References to thank those individuals and institutions who have supported your work on this article.
+
+
+
+{\appendix[Proof of the Zonklar Equations]
+\section*{Proof of the First Zonklar Equation}
+Appendix goes here.
+\section*{Proof of the Second Zonklar Equation}
+And here.
+}
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv, ./lit.bib}
+
+\vfill
+
+\end{document}
+
+

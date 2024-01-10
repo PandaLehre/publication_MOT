@@ -1,12 +1,12 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2023.3.30)  4 JAN 2024 17:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2023.2.9)  10 JAN 2024 15:52
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
-**./IEEE_MOT_ML.tex
-(IEEE_MOT_ML.tex
+**"c:/Users/druep/OneDrive - Duale Hochschule Baden-Württemberg Stuttgart (1)/DHBW/Forschung/Paper_CH/publication_MOT/IEEE_MOT_ML.tex"
+(c:/Users/druep/OneDrive - Duale Hochschule Baden-Württemberg Stuttgart (1)/DHBW/Forschung/Paper_CH/publication_MOT/IEEE_MOT_ML.tex
 LaTeX2e <2022-06-01> patch level 5
-L3 programming layer <2022-09-28>
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/ieeetran\IEEEtran.cls
+L3 programming layer <2022-09-28> (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/ieeetran\IEEEtran.cls
 Document Class: IEEEtran 2015/08/26 V1.8b by Michael Shell
 -- See the "IEEEtran_HOWTO" manual for usage information.
 -- http://www.michaelshell.org/tex/ieeetran/
@@ -17,9 +17,8 @@ Document Class: IEEEtran 2015/08/26 V1.8b by Michael Shell
 \@IEEEtrantmpcountB=\count186
 \@IEEEtrantmpcountC=\count187
 \@IEEEtrantmptoksA=\toks16
-LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 5
-03.
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1ptm.fd
+LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 503.
+(C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 -- Using 8.5in x 11in (letter) paper.
@@ -33,52 +32,42 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
-
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
-
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
-
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <9> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
-
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
-
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <11> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <11> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
-
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
-
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <17> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
-
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <20> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <20> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
-
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <24> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
-
 \IEEEquantizedlength=\dimen145
 \IEEEquantizedlengthdiff=\dimen146
 \IEEEquantizedtextheightdiff=\dimen147
@@ -115,29 +104,25 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <24> not available
 \@IEEEtranrubishbin=\box52
 )
 ** ATTENTION: Overriding command lockouts (line 2).
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/cite\cite.sty
+(C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/cite\cite.sty
 LaTeX Info: Redefining \cite on input line 302.
 LaTeX Info: Redefining \nocite on input line 332.
 Package: cite 2015/02/27  v 5.5
-)
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
+) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
 Package: amsmath 2022/04/08 v2.17n AMS math features
 \@mathmargin=\skip50
 
 For additional information on amsmath, use the `?' option.
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
+(C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
 Package: amstext 2021/08/26 v2.01 AMS text
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
+ (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks17
 \ex@=\dimen162
-))
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
+)) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen163
-)
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
+) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
 \inf@bad=\count266
@@ -187,25 +172,20 @@ LaTeX Info: Redefining \Relbar on input line 971.
 \mathdisplay@stack=\toks21
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
-)
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssymb.sty
+) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty
+ (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-))
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithmic
-.sty
+)) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithmic.sty
 Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
- (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
+ (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
 Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
-)
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks22
 )
@@ -215,42 +195,32 @@ Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \c@ALC@depth=\count281
 \ALC@tlm=\skip53
 \algorithmicindent=\skip54
-)
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+ (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
 Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+ (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
 Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
-)
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.
-cfg
+) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 107.
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.de
-f
+ (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.def
 File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
 \stockwidth=\dimen171
 \stockheight=\dimen172
 ))
 \Gin@req@height=\dimen173
 \Gin@req@width=\dimen174
-) (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty
+) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty
 Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
-) (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
+) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
 Package: xcolor 2022/06/12 v2.14 LaTeX color extensions (UK)
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
+ (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 227.
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx
-)
+ (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx)
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1353.
 Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1357.
 Package xcolor Info: Model `RGB' extended on input line 1369.
@@ -260,17 +230,11 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1373.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1374.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1375.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1376.
-)
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pd
-ftex.def
+) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-09-28 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count282
 \l__pdf_internal_box=\box55
-) (IEEE_MOT_ML.aux
-
-LaTeX Warning: Label `fig' multiply defined.
-
-)
+) (IEEE_MOT_ML.aux)
 \openout1 = `IEEE_MOT_ML.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
@@ -289,9 +253,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
 
 -- Lines per column: 56 (exact).
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.m
-kii
+(C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count283
 \scratchdimen=\dimen175
@@ -304,33 +266,25 @@ kii
 \MPnumerator=\count287
 \makeMPintoPDFobject=\count288
 \everyMPtoPDFconversion=\toks24
-)
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-
-base.sty
+) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
-Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
-85.
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.
-cfg
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
+ (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
 LaTeX Font Info:    Calculating math sizes for size <11> on input line 39.
 LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
-
- (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+ (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
-
- (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+ (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 <MOT_Framework_Integration_SPENT_SANT.png, id=1, 535.7616pt x 280.4076pt>
 File: MOT_Framework_Integration_SPENT_SANT.png Graphic file (type png)
 <use MOT_Framework_Integration_SPENT_SANT.png>
-Package pdftex.def Info: MOT_Framework_Integration_SPENT_SANT.png  used on inpu
-t line 68.
+Package pdftex.def Info: MOT_Framework_Integration_SPENT_SANT.png  used on input line 68.
 (pdftex.def)             Requested size: 252.0pt x 131.89427pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 73--76
@@ -352,31 +306,10 @@ Underfull \hbox (badness 1590) in paragraph at lines 77--78
 []\OT1/ptm/m/n/10 Viele herk[]ommliche Tracking-Systeme nutzen statis-che
  []
 
-[1{C:/Users/CHHOLZ/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
+[1{C:/Users/druep/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
 
 
  <./MOT_Framework_Integration_SPENT_SANT.png>]
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 1
-38.
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-[2]
-<fig1.png, id=20, 82.1469pt x 71.5473pt>
-File: fig1.png Graphic file (type png)
-<use fig1.png>
-Package pdftex.def Info: fig1.png  used on input line 243.
-(pdftex.def)             Requested size: 82.14668pt x 71.5471pt.
-LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 2
-54.
- (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd
-File: omsptm.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 254.
-
-[3 <./fig1.png (PNG copy)>]
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -388,37 +321,21 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[4
+[2
 
-] (IEEE_MOT_ML.aux)
-
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+] (IEEE_MOT_ML.aux) ) 
 Here is how much of TeX's memory you used:
- 4315 strings out of 475385
- 68778 string characters out of 2776435
- 425344 words of memory out of 3000000
- 25646 multiletter control sequences out of 15000+600000
- 515608 words of font info for 119 fonts, out of 8000000 for 9000
+ 4215 strings out of 475385
+ 67981 string characters out of 2776908
+ 422238 words of memory out of 3000000
+ 25562 multiletter control sequences out of 15000+600000
+ 503958 words of font info for 93 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,11n,62p,588b,333s stack positions out of 10000i,1000n,20000p,200000b,80000s
-{C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}<C
-:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmm
-i10.pfb><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmr10.pfb><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/amsfonts/cm/cmr6.pfb><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/amsfonts/cm/cmr7.pfb><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/CHHOLZ/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/CHHOLZ/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/CHHOLZ/AppData
-/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/CHHOLZ/AppDat
-a/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/CHHOLZ/AppD
-ata/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/CHHOLZ/App
-Data/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on IEEE_MOT_ML.pdf (4 pages, 179791 bytes).
+ 55i,11n,62p,594b,333s stack positions out of 10000i,1000n,20000p,200000b,80000s
+{C:/Users/druep/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}<C:/Users/druep/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/druep/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/druep/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/druep/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
+Output written on IEEE_MOT_ML.pdf (2 pages, 93657 bytes).
 PDF statistics:
- 75 PDF objects out of 1000 (max. 8388607)
+ 33 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
