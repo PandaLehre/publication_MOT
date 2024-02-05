@@ -18,15 +18,11 @@
 \title{Multi-Object Tracking without dynamic models and hard association metrics}
 
 \author{Christian Alexander Holz, Christian Bader, Matthias Drüppel
-% \IEEEmembership{Fellow, IEEE}, Masaki Owari
-\thanks{C. Holz is with Graduate School
-of Mathematics, Nagoya University, Nagoya,
-Japan}
+\thanks{C. Holz is with Master of Engineering, Duale Hochschule Baden-Württemberg (DHBW), Stuttgart, Germany}
 % \IEEEmembership{Fellow, IEEE}, Masaki Owari
 \thanks{C. Bader is with Graduate School
 of Mathematics, Nagoya University, Nagoya,
 Japan}
-% \IEEEmembership{Fellow, IEEE}, Masaki Owari
 \thanks{M. Drüppel is with the Center for Artificial Intelligence, DHBW Stuttgart,
 Stuttgart,
 Germany}
@@ -48,7 +44,7 @@ Angesichts der zunehmenden Komplexität und Anforderungen an präzise und effizi
 Zentrale Beiträge umfassen die Entwicklung und Evaluierung von drei spezialisierten neuronalen Netzwerken: Single Prediction Network (SPENT), Single Association Network (SANT), und Multi Association Network (MANTa).
 Diese Netzwerke zielen darauf ab, ML-Methoden mit einem traditionellen Kalman-Filter-Framework zu kombinieren und bieten einen innovativen Ansatz zur Bewältigung der MOT Herausforderungen.
 Die Vorteile eines Tracking-by-Detection (TbD) Frameworks, wie der modulare Aufbau, wurden mit den Vorteilen von Machine Learning (ML) Verfahren kombiniert.
-Die Ergebnisse zeigen ein modularen, robusten und wartbaren Tracker, welcher das Potenzial der ML-Integration in ADAS-Systeme unterstreicht.
+Die Ergebnisse zeigen ein modularen, robusten und wartbaren Tracker, welcher das Potenzial der ML-Integration in ADAS unterstreicht.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -84,7 +80,16 @@ Darüber hinaus diskutieren wir die Integration von SPENT und SANT in ein besteh
 Diese Arbeit bietet somit wertvolle Einblicke und einen bedeutenden Fortschritt für die Entwicklung von Advanced Driver Assistance Systems (ADAS) und trägt zur Weiterentwicklung der Technologien für autonomes Fahren bei.
 
 \section{Related work}
+\paragraph{Multi-Object Tracking}
+Die Verfolgung mehrerer Objekte ist eine zentrale Herausforderung in der Computer Vision. Die meisten bestehenden Ansätze zur Verfolgung mehrerer Objekte, einschließlich des hier vorgestellten, basieren auf dem Ansatz der "Tracking-by-Detection (TbD)".
+Offline-Methoden [xx, ...] verarbeiten dabei das gesamte Videomaterial auf einmal in einem Stapelverarbeitungsprozess. Diese Methoden sind jedoch für die meisten Echtzeit-Anwendungen, wie beispielsweise ADAS, ungeeignet. In solchen Anwendungen ist es entscheidend, den Zustand von Objekten unmittelbar nach neuen Erkennungen vorherzusagen. Daher setzen die meisten neueren Ansätze zur Verfolgung mehrerer Objekte auf Online-Methoden, die nicht auf zukünftige Bildinformationen angewiesen sind [xx, ...].
+Online-Methoden verwenden verschiedene Merkmale, um die Ähnlichkeit zwischen den erkannten Objekten und den existierenden Spuren zu schätzen. Dies kann auf Grundlage von vorhergesagten Positionen oder Ähnlichkeiten im Erscheinungsbild geschehen [xx, ...]. 
+Während einige Ansätze [xx, ...] nur die jüngste Erkennung, die einer Spur entspricht, berücksichtigen, integrieren andere Methoden zeitliche Informationen in eine Spurhistorie.  Verfahren nutzen beispielsweise rekurrente neuronale Netze, um zeitliche Informationen zu aggregieren [xx, ...]. 
+Wie von Mertz et al. [xx] wurde auch in dieser Arbeit das Ziel verfolgt einen datenbasierten Ansatz zu entwickeln, welcher lernen kann, das kombinatorische Non Deterministic Polynomial Time (NP) hard Optimierungsproblem der Datenassoziation vollständig zu lösen.
+Mertz et al. [xx] nutzen als Inputdaten für das entwickelte DA Netzwerk eine Distanzmatrix auf Basis des euklidischen Abstandsmaßes, und ersetzt somit einen Assoziationsalgorithmus wie z.B. den Hungarian Algorithm (HA). Es ist anzunehmen, dass bei der Erstellung der Groundtruth (GT) Trainingsdaten (Distanzmatrizen), sowie bei der Evaluierung, das euklidische Abstandsmaß als Basisberechnung verwendet wurde. Dies ist jedoch nicht explizit aufgeführt. Es lässt sich somit die Behauptung aufstellen, dass durch diesen Berechnungsschritt dem Netzwerk die Möglichkeit genommen wird, einer anderen Assoziationslogik zu folgen bzw. diese datenbasiert zu lernen.
 
+Im Rahmen dieser Arbeit wurde daher die These aufgestellt, dass durch ein nicht definiertes Abstandsmaß ein Gated Recurrent Unit (GRU) basiertes Assoziationsnetzwerk die Zuordnung von der zeitlichen Speicherkomponente und somit von der Historie verstärkt gebildet werden
+kann. In dieser Arbeit wurde daher das Ziel verfolgt ein Assoziationsnetzwerk zu entwickeln, welches die Zuordnung eines oder mehrerer SO zu einer bestehenden Anzahl an Tracks ohne definiertes Abstandsmaß lösen soll.
 
 
 \section{Conclusion}

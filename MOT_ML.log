@@ -1,12 +1,12 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2023.2.9)  10 JAN 2024 16:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2023.3.30)  5 FEB 2024 17:29
 entering extended mode
  restricted \write18 enabled.
- file:line:error style messages enabled.
  %&-line parsing enabled.
-**"c:/Users/druep/OneDrive - Duale Hochschule Baden-Württemberg Stuttgart (1)/DHBW/Forschung/Paper_CH/publication_MOT/MOT_ML.tex"
-(c:/Users/druep/OneDrive - Duale Hochschule Baden-Württemberg Stuttgart (1)/DHBW/Forschung/Paper_CH/publication_MOT/MOT_ML.tex
+**./MOT_ML.tex
+(MOT_ML.tex
 LaTeX2e <2022-06-01> patch level 5
-L3 programming layer <2022-09-28> (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/ieeetran\IEEEtran.cls
+L3 programming layer <2022-09-28>
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/ieeetran\IEEEtran.cls
 Document Class: IEEEtran 2015/08/26 V1.8b by Michael Shell
 -- See the "IEEEtran_HOWTO" manual for usage information.
 -- http://www.michaelshell.org/tex/ieeetran/
@@ -17,8 +17,9 @@ Document Class: IEEEtran 2015/08/26 V1.8b by Michael Shell
 \@IEEEtrantmpcountB=\count186
 \@IEEEtrantmpcountC=\count187
 \@IEEEtrantmptoksA=\toks16
-LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 503.
-(C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1ptm.fd
+LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 5
+03.
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 -- Using 8.5in x 11in (letter) paper.
@@ -32,42 +33,52 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <9> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <11> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <11> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <17> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <20> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <20> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <24> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+
 \IEEEquantizedlength=\dimen145
 \IEEEquantizedlengthdiff=\dimen146
 \IEEEquantizedtextheightdiff=\dimen147
@@ -102,21 +113,24 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <24> not available
 \IEEEPARstartletwidth=\dimen161
 \c@IEEEbiography=\count199
 \@IEEEtranrubishbin=\box52
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
+) (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
 Package: amsmath 2022/04/08 v2.17n AMS math features
 \@mathmargin=\skip50
 
 For additional information on amsmath, use the `?' option.
-(C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
 Package: amstext 2021/08/26 v2.01 AMS text
- (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
+
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks17
 \ex@=\dimen162
-)) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
+))
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen163
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
 \inf@bad=\count266
@@ -166,18 +180,22 @@ LaTeX Info: Redefining \Relbar on input line 971.
 \mathdisplay@stack=\toks21
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithmic.sty
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithmic
+.sty
 Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
- (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
+ (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
 Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks22
 )
@@ -187,9 +205,12 @@ Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \c@ALC@depth=\count281
 \ALC@tlm=\skip53
 \algorithmicindent=\skip54
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithm.sty
-Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating environment
- (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithm.s
+ty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+ (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count282
 \float@exts=\toks23
@@ -199,7 +220,8 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 )
 \@float@every@algorithm=\toks25
 \c@algorithm=\count283
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
 Package: array 2022/03/10 v2.5f Tabular extension package (FMi)
 \col@sep=\dimen171
 \ar@mcellbox=\box57
@@ -208,10 +230,12 @@ Package: array 2022/03/10 v2.5f Tabular extension package (FMi)
 \extratabsurround=\skip55
 \backup@length=\skip56
 \ar@cellbox=\box58
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/subfig\subfig.sty
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/subfig\subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
- (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
-Package: caption3 2022/03/17 v2.3b caption3 kernel (AR)
+
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
 \caption@tempdima=\dimen173
 \captionmargin=\dimen174
 \caption@leftmargin=\dimen175
@@ -222,7 +246,17 @@ Package: caption3 2022/03/17 v2.3b caption3 kernel (AR)
 \caption@hangindent=\dimen180
 Package caption Info: Unknown document class (or package),
 (caption)             standard defaults will be used.
-Package caption Info: \@makecaption = \long macro:#1#2->\ifx \@captype \@IEEEtablestring \footnotesize \bgroup \par \centering \@IEEEtabletopskipstrut {\normalfont \footnotesize #1}\\{\normalfont \footnotesize \scshape #2}\par \addvspace {0.5\baselineskip }\egroup \@IEEEtablecaptionsepspace \else \@IEEEfigurecaptionsepspace \setbox \@tempboxa \hbox {\normalfont \footnotesize {#1.}\nobreakspace \nobreakspace #2}\ifdim \wd \@tempboxa >\hsize \setbox \@tempboxa \hbox {\normalfont \footnotesize {#1.}\nobreakspace \nobreakspace }\parbox [t]{\hsize }{\normalfont \footnotesize \noindent \unhbox \@tempboxa #2}\else \ifCLASSOPTIONconference \hbox to\hsize {\normalfont \footnotesize \hfil \box \@tempboxa \hfil }\else \hbox to\hsize {\normalfont \footnotesize \box \@tempboxa \hfil }\fi \fi \fi  on input line 1176.
+Package caption Info: \@makecaption = \long macro:#1#2->\ifx \@captype \@IEEEta
+blestring \footnotesize \bgroup \par \centering \@IEEEtabletopskipstrut {\norma
+lfont \footnotesize #1}\\{\normalfont \footnotesize \scshape #2}\par \addvspace
+ {0.5\baselineskip }\egroup \@IEEEtablecaptionsepspace \else \@IEEEfigurecaptio
+nsepspace \setbox \@tempboxa \hbox {\normalfont \footnotesize {#1.}\nobreakspac
+e \nobreakspace #2}\ifdim \wd \@tempboxa >\hsize \setbox \@tempboxa \hbox {\nor
+malfont \footnotesize {#1.}\nobreakspace \nobreakspace }\parbox [t]{\hsize }{\n
+ormalfont \footnotesize \noindent \unhbox \@tempboxa #2}\else \ifCLASSOPTIONcon
+ference \hbox to\hsize {\normalfont \footnotesize \hfil \box \@tempboxa \hfil }
+\else \hbox to\hsize {\normalfont \footnotesize \box \@tempboxa \hfil }\fi \fi 
+\fi  on input line 1175.
 )
 \c@KVtest=\count284
 \sf@farskip=\skip57
@@ -237,42 +271,55 @@ Package caption Info: \@makecaption = \long macro:#1#2->\ifx \@captype \@IEEEtab
 \c@lotdepth=\count290
 \sf@top=\skip60
 \sf@bottom=\skip61
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty
+) (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty
 Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/sttools\stfloats.sty
-Package: stfloats 2017/03/27 v3.3 Improve float mechanism and baselineskip settings
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/sttools\stfloats.sty
+Package: stfloats 2017/03/27 v3.3 Improve float mechanism and baselineskip sett
+ings
 \@dblbotnum=\count291
 \c@dblbotnumber=\count292
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/tools\verbatim.sty
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/tools\verbatim.sty
 Package: verbatim 2020-07-07 v1.5u LaTeX2e package for verbatim enhancements
 \every@verbatim=\toks27
 \verbatim@line=\toks28
 \verbatim@in@stream=\read2
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
- (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
 Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
- (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
 Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.cfg
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.
+cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 107.
- (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.def
+
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.de
+f
 File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
 \stockwidth=\dimen182
 \stockheight=\dimen183
 ))
 \Gin@req@height=\dimen184
 \Gin@req@width=\dimen185
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/cite\cite.sty
+) (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/cite\cite.sty
 LaTeX Info: Redefining \cite on input line 302.
 LaTeX Info: Redefining \nocite on input line 332.
 Package: cite 2015/02/27  v 5.5
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdftex.def
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pd
+ftex.def
 File: l3backend-pdftex.def 2022-09-28 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count293
 \l__pdf_internal_box=\box59
@@ -303,7 +350,9 @@ LaTeX Font Info:    ... okay on input line 16.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: End \AtBeginDocument code.
-(C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
+
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.m
+kii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count294
 \scratchdimen=\dimen186
@@ -316,75 +365,113 @@ Package caption Info: End \AtBeginDocument code.
 \MPnumerator=\count298
 \makeMPintoPDFobject=\count299
 \everyMPtoPDFconversion=\toks30
-) (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-base.sty
+)
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-
+base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
-Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
- (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.
+cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Font Info:    Trying to load font information for U+msa on input line 55.
- (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+Underfull \hbox (badness 1454) in paragraph at lines 39--39
+[][][]\OT1/ptm/m/n/8 C. Holz is with Mas-ter of En-gi-neer-ing, Duale Hochschul
+e Baden-
+ []
+
+LaTeX Font Info:    Trying to load font information for U+msa on input line 51.
+
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 55.
- (C:\Users\druep\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+LaTeX Font Info:    Trying to load font information for U+msb on input line 51.
+
+
+(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 10000) in paragraph at lines 59--61
+Underfull \hbox (badness 10000) in paragraph at lines 55--57
 \OT1/ptm/m/n/10 Driver As-sis-tance Sys-tems (ADAS) hat die
  []
 
 
-Underfull \hbox (badness 2547) in paragraph at lines 59--61
+Underfull \hbox (badness 2547) in paragraph at lines 55--57
 \OT1/ptm/m/n/10 und dy-namis-chen Umge-bun-gen, wie sie im st[]adtischen
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 59--61
+Underfull \hbox (badness 10000) in paragraph at lines 55--57
 \OT1/ptm/m/n/10 Bee-in-flus-sun-gen, ins-beson-dere bei Verdeck-un-gen und
  []
 
 <MOT_Framework_Integration_SPENT_SANT.png, id=1, 535.7616pt x 280.4076pt>
 File: MOT_Framework_Integration_SPENT_SANT.png Graphic file (type png)
 <use MOT_Framework_Integration_SPENT_SANT.png>
-Package pdftex.def Info: MOT_Framework_Integration_SPENT_SANT.png  used on input line 72.
+Package pdftex.def Info: MOT_Framework_Integration_SPENT_SANT.png  used on inpu
+t line 68.
 (pdftex.def)             Requested size: 252.0pt x 131.89427pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 77--80
+Underfull \hbox (badness 10000) in paragraph at lines 73--76
 []\OT1/ptm/m/n/10 Unser Haupt-beitrag liegt in der En-twick-lung und
  []
 
 
-Underfull \hbox (badness 7238) in paragraph at lines 77--80
+Underfull \hbox (badness 7238) in paragraph at lines 73--76
 \OT1/ptm/m/n/10 Evaluierung des Sin-gle Pre-dic-tion Net-work (SPENT),
  []
 
 
-Underfull \hbox (badness 2376) in paragraph at lines 77--80
+Underfull \hbox (badness 2376) in paragraph at lines 73--76
 \OT1/ptm/m/n/10 Ob-jekte vorherzusagen ohne den Be-darf eines vor der
  []
 
 
-Underfull \hbox (badness 1590) in paragraph at lines 81--82
+Underfull \hbox (badness 1590) in paragraph at lines 77--78
 []\OT1/ptm/m/n/10 Viele herk[]ommliche Tracking-Systeme nutzen statis-che
  []
 
-[1{C:/Users/druep/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
+[1{C:/Users/CHHOLZ/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
 
 
- <./MOT_Framework_Integration_SPENT_SANT.png>] (MOT_ML.bbl) [2
+ <./MOT_Framework_Integration_SPENT_SANT.png>]
+Underfull \hbox (badness 2384) in paragraph at lines 84--90
+ \OT1/ptm/m/it/10 a) Multi-Object Track-ing: [][] \OT1/ptm/m/n/10 Die Ver-fol-g
+ung mehrerer
+ []
 
-] (MOT_ML.aux) ) 
+
+Underfull \hbox (badness 1694) in paragraph at lines 84--90
+\OT1/ptm/m/n/10 Ob-jekte ist eine zen-trale Her-aus-forderung in der Com-
+ []
+
+
+Underfull \hbox (badness 3219) in paragraph at lines 84--90
+\OT1/ptm/m/n/10 gesamte Video-ma-te-rial auf ein-mal in einem Stapelver-
+ []
+
+
+Underfull \hbox (badness 2495) in paragraph at lines 84--90
+\OT1/ptm/m/n/10 ar-beitungsprozess. Diese Meth-o-den sind je-doch f[]ur die
+ []
+
+(MOT_ML.bbl) [2] (MOT_ML.aux) ) 
 Here is how much of TeX's memory you used:
- 4671 strings out of 475385
- 83989 string characters out of 2776908
- 432508 words of memory out of 3000000
- 25990 multiletter control sequences out of 15000+600000
- 508946 words of font info for 101 fonts, out of 8000000 for 9000
+ 4674 strings out of 475385
+ 83355 string characters out of 2776435
+ 432768 words of memory out of 3000000
+ 25994 multiletter control sequences out of 15000+600000
+ 510082 words of font info for 102 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 55i,9n,63p,589b,228s stack positions out of 10000i,1000n,20000p,200000b,80000s
-{C:/Users/druep/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}<C:/Users/druep/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/druep/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/druep/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/druep/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on MOT_ML.pdf (2 pages, 92920 bytes).
+ 55i,9n,63p,687b,228s stack positions out of 10000i,1000n,20000p,200000b,80000s
+{C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/f
+onts/enc/dvips/base/8r.enc}<C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts
+/type1/urw/times/utmb8a.pfb><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/font
+s/type1/urw/times/utmbi8a.pfb><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fo
+nts/type1/urw/times/utmr8a.pfb><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/f
+onts/type1/urw/times/utmri8a.pfb>
+Output written on MOT_ML.pdf (2 pages, 98604 bytes).
 PDF statistics:
  33 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
