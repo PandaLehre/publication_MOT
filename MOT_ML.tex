@@ -92,8 +92,28 @@ Im Rahmen dieser Arbeit wurde daher die These aufgestellt, dass durch ein nicht 
 kann. In dieser Arbeit wurde daher das Ziel verfolgt ein Assoziationsnetzwerk zu entwickeln, welches die Zuordnung eines oder mehrerer SO zu einer bestehenden Anzahl an Tracks ohne definiertes Abstandsmaß lösen soll.
 
 
+\section{Tracking with Prediction and Association Networks}
+Wir wenden das Paradigma des Tracking-by-Detection (TbD) an, bei dem ein Tracker die Objekterkennungen fusioniert, um Objektspuren zu erzeugen, die über die Zeit konsistent sind.
+Ba-Tuong Vo et al. [xx] stellt beispielsweise einen Framework für die Untersuchung von Tracking Ansätzen zur Verfügung, welche dem TbD Paradigma folgen.
+Wir schlagen einen Tracker vor mit jeweils einem Long Short-Term Memory (LSTM) Netzwerk für die Prädiktion und Assoziation der Sensorobjekte (SO) zu den bestehenden Tracks.
+
+Das vorgeschlagene Sinlge Prediction Network (SPENT) verarbeitet die Erkennungen in einem zeitlichen Fenster, das aus Objektmessungen, wie Position, Objektdimension, relativer Geschwindigkeit und Objekttyp besteht und sagt einen festdimensionalen Zustandsvektor für jede Erkennung voraus. Die ausgegebenen Merkmale dienen dem Single Association Network (SANT) als Input, um Zieltrajektorien zu bilden. Siehe Fig. 1 für einen Überblick über unseren Ansatz. Im weiteren Verlauf dieses Abschnitts werden wir die beiden vorgeschlagenen Module im Detail erläutern.
+
+\subsection{Single Prediction Network (SPENT)}
+Die meisten bestehenden Verfolgungsmethoden verknüpfen eingehende Erkennungen paarweise mit Objektzuständen, die durch ein einfaches Bewegungsmodell, z. B. ein Modell mit konstanter Geschwindigkeit, unter Verwendung eines Kalman-Filters vorhergesagt werden. Neuere Arbeiten haben jedoch gezeigt, dass die Aggregation zeitlicher Informationen sowie von Kontextinformationen die Verfolgung mehrerer Objekte verbessern kann, indem zusätzlich zu den paarweisen Ähnlichkeiten zwischen den Erkennungen Informationen höherer Ordnung genutzt werden [xx]. 
+Unserer Ansatz sieht es vor, auf die Bewegungsmodelle zu verzichten und stattdessen die Hiddenstates der LSTM Schicht als objektspezifisches Parameterset zu nutzen.
+Die initialen Werte der Hiddenstates der LSTM Schicht werden im Tracking anhand der erhaltenen Messdaten aktualisiert. 
+Durch diese Aktualisierung erfolgt somit eine interne Korrektur über den Sequenzverlauf.
+
+...
+
+\section{Experimental Evaluation}
+... KITTI-Car Benchmark.
+
+
 \section{Conclusion}
 The conclusion goes here.
+
 
 
 \section*{Acknowledgments}
