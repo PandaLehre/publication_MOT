@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2023.3.30)  6 FEB 2024 13:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2023.3.30)  6 FEB 2024 17:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -376,106 +376,103 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Underfull \hbox (badness 1454) in paragraph at lines 39--39
-[][][]\OT1/ptm/m/n/8 C. Holz is with Mas-ter of En-gi-neer-ing, Duale Hochschul
-e Baden-
- []
+LaTeX Font Info:    Trying to load font information for U+msa on input line 62.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 51.
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+ (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 51.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 62.
 
-
-(C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+ (C:\Users\CHHOLZ\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 10000) in paragraph at lines 55--57
-\OT1/ptm/m/n/10 Driver As-sis-tance Sys-tems (ADAS) hat die
- []
+
+LaTeX Warning: Citation `Bewley.2016' on page 1 undefined on input line 70.
 
 
-Underfull \hbox (badness 2547) in paragraph at lines 55--57
-\OT1/ptm/m/n/10 und dy-namis-chen Umge-bun-gen, wie sie im st[]adtischen
- []
+LaTeX Warning: Citation `Milan.13.04.2016' on page 1 undefined on input line 70
+.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 55--57
-\OT1/ptm/m/n/10 Bee-in-flus-sun-gen, ins-beson-dere bei Verdeck-un-gen und
+LaTeX Warning: Citation `Chu.09.08.2017' on page 1 undefined on input line 70.
+
+
+LaTeX Warning: Citation `Seidenschwarz.09.06.2022' on page 1 undefined on input
+ line 70.
+
+
+Underfull \hbox (badness 4429) in paragraph at lines 86--94
+[]\OT1/ptm/m/n/10 In the com-monly used Tracking-by-Detection (TbD)
  []
 
 <MOT_Framework_Integration_SPENT_SANT.png, id=1, 535.7616pt x 280.4076pt>
 File: MOT_Framework_Integration_SPENT_SANT.png Graphic file (type png)
 <use MOT_Framework_Integration_SPENT_SANT.png>
 Package pdftex.def Info: MOT_Framework_Integration_SPENT_SANT.png  used on inpu
-t line 68.
+t line 96.
 (pdftex.def)             Requested size: 252.0pt x 131.89427pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--76
-[]\OT1/ptm/m/n/10 Unser Haupt-beitrag liegt in der En-twick-lung und
- []
-
-
-Underfull \hbox (badness 7238) in paragraph at lines 73--76
-\OT1/ptm/m/n/10 Evaluierung des Sin-gle Pre-dic-tion Net-work (SPENT),
- []
-
-
-Underfull \hbox (badness 2376) in paragraph at lines 73--76
-\OT1/ptm/m/n/10 Ob-jekte vorherzusagen ohne den Be-darf eines vor der
- []
-
-
-Underfull \hbox (badness 1590) in paragraph at lines 77--78
-[]\OT1/ptm/m/n/10 Viele herk[]ommliche Tracking-Systeme nutzen statis-che
- []
-
-[1{C:/Users/CHHOLZ/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
-
-
- <./MOT_Framework_Integration_SPENT_SANT.png>]
-Underfull \hbox (badness 2384) in paragraph at lines 84--90
+Underfull \hbox (badness 2384) in paragraph at lines 117--123
  \OT1/ptm/m/it/10 a) Multi-Object Track-ing: [][] \OT1/ptm/m/n/10 Die Ver-fol-g
 ung mehrerer
  []
 
 
-Underfull \hbox (badness 1694) in paragraph at lines 84--90
+Underfull \hbox (badness 1694) in paragraph at lines 117--123
 \OT1/ptm/m/n/10 Ob-jekte ist eine zen-trale Her-aus-forderung in der Com-
  []
 
 
-Underfull \hbox (badness 3219) in paragraph at lines 84--90
+Underfull \hbox (badness 3219) in paragraph at lines 117--123
 \OT1/ptm/m/n/10 gesamte Video-ma-te-rial auf ein-mal in einem Stapelver-
  []
 
 
-Underfull \hbox (badness 2495) in paragraph at lines 84--90
+Underfull \hbox (badness 2495) in paragraph at lines 117--123
 \OT1/ptm/m/n/10 ar-beitungsprozess. Diese Meth-o-den sind je-doch f[]ur die
  []
 
-(MOT_ML.bbl [2]) [3
 
-] (MOT_ML.aux) ) 
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [1{C:/Users/CHHOLZ/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
+
+
+ <./MOT_Framework_Integration_SPENT_SANT.png>] (MOT_ML.bbl
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.24 \end{thebibliography}
+                          
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+) [2] (MOT_ML.aux)
+
+LaTeX Warning: There were undefined references.
+
+ ) 
 Here is how much of TeX's memory you used:
- 4675 strings out of 475385
- 83363 string characters out of 2776435
- 434768 words of memory out of 3000000
- 25995 multiletter control sequences out of 15000+600000
- 510082 words of font info for 102 fonts, out of 8000000 for 9000
+ 4678 strings out of 475385
+ 83425 string characters out of 2776435
+ 435765 words of memory out of 3000000
+ 25998 multiletter control sequences out of 15000+600000
+ 510053 words of font info for 102 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
  55i,9n,63p,687b,228s stack positions out of 10000i,1000n,20000p,200000b,80000s
-{C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/
-base/8r.enc}<C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/type1/urw/time
-s/utmb8a.pfb><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/type1/urw/tim
-es/utmbi8a.pfb><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/type1/urw/t
-imes/utmr8a.pfb><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/type1/urw/
-times/utmri8a.pfb>
-Output written on MOT_ML.pdf (3 pages, 102652 bytes).
+{C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}<C
+:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><
+C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb
+><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pf
+b><C:/Users/CHHOLZ/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.
+pfb>
+Output written on MOT_ML.pdf (2 pages, 99409 bytes).
 PDF statistics:
- 36 PDF objects out of 1000 (max. 8388607)
+ 33 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

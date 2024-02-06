@@ -18,15 +18,12 @@
 \title{Multi-Object Tracking without dynamic models and hard association metrics}
 
 \author{Christian Alexander Holz, Christian Bader, Matthias Drüppel
-\thanks{C. Holz is with Master of Engineering, Duale Hochschule Baden-Württemberg (DHBW), Stuttgart, Germany}
-% \IEEEmembership{Fellow, IEEE}, Masaki Owari
-\thanks{C. Bader is with Graduate School
-of Mathematics, Nagoya University, Nagoya,
-Japan}
-\thanks{M. Drüppel is with the Center for Artificial Intelligence, DHBW Stuttgart,
-Stuttgart,
-Germany}
+	\thanks{C. Holz is with Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany}
+	\thanks{C. Bader is with Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany}
+	\thanks{M. Drüppel is with the Center for Artificial Intelligence,
+		Duale Hochschule Baden-Württemberg (DHBW), Stuttgart, Germany}
 }
+
 
 % The paper headers
 \markboth{Journal of \LaTeX\ Class Files,~Vol.~tbd, No.~tbd, tbd~2024}%
@@ -39,45 +36,81 @@ Germany}
 \maketitle
 
 \begin{abstract}
-In diesem Paper wird die Entwicklung innovativer Machine Learning (ML)-basierter Methoden zur Multi Object Tracking (MOT) im Kontext von Advanced Driver Assistance Systems (ADAS) untersucht.
-Angesichts der zunehmenden Komplexität und Anforderungen an präzise und effiziente Objektverfolgungssysteme in der Automobilindustrie, fokussiert sich diese Arbeit auf die Integration von ML-Techniken in etablierte Tracking-Verfahren.
-Zentrale Beiträge umfassen die Entwicklung und Evaluierung von drei spezialisierten neuronalen Netzwerken: Single Prediction Network (SPENT), Single Association Network (SANT), und Multi Association Network (MANTa).
-Diese Netzwerke zielen darauf ab, ML-Methoden mit einem traditionellen Kalman-Filter-Framework zu kombinieren und bieten einen innovativen Ansatz zur Bewältigung der MOT Herausforderungen.
-Die Vorteile eines Tracking-by-Detection (TbD) Frameworks, wie der modulare Aufbau, wurden mit den Vorteilen von Machine Learning (ML) Verfahren kombiniert.
-Die Ergebnisse zeigen ein modularen, robusten und wartbaren Tracker, welcher das Potenzial der ML-Integration in ADAS unterstreicht.
+	%In diesem Paper wird die Entwicklung innovativer Machine Learning (ML)-basierter Methoden zur Multi Object Tracking (MOT) im Kontext von Advanced Driver Assistance Systems (ADAS) untersucht.
+	%Angesichts der zunehmenden Komplexität und Anforderungen an präzise und effiziente Objektverfolgungssysteme in der Automobilindustrie, fokussiert sich diese Arbeit auf die Integration von ML-Techniken in etablierte Tracking-Verfahren.
+	%Zentrale Beiträge umfassen die Entwicklung und Evaluierung von drei spezialisierten neuronalen Netzwerken: Single Prediction Network (SPENT), Single Association Network (SANT), und Multi Association Network (MANTa).
+	%Diese Netzwerke zielen darauf ab, ML-Methoden mit einem traditionellen Kalman-Filter-Framework zu kombinieren und bieten einen innovativen Ansatz zur Bewältigung der MOT Herausforderungen.
+	%Die Vorteile eines Tracking-by-Detection (TbD) Frameworks, wie der modulare Aufbau, wurden mit den Vorteilen von Machine Learning (ML) Verfahren kombiniert.
+	%Die Ergebnisse zeigen ein modularen, robusten und wartbaren Tracker, welcher das Potenzial der ML-Integration in ADAS unterstreicht.
+	In this paper, we delve into the development of innovative Machine Learning (ML)-based methods
+	for Multi Object Tracking (MOT) within the context of Advanced Driver Assistance Systems (ADAS).
+	Given the increasing complexity and demand for precise and efficient object tracking systems
+	in the automotive industry, this work focuses on the integration of ML techniques into
+	established tracking methodologies.
+	Key contributions encompass the creation and evaluation of three specialized neural networks:
+	the Single Prediction Network (SPENT), the Single Association Network (SANT),
+	and the Multi Association Network (MANTa).
+	These networks aim to combine ML methods with a traditional Kalman filter framework,
+	offering an innovative approach to addressing MOT challenges.
+	The advantages of a Tracking-by-Detection (TbD) framework, such as its modular structure,
+	have been amalgamated with the benefits of Machine Learning (ML) techniques.
+	The results reveal a modular, robust, and maintainable tracker,
+	underscoring the potential of ML integration in ADAS.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Article submission, IEEE, IEEEtran, journal, \LaTeX, paper, template, typesetting.
+	Article submission, IEEE, IEEEtran, journal, \LaTeX, paper, template, typesetting.
 \end{IEEEkeywords}
 
 \section{Introduction}
-\IEEEPARstart{T}{his} \cite{Moore1965} Die fortwährende Evolution von Advanced Driver Assistance Systems (ADAS) hat die Notwendigkeit einer präzisen und zuverlässigen Multi Object Tracking (MOT) ins Rampenlicht gerückt. In komplexen und dynamischen Umgebungen, wie sie im städtischen Verkehr vorkommen, ist es entscheidend, die Positionen und Bewegungen mehrerer Objekte gleichzeitig und genau zu erfassen.
-Die Herausforderung hierbei liegt nicht nur in der Erfassung und Verfolgung einzelner Objekte, sondern auch in der Berücksichtigung ihrer Interaktionen und gegenseitigen Beeinflussungen, insbesondere bei Verdeckungen und plötzlichen Bewegungsänderungen.
+\IEEEPARstart{T}{he} 
+%Die fortwährende Evolution von Advanced Driver Assistance Systems (ADAS) hat die Notwendigkeit einer präzisen und zuverlässigen Multi Object Tracking (MOT) ins Rampenlicht gerückt. In komplexen und dynamischen Umgebungen, wie sie im städtischen Verkehr vorkommen, ist es entscheidend, die Positionen und Bewegungen mehrerer Objekte gleichzeitig und genau zu erfassen.
+%Die Herausforderung hierbei liegt nicht nur in der Erfassung und Verfolgung einzelner Objekte, sondern auch in der Berücksichtigung ihrer Interaktionen und gegenseitigen Beeinflussungen, insbesondere bei Verdeckungen und plötzlichen Bewegungsänderungen.
+ongoing evolution of Advanced Driver Assistance Systems (ADAS) has brought the need for
+precise and reliable Multi Object Tracking (MOT) into the spotlight \cite{Bewley.2016} \cite{Milan.13.04.2016} \cite{Chu.09.08.2017} \cite{Seidenschwarz.09.06.2022}. 
+In complex and dynamic environments, as encountered in urban traffic,
+it is crucial to simultaneously and accurately capture
+the positions and movements of multiple objects.
+The challenge here lies not only in the detection and tracking of individual objects
+but also in considering their interactions and mutual influences,
+especially in cases of occlusions and sudden changes in motion.
 
-In dem häufig verwendeten Paradigma des Tracking-by-Detection (TbD) fusioniert ein Tracker erkannte Sensorobjekte (SO), um konsistente Objektspuren über die Zeit zu erstellen.
-Eine Schlüsselherausforderung dabei ist, eingehende Messungen (Sensor Objekten (SO)) den entsprechenden bestehenden Spuren zuzuordnen bzw. neue Objektspuren zu Initialisieren.
-Diese Datenassoziation wird in den meisten existierenden Methoden basiert auf Ähnlichkeitswerten durchgeführt, die zwischen den Messungen und den bestehenden Spuren berechnet werden.
-Diese Ähnlichkeitswerte können auf der letzten Erkennung beruhen oder aus historischen Erkennungen aggregiert werden.
-Für die Zustandsvorhersage haben sich bei TbD Ansätzen in vielen Anwendungen, Kalman-Filter und dessen Varianten als effektiv erwiesen.
-Diese stoßen jedoch bei komplexeren Szenarien, insbesondere bei nicht-linearen Bewegungsmustern und Interaktionen mehrerer Objekte, an ihre Grenzen.
-In dieser Arbeit stellen wir einen neuartigen MOT Ansatz vor, der Machine Learning (ML) nutzt, um diese Herausforderungen zu überwinden.
-Wir konzentrieren uns insbesondere auf die Entwicklung und Implementierung von Neural Networks (NN), die eine präzisere und flexiblere Objektverfolgung datenbasiert ermöglichen können, ohne auf umständliche Heuristiken und Hyperparameter angewiesen zu sein.
+%In dem häufig verwendeten Paradigma des Tracking-by-Detection (TbD) fusioniert ein Tracker erkannte Sensorobjekte (SO), um konsistente Objektspuren über die Zeit zu erstellen.
+%Eine Schlüsselherausforderung dabei ist, eingehende Messungen (Sensor Objekten (SO)) den entsprechenden bestehenden Spuren zuzuordnen bzw. neue Objektspuren zu Initialisieren.
+%Diese Datenassoziation wird in den meisten existierenden Methoden basiert auf Ähnlichkeitswerten durchgeführt, die zwischen den Messungen und den bestehenden Spuren berechnet werden.
+%Diese Ähnlichkeitswerte können auf der letzten Erkennung beruhen oder aus historischen Erkennungen aggregiert werden.
+%Für die Zustandsvorhersage haben sich bei TbD Ansätzen in vielen Anwendungen, Kalman-Filter und dessen Varianten als effektiv erwiesen.
+%Diese stoßen jedoch bei komplexeren Szenarien, insbesondere bei nicht-linearen Bewegungsmustern und Interaktionen mehrerer Objekte, an ihre Grenzen.
+%In dieser Arbeit stellen wir einen neuartigen MOT Ansatz vor, der Machine Learning (ML) nutzt, um diese Herausforderungen zu überwinden.
+%Wir konzentrieren uns insbesondere auf die Entwicklung und Implementierung von Neural Networks (NN), die eine präzisere und flexiblere Objektverfolgung datenbasiert ermöglichen können, ohne auf umständliche Heuristiken und Hyperparameter angewiesen zu sein.
+In the commonly used Tracking-by-Detection (TbD) paradigm, a tracker fuses detected sensor objects (SO) to create consistent object tracks over time. 
+A key challenge within this paradigm is associating incoming measurements (Sensor Objects (SO)) with their corresponding existing tracks or initializing new object tracks.
+This data association is typically carried out in most existing methods based on similarity scores calculated between the measurements and the existing tracks.
+These similarity scores may rely on the latest detection or be aggregated from historical detections.
+For state prediction, in many TbD approaches, Kalman filters and their variants have proven to be effective.
+However, they reach their limits in more complex scenarios, particularly in the presence of non-linear motion patterns and interactions among multiple objects.
+In this work, we introduce a novel MOT approach that leverages Machine Learning (ML) to overcome these challenges.
+We specifically focus on the development and implementation of Neural Networks (NN), which can enable more precise and flexible data-driven object tracking without relying on cumbersome heuristics and hyperparameters.
 
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=1.0\linewidth]{MOT_Framework_Integration_SPENT_SANT.png}}
-	\caption{Schematische Darstellung der beiden integrierten Netzwerke SPENT und SANT in einen Tracking-by-Detection (TbD) Framework.}
-	\label{fig}
+	\caption{Schematic representation of the two integrated networks SPENT and SANT in a tracking-by-detection (TbD) framework.}
+	\label{fig1}
 \end{figure}
 
-Unser Hauptbeitrag liegt in der Entwicklung und Evaluierung des Single Prediction Network (SPENT), des Single Association Network (SANT) und des Multi Association Network (MANTa).
-Im Vergleich zum Kalman-Filter, ist SPENT in der Lage, Systemzustände einzelner Objekte vorherzusagen ohne den Bedarf eines vor der Laufzeit definierten Zustands- bzw. Beobachtungsmodells.
-SPENT bietet das Potenzial, insbesondere in Bezug auf die Anpassungsfähigkeit an verschiedene Szenarien und die Fähigkeit, Nichtlinearitäten effektiv zu handhaben.
+%Unser Hauptbeitrag liegt in der Entwicklung und Evaluierung des Single Prediction Network (SPENT), des Single Association Network (SANT) und des Multi Association Network (MANTa).
+%Im Vergleich zum Kalman-Filter, ist SPENT in der Lage, Systemzustände einzelner Objekte vorherzusagen ohne den Bedarf eines vor der Laufzeit definierten Zustands- bzw. Beobachtungsmodells.
+%SPENT bietet das Potenzial, insbesondere in Bezug auf die Anpassungsfähigkeit an verschiedene Szenarien und die Fähigkeit, Nichtlinearitäten effektiv zu handhaben.
+Our primary contribution lies in the development and evaluation of the Single Prediction Network (SPENT),
+the Single Association Network (SANT), and the Multi Association Network (MANTa). In comparison to the Kalman filter, SPENT is capable of predicting the state of individual objects without the need for a predefined state or observation model at runtime.
+SPENT holds the potential, particularly in terms of adaptability to various scenarios and the ability to effectively handle nonlinearities.
 
-Viele herkömmliche Tracking-Systeme nutzen statische Methoden zur Datenassoziation, die oft auf einfachen Heuristiken oder festen Schwellenwerten basieren. SANT hingegen nutzt maschinelles Lernen, um diese Prozesse zu automatisieren und sich besser an unterschiedliche Szenarien anzupassen. Somit ersetzt SANT innerhalb des TbD MOT Verfahrens die Berechnung einer Abstandsmetrik sowie den Hungarian-Algorithm zur entsprechenden Zuordnung.
+%Viele herkömmliche Tracking-Systeme nutzen statische Methoden zur Datenassoziation, die oft auf einfachen Heuristiken oder festen Schwellenwerten basieren. SANT hingegen nutzt maschinelles Lernen, um diese Prozesse zu automatisieren und sich besser an unterschiedliche Szenarien anzupassen. Somit ersetzt SANT innerhalb des TbD MOT Verfahrens die Berechnung einer Abstandsmetrik sowie den Hungarian-Algorithm zur entsprechenden Zuordnung.
+Many conventional tracking systems rely on static methods for data association, often based on simple heuristics or fixed thresholds. In contrast, SANT employs machine learning to automate these processes and adapt more effectively to different scenarios. As a result, within the TbD MOT framework, SANT replaces the calculation of a distance metric and the Hungarian algorithm for the corresponding assignment.
 
-Darüber hinaus diskutieren wir die Integration von SPENT und SANT in ein bestehendes Tracking-System und demonstrieren die Performance auf Basis mehrere Tests und Vergleiche mit etablierten Methoden.
-Diese Arbeit bietet somit wertvolle Einblicke und einen bedeutenden Fortschritt für die Entwicklung von Advanced Driver Assistance Systems (ADAS) und trägt zur Weiterentwicklung der Technologien für autonomes Fahren bei.
+%Darüber hinaus diskutieren wir die Integration von SPENT und SANT in ein bestehendes Tracking-System und demonstrieren die Performance auf Basis mehrere Tests und Vergleiche mit etablierten Methoden.
+%Diese Arbeit bietet somit wertvolle Einblicke und einen bedeutenden Fortschritt für die Entwicklung von Advanced Driver Assistance Systems (ADAS) und trägt zur Weiterentwicklung der Technologien für autonomes Fahren bei.
+Furthermore, we integrate SPENT and SANT into an existing tracking system and demonstrate their performance through multiple tests and comparisons with established methods. This work provides valuable insights and a significant advancement in the development of Advanced Driver Assistance Systems (ADAS), contributing to the further evolution of technologies for autonomous driving.
 
 \section{Related work}
 \paragraph{Multi-Object Tracking}
