@@ -22,22 +22,23 @@
 \BIBdecl
 
 \bibitem{Bewley.2016}
-A.~B. Z. G. L. O. F. R.~B. Upcroft, ``Simple online and realtime tracking,''
-  \emph{Paper}, 2016.
+{Alex Bewley, Zongyuan Ge, Lionel Ott, Fabio Ramos, Ben Upcroft}, ``Simple
+  online and realtime tracking,'' \emph{Paper}, 2016.
 
 \bibitem{Milan.13.04.2016}
-A.~M. S. R. A. D. I. R.~K. Schindler, ``Online multi-target tracking using
-  recurrent neural networks,'' 2016.
+{Anton Milan, Seyed Rezatofighi, Anthony Dick, Ian Reid, Konrad Schindler},
+  ``Online multi-target tracking using recurrent neural networks,'' 2016.
 
 \bibitem{Chu.09.08.2017}
 \BIBentryALTinterwordspacing
-Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using
-  cnn-based single object tracker with spatial-temporal attention mechanism,''
-  2017. [Online]. Available: \url{http://arxiv.org/pdf/1708.02843v2}
+{Qi Chu, Wanli Ouyang, Hongsheng Li, Xiaogang Wang, Bin Liu, Nenghai Yu},
+  ``Online multi-object tracking using cnn-based single object tracker with
+  spatial-temporal attention mechanism,'' 2017. [Online]. Available:
+  \url{http://arxiv.org/pdf/1708.02843v2}
 \BIBentrySTDinterwordspacing
 
 \bibitem{Seidenschwarz.09.06.2022}
-J.~S. G. B. V. S. I. E.~L. Leal-Taix{\'e}, ``Simple cues lead to a strong
-  multi-object tracker,'' 2022.
+{Jenny Seidenschwarz, Guillem Bras{\'o}, Victor Serrano, Ismail Elezi, Laura
+  Leal-Taix{\'e}}, ``Simple cues lead to a strong multi-object tracker,'' 2022.
 
 \end{thebibliography}

@@ -13,9 +13,9 @@ Reallocating 'singl_function' (item size: 4) to 100 items.
 Database file #1: IEEEabrv.bib
 Database file #2: ./lit.bib
 Warning--entry type for "Milan.13.04.2016" isn't style-file defined
---line 35 of file ./lit.bib
+--line 37 of file ./lit.bib
 Warning--entry type for "Chu.09.08.2017" isn't style-file defined
---line 49 of file ./lit.bib
+--line 51 of file ./lit.bib
 -- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
@@ -23,7 +23,7 @@ Warning--entry type for "Chu.09.08.2017" isn't style-file defined
 Done.
 You've used 4 entries,
             4087 wiz_defined-function locations,
-            1365 strings with 18335 characters,
+            1365 strings with 18343 characters,
 and the built_in function-call counts, 1465 in all, are:
 = -- 103
 > -- 16
