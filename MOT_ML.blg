@@ -12,54 +12,60 @@ Reallocating 'wiz_functions' (item size: 4) to 6000 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Database file #1: IEEEabrv.bib
 Database file #2: ./lit.bib
-Warning--entry type for "Milan.13.04.2016" isn't style-file defined
---line 37 of file ./lit.bib
-Warning--entry type for "Chu.09.08.2017" isn't style-file defined
---line 51 of file ./lit.bib
+Warning--entry type for "DL_RNN_mot.2016" isn't style-file defined
+--line 33 of file ./lit.bib
+Warning--entry type for "DL_RNN_data_association.2019" isn't style-file defined
+--line 45 of file ./lit.bib
+Warning--entry type for "DL_CNN_mot_sot_based.2017" isn't style-file defined
+--line 69 of file ./lit.bib
+Warning--entry type for "DL_ATT_CNN_soda.2020" isn't style-file defined
+--line 81 of file ./lit.bib
+Warning--entry type for "DL_ATT_CNN_mot_sot_based.2017" isn't style-file defined
+--line 93 of file ./lit.bib
 -- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 
 Done.
-You've used 4 entries,
+You've used 8 entries,
             4087 wiz_defined-function locations,
-            1365 strings with 18343 characters,
-and the built_in function-call counts, 1465 in all, are:
-= -- 103
-> -- 16
+            1380 strings with 18988 characters,
+and the built_in function-call counts, 2770 in all, are:
+= -- 201
+> -- 32
 < -- 0
-+ -- 8
-- -- 4
-* -- 60
-:= -- 280
-add.period$ -- 8
-call.type$ -- 4
-change.case$ -- 4
++ -- 16
+- -- 8
+* -- 95
+:= -- 516
+add.period$ -- 16
+call.type$ -- 8
+change.case$ -- 8
 chr.to.int$ -- 0
-cite$ -- 4
-duplicate$ -- 123
-empty$ -- 144
-format.name$ -- 4
-if$ -- 304
+cite$ -- 8
+duplicate$ -- 249
+empty$ -- 286
+format.name$ -- 8
+if$ -- 598
 int.to.chr$ -- 0
-int.to.str$ -- 4
-missing$ -- 26
-newline$ -- 37
-num.names$ -- 4
-pop$ -- 77
+int.to.str$ -- 8
+missing$ -- 50
+newline$ -- 47
+num.names$ -- 8
+pop$ -- 144
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 110
+skip$ -- 219
 stack$ -- 0
-substring$ -- 4
-swap$ -- 62
+substring$ -- 8
+swap$ -- 123
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 4
+type$ -- 8
 warning$ -- 0
-while$ -- 4
-width$ -- 5
-write$ -- 54
-(There were 2 warnings)
+while$ -- 8
+width$ -- 9
+write$ -- 81
+(There were 5 warnings)

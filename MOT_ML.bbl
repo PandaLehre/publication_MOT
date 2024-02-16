@@ -21,24 +21,40 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{Bewley.2016}
+\bibitem{KF_simple_cues.2022}
+{Jenny Seidenschwarz, Guillem Bras{\'o}, Victor Serrano, Ismail Elezi, Laura
+  Leal-Taix{\'e}}, ``Simple cues lead to a strong multi-object tracker,''
+  \emph{Paper}, 2022.
+
+\bibitem{KF_simple_online_realtime.2016}
 {Alex Bewley, Zongyuan Ge, Lionel Ott, Fabio Ramos, Ben Upcroft}, ``Simple
   online and realtime tracking,'' \emph{Paper}, 2016.
 
-\bibitem{Milan.13.04.2016}
+\bibitem{DL_CNN_mot_sot_based.2017}
+{Qi Chu, Wanli Ouyang, Hongsheng Li, Xiaogang Wang, Bin Liu, Nenghai Yu},
+  ``Online multi-object tracking using cnn-based single object tracker with
+  spatial-temporal attention mechanism,'' 2017.
+
+\bibitem{DL_RNN_mot.2016}
 {Anton Milan, Seyed Rezatofighi, Anthony Dick, Ian Reid, Konrad Schindler},
   ``Online multi-target tracking using recurrent neural networks,'' 2016.
 
-\bibitem{Chu.09.08.2017}
-\BIBentryALTinterwordspacing
-{Qi Chu, Wanli Ouyang, Hongsheng Li, Xiaogang Wang, Bin Liu, Nenghai Yu},
-  ``Online multi-object tracking using cnn-based single object tracker with
-  spatial-temporal attention mechanism,'' 2017. [Online]. Available:
-  \url{http://arxiv.org/pdf/1708.02843v2}
-\BIBentrySTDinterwordspacing
+\bibitem{DL_RNN_data_association.2019}
+H.~L. H. Z.~C. Mertz, ``Deepda: Lstm-based deep data association network for
+  multi-targets tracking in clutter,'' 2019.
 
-\bibitem{Seidenschwarz.09.06.2022}
-{Jenny Seidenschwarz, Guillem Bras{\'o}, Victor Serrano, Ismail Elezi, Laura
-  Leal-Taix{\'e}}, ``Simple cues lead to a strong multi-object tracker,'' 2022.
+\bibitem{DL_ATT_CNN_soda.2020}
+W.-C. H. H. K. T.-Y. L. Y. C.~R. Yu, ``Soda: Multi-object tracking with soft
+  data association,'' 2020.
+
+\bibitem{DL_ATT_CNN_mot_sot_based.2017}
+Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using
+  cnn-based single object tracker with spatial-temporal attention mechanism,''
+  2017.
+
+\bibitem{offline_mot.2017}
+{Roberto Henschel, Laura Leal-Taixé, Daniel Cremers, Bodo Rosenhahn}, ``Fusion
+  of head and full-body detectors for multi-object tracking,'' \emph{Paper},
+  2017.
 
 \end{thebibliography}
