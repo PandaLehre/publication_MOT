@@ -74,7 +74,7 @@ and reliable Multi Object Tracking (MOT) into the spotlight
 \cite{KF_simple_cues.2022} \cite{KF_simple_online_realtime.2016}
 \cite{DL_CNN_mot_sot_based.2017} 
 \cite{DL_RNN_mot.2016} \cite{DL_RNN_data_association.2019}
-\cite{DL_ATT_CNN_soda.2020} \cite{DL_ATT_CNN_mot_sot_based.2017}
+\cite{DL_ATT_CNN_soda.2020} \cite{DL_ATT_CNN_mot_sot_based.2017} \cite{DL_ATT_Trackformer.2022}
 .
 In complex and dynamic environments, as encountered in urban traffic, it is crucial to
 simultaneously and accurately capture the positions and movements of multiple objects.
@@ -101,7 +101,7 @@ This can be done on the basis of predicted positions or similarities in appearan
 .
 While some approaches only consider the most recent recognition corresponding to a track,
 other methods integrate temporal information into a track history.
-For example, methods use recurrent neural networks 
+For example, methods use recurrent neural networks (RNNs)
 \cite{DL_RNN_mot.2016} \cite{DL_RNN_data_association.2019}
 or attention mechanisms
 \cite{DL_ATT_CNN_soda.2020} \cite{DL_ATT_CNN_mot_sot_based.2017}
@@ -148,7 +148,7 @@ without a defined distance measure.
 Our primary contribution is the development and evaluation of three NN that we labeled:
 (i) the Single Prediction Network (SPENT), (ii) the Single Association Network (SANT),
 and (iii) the Multi Association Network (MANTa).
-Figure \ref{fig1} provides an overview of our approach (i) and (ii).
+Figure \ref{MOT_Framework_Integration_SPENT_SANT} provides an overview of our approach (i) and (ii).
 The proposed Sinlge Prediction Network (SPENT) processes the sensor objects (SO) per time step,
 which consists of a state vector and contains information such as object position,
 orientation and dimension.
@@ -160,7 +160,7 @@ In the remainder of the following sections, we will explain the proposed modules
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=1.0\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
 	\caption{Schematic representation of the two integrated networks SPENT and SANT in a tracking-by-detection (TbD) framework.}
-	\label{fig1}
+	\label{MOT_Framework_Integration_SPENT_SANT}
 \end{figure}
 
 In comparison to the Kalman filter, SPENT is capable of predicting the state of 
@@ -183,26 +183,115 @@ development of Advanced Driver Assistance Systems (ADAS),
 contributing to the further evolution of technologies for autonomous driving (AD).
 
 \section{Tracking with Prediction and Association Networks}
-Wir wenden das Paradigma des Tracking-by-Detection (TbD) an, bei dem ein Tracker 
-die Objekterkennungen fusioniert, um Objektspuren zu erzeugen, die über die Zeit konsistent sind.
-Ba-Tuong Vo et al. [xx] stellt beispielsweise einen Framework für die Untersuchung 
-von Tracking Ansätzen zur Verfügung, welche dem TbD Paradigma folgen.
-Wir schlagen einen Tracker vor mit jeweils einem Long Short-Term Memory (LSTM) Netzwerk 
-für die Prädiktion und Assoziation der Sensorobjekte (SO) zu den bestehenden Tracks.
+We apply the tracking-by-detection (TbD) paradigm, in which a tracker fuses object 
+fuses the object detections to generate object tracks that are consistent over time.
+\cite{KF_framework.2013}, for example, provides a framework for analysing tracking approaches 
+of tracking approaches that follow the TbD paradigm.
+We propose a tracker with a Long Short-Term Memory (LSTM) / bidirectional Long Short-Term Memory (BiLSTM) network for the prediction and association of the sensor objects (SO) to the existing tracks.
 
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: SPENT
 \subsection{Single Prediction Network (SPENT)}
-Die meisten bestehenden Verfolgungsmethoden verknüpfen eingehende Erkennungen paarweise mit Objektzuständen, die durch ein einfaches Bewegungsmodell, z. B. ein Modell mit konstanter Geschwindigkeit, unter Verwendung eines Kalman-Filters vorhergesagt werden. Neuere Arbeiten haben jedoch gezeigt, dass die Aggregation zeitlicher Informationen sowie von Kontextinformationen die Verfolgung mehrerer Objekte verbessern kann, indem zusätzlich zu den paarweisen Ähnlichkeiten zwischen den Erkennungen Informationen höherer Ordnung genutzt werden [xx].
-Unserer Ansatz sieht es vor, auf die Bewegungsmodelle zu verzichten und stattdessen die Hiddenstates der LSTM Schicht als objektspezifisches Parameterset zu nutzen.
-Die initialen Werte der Hiddenstates der LSTM Schicht werden im Tracking anhand der erhaltenen Messdaten aktualisiert.
-Durch diese Aktualisierung erfolgt somit eine interne Korrektur über den Sequenzverlauf.
+Most existing tracking methods associate incoming detections pairwise with object states predicted by a simple motion model, e.g. a constant velocity model, using a Kalman filter.
+However, recent work has demonstrated that aggregating temporal information as well as contextual information can improve the tracking of multiple objects by utilising higher order information in addition to pairwise similarities between detections \cite{DL_RNN_mot.2016} \cite{DL_RNN_data_association.2019} \cite{DL_RNN_data_association.2020} \cite{DL_ATT_CNN_soda.2020}.
+Our approach is to dispense with the motion models and instead use the hidden states of the LSTM layer as an object-specific parameter set.
+The initial values of the hidden states of the LSTM layer are updated in tracking based on the measurement data received.
+This update therefore results in an internal correction over the course of the sequence.
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=0.4\linewidth]{figs/SPENT_network_arch.png}}
+	\caption{Schematic representation of the generic network structure of SPENT.}
+	\label{SPENT_network_arch}
+\end{figure}
+
+\paragraph{Data preprocessing}
+Corresponding ground truth (GT) data from the KITTI data set was used for the development.
+A GT Track contains the information of an object over time, starting with its appearance and ending with its exit from the sensor detection range.
+In order to achieve better generalisation and to increase the chance that the training converges, the track state values at time t (predictors) and track state values at time t+1 (targets) were normalised.
+After \cite{DL_book.2019}, normalisation can be performed so that the predictors and targets have a mean value of zero and a unit variance.
+The mean value $\mu$ and the standard deviation $\sigma$ were calculated for all tracks using the following formulae:
+\begin{equation}
+	\mu = \frac{1}{N} \sum_{i = 1}^{N} A_i
+\end{equation}
+\begin{equation}
+	\sigma = \sqrt{{\frac{1}{N - 1}} \sum_{i = 1}^{N} |A_i - \mu|^2}
+\end{equation}
+
+Pre-padding was also applied.
+\cite{DL_padding.2019} shows how padding influences the performance of neural networks in sequence-based tasks. 
+The study suggests that although both pre-padding and post-padding are feasible, the choice of padding technique can have a significant impact on the efficiency of the model, especially for LSTM networks where the sequence context is crucial.
+
+\paragraph{Network development}
+The Single Prediction Network (SPENT) was developed using the open-loop method, this means that the network predicts values for a future time step based on previously received data.
+For use in an online MOT process, the network is therefore able to make a prediction about the probable next state values using the state values received for an SO.
+The internal values (hidden states) of the LSTM layer are updated per time step based on the measurement data received.
+This updating process therefore provides an internal correction over the course of the sequence of each track.
+
+The regression layer used (regressionoutput) calculates the loss of the mean square error for regression tasks. 
+The mean square error (MSE) indicates the average of the squared difference between the model prediction and the target value. 
+This value can be used as a measure of the quality of an estimator. For a single observation, the mean square error is given by:
+\begin{equation}
+	MSE = \sum_{i=1}^{R}\frac{{(t_i-y_i)}^2}{R}
+\end{equation}
+where $R$ is the number of responses, $t_i$ is the target output and $y_i$ is the prediction of the network for sample $i$. 
+For sequence-to-sequence regression networks such as SPENT, the loss function of the regression layer is half the mean square error of the predictions for each time step, normalised by $S$, not by $R$:
+\begin{equation}
+	loss = \frac{1}{2S} \sum_{i=1}^{S}\sum_{j=1}^{R}{({t_{ij}}-{y_{ij}})}^2
+\end{equation}
+where $S$ is the sequence length. During training, the average loss is calculated using the observations in the mini-batch. Where $S$ is the mini-batch length.
+In relation to the KITTI data set (cars and vans), an RMSE of 0.025 was achieved for the position prediction of all objects in the dataset.
 
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: SANT
 \subsection{Single Association Network (SANT)}
+SANT stellt einen datenbasierten Ansatz dar, welcher lernen kann, das kombinatorische Non Deterministic Polynomial Time (NP) hard Optimierungsproblem der Datenassoziation vollständig zu lösen. 
+Im Vergleich zu den meisten Assoziationsverfahren \cite{DL_RNN_mot.2016} \cite{DL_RNN_data_association.2019} \cite{DL_RNN_data_association.2019} stellt SANT einen Ansatz dar, welcher als Inputdaten keine definierte Distanzmatrix erhält, sondern die bestehenden Tracks sowie jede neue Messung (SO) erhält.
+Damit entfällt die Definition eines Abstandsmaßes, womit dem Netzwerk die Freiheit gegeben wurde, einer eigenen Assoziationslogik zu folgen bzw. diese datenbasiert zu lernen.
+Somit ersetzt SANT die Berechnung eines Abstandsmaßes sowie einen Assoziationsalgorithmus wie z.B. den Hungarian Algorithm (HA).
+
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=0.4\linewidth]{figs/SANT_network_arch.png}}
+	\caption{Schematic representation of the generic network structure of SANT.}
+	\label{SANT_network_arch}
+\end{figure}
+
+\paragraph{Datenvorverarbeitung}
+Für die Entwicklung des Single Association Networks (SANT) wurde die Datenassoziation als zeitlich gegliedertes Problem (Sequenz-zu-Vektor) betrachtet.
+Das Datenassoziationsproblem beschreibt somit die Zuordnung von einem SO zu einem Set von Tracks.
+Die entsprechenden Tracks wurden aus dem KITTI Datensatz der gelabelten Kameraaufzeichnungen extrahiert.
+Allerdings existieren für das betrachtete Problem der Assoziation keine realen GT Daten.
+Um sicherzustellen, dass die Zuordnung eines Sensor Objekts (SOs) zu einem Track eines Tracksets genau eine korrekte Lösung besitzt, wurde das SO in einem Zeitschritt aus dem bestehenden Trackset eines Zeitschritts erzeugt. 
+Die Daten wurden entsprechend künstlich verrauscht, um aus den GT Daten realistische Sensordaten zu erzeugen.
+Das Datenformat wurde entsprechend gewählt, um eine indexbasierte Trackzuordnung für das Single Association Network (SANT) zu ermöglichen.
+Die Größe der Inputmatrix entspricht daher $m * n$. Mit $m = 2 * AnzahlZustandswerte$ und $n = Trackanzahl(t)$.
+
+\paragraph{Netzwerkentwicklung}
+Das Netzwerk (Fig. \ref{SANT_network_arch}) ist als Sequenz-to-Classification ausgelegt, wobei der sequenceinput die beschriebene Inputmatrix pro Zeitschritt darstellt.
+
+BILSTM,...
+Die vollständig verknüpfte Schicht (FC) gibt über die Anzahl der der Ausgabewerte die Klassenanzahl n vor. Die n Klassenwerte werden in der Softmax Schicht durch Anwendung der Softmaxfunktion
+in eine eindeutige Wahrscheinlichkeitsverteilung berechnet (wie in Kapitel 2.2.1 beschrieben). 
+Durch Anwendung der Cross-Entropie-Operation in der Ausgabeschicht
+(Classout) konnte SANT auf einen korrekten Zuordnungswert (GT
+Klassenindex) trainiert werden.
+
+Die Cross-Entropie-Kostenfunktion (Kreuzentropie) berechnet den Cross-Entropie-Verlust zwischen Netzvorhersagen und Zielwerten für die eindeutige Zuordnungsaufgabe (für sich gegenseitig ausschließende Klassen). 
+Dabei wird mittels One-Hot-Kodierung die Klasse binär in einem Vektor dargestellt und somit ein 1-zu-n Code generiert.
+Nach folgender Formel werden die Crossentropie-Verlustwerte für jeden Eingabewert $Y_j$ und zugehörigen Zielwert (Targetvalue) $T_j$ elementweise berechnet:
+\begin{equation}
+loss_j = -(T_j ln Y_j + (1 - T_j) ln(1 - Y_j))
+\end{equation}
+Um einen Skalar $loss$ zu erhalten werden alle Verlustwerte $loss_j$ aufsummiert und durch die Anzahl der Samples $N$ geteilt. Optional können die Verlustwerte von definierten Samples mit dem Gewichtungsfaktor $w_j$ gewichtet werden:
+\begin{equation}
+loss = \frac{1}{N} \sum_{}loss_j w_j
+\end{equation}
+Eine entsprechende Nutzung des Gewichtungsfaktors $w_j$ kann bei Datensätzen mit unausgewogenen (imbalanced) Klassenverteilung hilfreich sein.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: MANTa
 \subsection{Multi Association Network (MANTa)}
 
+\paragraph{Datenvorverarbeitung}
+
+\paragraph{Netzwerkentwicklung}
 
 \section{Experimental Evaluation}
 ... KITTI-Car Benchmark.
@@ -224,7 +313,7 @@ And here.
 }
 
 \bibliographystyle{IEEEtran}
-\bibliography{IEEEabrv, ./lit.bib}
+\bibliography{IEEEabrv, lit.bib}
 
 \vfill
 
