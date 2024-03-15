@@ -10,7 +10,7 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{cite}
-\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore} 
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 % updated with editorial comments 8/9/2021
 
 
@@ -33,6 +33,7 @@
 \maketitle
 
 
+% Unwritten rule: dont cite or reference figures or tables in the abstract
 \begin{abstract}
     In this paper, we develop Machine Learning (ML)-based methods for Multi Object Tracking (MOT)
     within the context of Advanced Driver Assistance Systems (ADAS).
@@ -44,18 +45,13 @@
     (ii) the Single Association Network (SANT) for associating incoming sensor objects
     with existing tracks, (iii) and the Multi Association Network (MANTa) for associating
     multiple sensor objects with existing tracks.
-    Figure \ref{fig1} provides an overview of our approach (i) and (ii).
-    These networks aim to combine ML methods with a traditional Kalman filter framework,
-    offering a data driven approach to addressing MOT challenges.
-    We integrate our three ML networks into a Kalman framework and evaluate the performance,
-    both of the components itself and the overall system.
-    By replacing single components, we get a clearer understanding of the impact of the ML models
-    on the overall tracking system.
-    This approach also leaves the modularity of system intact while enabling machine learning (ML)
-    for certain tracking tasks.
+    We combine our ML methods with a traditional Kalman filter framework,
+    offering a data driven approach to address MOT challenges while maintaining the modularity and interpretability of classical filter approaches.
+    We asses both, the performance of all three models alone as well as their impact on the performance when they are integrated in the Kalman framework.
+    Replacing single components allows us to get a clear evaluation of the impact of each ML model on the overall tracking system while maintaining the modularity of the system.
     The results reveal a modular, robust, and maintainable tracker,
     underscoring the potential of ML integration in ADAS.
-    % hier müssen später noch unbedingt die wichtigsten Ergebnisse rein.
+    % hier müssen später noch unbedingt die wichtigsten konkreten Ergebnisse rein.
 \end{abstract}
 
 
@@ -65,127 +61,109 @@
 
 
 \section{Introduction}
-% MD: Ich würde erst ganz allgemein bleiben und auch nochmal sagen, welche Schwierigkeiten klassisches Tracking hat, z.B., dass spezifische Lösungen für spezifische Szenarien entwickelt werden müssen. Diese Entwicklung ist aber nicht direkt Daten getrieben und führt zu einer hohen Anzahl an Parametern, die eingestellt werden müssen und einer schlechten Wartbarkeit und Anpassbarkeit auf andere Fahrzeug Modelle oder Verkehrsituationen. Data driven Ansätze können hier helfen, diese Probleme zu lösen.
-% MD: Danach würde ich über die einzelnen Punkte sprechen: Erst prediction, dann Assoziation. Die kriegen auch jeweils ihren eigenen Absatz. Und dann noch einen Absatz für alles zusammen. Oder erst alles zusammen und dann einzeln, aber ganz klar getrennt.
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: Allgemeine Einführung MOT
+% MD: Hier sollten dann nur "klassische Paper zitiert werden, also keine ML Paper.
 \IEEEPARstart{T}{he}
 ongoing evolution of Advanced Driver Assistance Systems (ADAS) has brought the need for precise
-and reliable Multi Object Tracking (MOT) into the spotlight 
-\cite{KF_simple_cues.2022} \cite{KF_simple_online_realtime.2016}
-\cite{DL_CNN_mot_sot_based.2017} 
-\cite{DL_RNN_mot.2016} \cite{DL_RNN_data_association.2019}
-\cite{DL_ATT_CNN_soda.2020} \cite{DL_ATT_CNN_mot_sot_based.2017} \cite{DL_ATT_Trackformer.2022}
-.
-In complex and dynamic environments, as encountered in urban traffic, it is crucial to
-simultaneously and accurately capture the positions and movements of multiple objects.
-Tracking multiple objects is a key challenge in computer vision (CV).
+and reliable Multi Object Tracking (MOT) into the spotlight
+\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, DL_CNN_mot_sot_based.2017, DL_RNN_mot.2016, DL_RNN_data_association.2019, DL_ATT_CNN_mot_sot_based.2017, DL_ATT_Trackformer.2022, DL_ATT_CNN_soda.2020}. In complex and dynamic environments, as encountered in urban traffic, it is crucial to
+simultaneously and accurately capture the positions and movements of multiple objects - a key challenge in computer vision (CV).
 
 In the commonly used Tracking-by-Detection (TbD) paradigm,
 a tracker fuses detected sensor objects (SO) to create consistent object tracks over time.
-A key challenge within this paradigm is associating incoming measurements SO
+A key challenge within this paradigm is associating the incoming measured SO
 with their corresponding existing object tracks or initializing new object tracks.
 
-Offline methods \cite{offline_mot.2017} process the entire video material at once
-in a batch process. However, these methods are unsuitable for most real-time applications,
-such as ADAS.
-In such applications, it is crucial to predict the state of objects immediately 
-after new detections.
-Therefore, most recent approaches for tracking multiple objects rely on online methods
-that do not depend on future image information.
-Online methods use various features to estimate the similarity between the recognised objects
-and the existing tracks.
-This can be done on the basis of predicted positions or similarities in appearance
-\cite{KF_simple_online_realtime.2016}
-\cite{DL_CNN_mot_sot_based.2017} 
-\cite{DL_RNN_mot.2016} \cite{DL_RNN_data_association.2019}
-.
-While some approaches only consider the most recent recognition corresponding to a track,
-other methods integrate temporal information into a track history.
-For example, methods use recurrent neural networks (RNNs)
-\cite{DL_RNN_mot.2016} \cite{DL_RNN_data_association.2019}
-or attention mechanisms
-\cite{DL_ATT_CNN_soda.2020} \cite{DL_ATT_CNN_mot_sot_based.2017}
-to aggregate temporal information.
+Tracking frameworks form the heart of ADAS systems that are used in millions of vehicles around the globe. The vast majority of these frameworks rely on classical approaches such as the Kalman filter (KF) or its variants. These classical tracking theories have the great benefit of being modular and interpretable. The task is split into clearly separated subtasks such as the prediction of currently tracked objects and the association with newly measured ones. Furthermore the math and the theory itself is often clean and comprehendible. However, in the automotive industry these tracking systems need to be applied to a variety of different car models with different sensor sets, different installation heights of the sensors, different countries and always perform for a wide range of driving scenarios. This often leads to the increasing implementation of heuristics and parameters that tweak the tracking system for specific configurations and situations. But hand-engineered parameters and heuristics are hard to maintain and develop further from a software engineering point of view. Furthermore, performance of classical approaches can reach its limits in challenging situations.
 
+In this work, we propose a data driven approach to tracking frameworks, which would allow the same system to be fine tuned for specific configurations relying only on data, thus increasing maintainability and adaptability. We do this preserving one of the biggest  strengths of classical approaches: its modularity, by replacing only single tracking components with ML models.
+
+
+% MD: Vielleicht können wir noch ein paar Arbeiten finden die ML für tracking nutzen.
+% MD: Wir sollten insgesamt auf 35++ zitierte Arbeiten kommen. Oft ist das Einfachste sich eine gute andere Arbeit aus möglichst dem Gleichen Themengebiet zu nehmen und zu schauen wen die gerade zitieren.
+\section{Related work}
+\subsection{Real time applications}
+ADAS are embedded real-time applications where it is crucial to predict the state of objects immediately after their detection. This rules out offline tracking methods as presented in \cite{offline_mot.2017} that process the entire video material at once in a batch process.
+Therefore, most recent approaches for tracking multiple objects rely on online methods
+that do not depend on future image information. Online methods use various features to estimate the similarity between the recognized objects and the existing tracks.
+This can be done on the basis of their predicted positions or even similarities in appearance
+\cite{KF_simple_online_realtime.2016, DL_CNN_mot_sot_based.2017, DL_RNN_data_association.2019, DL_RNN_mot.2016}.
+
+\subsection{Tracked object prediction}
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: prediction
-For state prediction, in many TbD approaches, Kalman filters and their variants 
-have proven to be effective.
+One fundamental problem in TbD frameworks is the prediction of the states of the already tracked objects. In many approaches Kalman filters and their variants have proven to be effective for state prediction. %cite, kannst auch etwas nochmal citen
 However, they reach their limits in more complex scenarios, particularly in the presence
-of non-linear motion patterns and interactions among multiple objects.
+of non-linear motion patterns and interactions among multiple objects. % finden wir hier auch ein Paper? Grenzen von Kalman filtern, sowas?
 In this work, we introduce a novel MOT approach that leverages Machine Learning (ML)
 to overcome these challenges.
 We specifically focus on the development and implementation of Neural Networks (NN),
-which can enable more precise and flexible data-driven object tracking without
-relying on cumbersome heuristics and hyperparameters.
+which can enable more precise and flexible data-driven object tracking.
 
+\subsection{Association}
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: association
-The data association is typically carried out based on similarity scores calculated between
-the measurements and the existing tracks.
-These similarity scores may rely on the latest detection or be aggregated from 
-historical detections.
-As in Mertz et al \cite{DL_RNN_data_association.2019}, the aim of this work was to develop
-a data-based approach that can learn to completely solve the combinatorial 
-Non Deterministic Polynomial Time (NP) hard optimisation problem of data association.
-Mertz et al \cite{DL_RNN_data_association.2019} use a distance matrix based on the 
-Euclidean distance measure as input data for the developed DA network,
-thus replacing an association algorithm such as the Hungarian Algorithm (HA).
+Another fundamental problem in TbD framework is data association. For this some approaches only consider the current state of the tracks,
+while others integrate temporal information auch as the track history.
+This aggregate of temporal information can be done for example using attention mechanisms as used in \cite{DL_ATT_CNN_soda.2020, DL_ATT_CNN_mot_sot_based.2017} or recurrent neural networks (RNNs) as in \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}. The latter is what we are also pursuing in this work.
+Similar to the problem statement in Mertz et al \cite{DL_RNN_data_association.2019}, the aim of our work is to develop a data-based approach that can learn to completely solve the combinatorial Non Deterministic Polynomial Time (NP) hard optimization problem of data association.
+Mertz et al \cite{DL_RNN_data_association.2019} use a distance matrix based on the
+Euclidean distance measure as input for the developed association network,
+thus replacing an association algorithm such as the Hungarian Algorithm (HA). %cite for HA algorithm
+% MD: Du kannst dem Autor auch einfach schreiben und nachfragen.
 It can be assumed that the Euclidean distance measure was used as the basis for calculating
 the ground truth (GT) training data (distance matrices) and for the evaluation.
 However, this is not explicitly stated.
-It can therefore be argued that this calculation step deprives the network 
-of the opportunity to follow a different association logic or to learn it on the basis of data.
-In the context of this work, the hypothesis was therefore put forward that a Gated 
-Recurrent Unit (GRU)-based association network can be formed by an undefined distance measure 
-to increase the assignment of the temporal memory component and thus of the history. 
+When the Euclidean distance is used to calculate the training data, the network will only learn to follow this logic. This deprives the network
+of the opportunity to follow a different association logic.
+In the context of this work, we put forward the hypothesis that a Gated
+Recurrent Unit (GRU)-based association network can be designed and trained using an undefined distance measure. %MD: Ich finde den nächsten Satz schwer zu verstehen. Kannst du das einfacher umschreiben? Was ist "assignment of temporal memory component"
+This can increase the assignment of the temporal memory component, i.e. the history, and thus boost performance.
 
-The aim of this work was therefore to develop an association network that is intended to solve
+The goal of this work was therefore to develop an association network that is intended to solve
 the assignment of one or more sensor objects (SO) to an existing number of object tracks
 without a defined distance measure.
 
 
-\section{Related work}
-%%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: Einführung unser Ansatz 
+\section{Overview of our proposed models}
+%%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: Einführung unser Ansatz
 Our primary contribution is the development and evaluation of three NN that we labeled:
 (i) the Single Prediction Network (SPENT), (ii) the Single Association Network (SANT),
 and (iii) the Multi Association Network (MANTa).
 Figure \ref{MOT_Framework_Integration_SPENT_SANT} provides an overview of our approach (i) and (ii).
-The proposed Sinlge Prediction Network (SPENT) processes the sensor objects (SO) per time step,
-which consists of a state vector and contains information such as object position,
-orientation and dimension.
-SPENT predicts a fixed-dimensional state vector for each SO based on
-the received state vectors per SO.
-The output predictions from SPENT are used as input to the Single Association Network (SANT)
+The input for the proposed Single Prediction Network (SPENT) are the sensor objects (SO) in every time step. These objects consists of a fixed-dimensional state vector that contains information such as object position, orientation and dimension.
+SPENT predicts all vectors to the next time step where they are used as input to the Single Association Network (SANT)
 to build target trajectories or object tracks.
-In the remainder of the following sections, we will explain the proposed modules in detail.
+
+%MD: Ist k als Index besser als t für time? Ich würde unter SANT und SPENT noch association / fusion and prediction schreiben (fusion passiert hier doch auch). Ich würde alle Pfeile beschriften, entweder mit einem Wort daneben oder so wie es hier gemacht wurde mit einer Abkürzung. Unter Delete steht delete_thr, was ist das? Bei den Hiddenstatevectors würde ich oben oder unten in der Beschreibung noch schreiben "one for each track". Warum sind die Pfeile oben dünner als die unten? Steht doch das gleiche drin und warum gibt es unten zwei verschiedene Farben? Steht doch auch das gleiche drin.
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=1.0\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
 	\caption{Schematic representation of the two integrated networks SPENT and SANT in a tracking-by-detection (TbD) framework.}
 	\label{MOT_Framework_Integration_SPENT_SANT}
 \end{figure}
 
-In comparison to the Kalman filter, SPENT is capable of predicting the state of 
+% hier gehst du nochmal auf die beiden Modelle einzeln ein, das würde ich nach unten ziehen. Da gibt es doch einen Absatz nur für SPENT und einen nur für SANT. Und alles was eher Einleitungscharakter hat würde ich nach oben in die Introduction ziehen.
+
+In comparison to the Kalman filter, SPENT is capable of predicting the state of
 individual objects without the need for a predefined state or observation model at runtime.
 SPENT holds the potential, particularly in terms of adaptability to various scenarios
 and the ability to effectively handle nonlinearities.
 Many conventional tracking systems rely on static methods for data association,
 often based on simple heuristics or fixed thresholds.
 In contrast, SANT employs machine learning to automate these processes and adapt
-more effectively to different scenarios. 
+more effectively to different scenarios.
 As a result, within the TbD MOT framework,
 SANT replaces the calculation of a distance metric and the Hungarian algorithm for
 the corresponding assignment.
-Furthermore, we integrate SPENT and SANT into an existing tracking system and demonstrate 
+Furthermore, we integrate SPENT and SANT into an existing tracking system and demonstrate
 their performance through multiple tests and comparisons with established methods.
-% Ich wäre mit Wertungen immer sehr vorsichtig in Papern. Also hier schreibst du "valuable insights". Ich würde eher ein nicht wertendes adjectiv suchen. Ob das wertvoll ist oder nicht, müssen andere entscheiden.
-% --> CH: exciting? 
-This work provides exciting insights and a significant advancement in the
+
+This work provides new insights and advancement in the
 development of Advanced Driver Assistance Systems (ADAS),
 contributing to the further evolution of technologies for autonomous driving (AD).
 
 \section{Tracking with Prediction and Association Networks}
-We apply the tracking-by-detection (TbD) paradigm, in which a tracker fuses object 
+We apply the tracking-by-detection (TbD) paradigm, in which a tracker fuses object
 fuses the object detections to generate object tracks that are consistent over time.
-\cite{KF_framework.2013}, for example, provides a framework for analysing tracking approaches 
+\cite{KF_framework.2013}, for example, provides a framework for analysing tracking approaches
 of tracking approaches that follow the TbD paradigm.
 We propose a tracker with a Long Short-Term Memory (LSTM) / bidirectional Long Short-Term Memory (BiLSTM) network for the prediction and association of the sensor objects (SO) to the existing tracks.
 
@@ -216,7 +194,7 @@ The mean value $\mu$ and the standard deviation $\sigma$ were calculated for all
 \end{equation}
 
 Pre-padding was also applied.
-\cite{DL_padding.2019} shows how padding influences the performance of neural networks in sequence-based tasks. 
+\cite{DL_padding.2019} shows how padding influences the performance of neural networks in sequence-based tasks.
 The study suggests that although both pre-padding and post-padding are feasible, the choice of padding technique can have a significant impact on the efficiency of the model, especially for LSTM networks where the sequence context is crucial.
 
 \paragraph{Network development}
@@ -225,13 +203,13 @@ For use in an online MOT process, the network is therefore able to make a predic
 The internal values (hidden states) of the LSTM layer are updated per time step based on the measurement data received.
 This updating process therefore provides an internal correction over the course of the sequence of each track.
 
-The regression layer used (regressionoutput) calculates the loss of the mean square error for regression tasks. 
-The mean square error (MSE) indicates the average of the squared difference between the model prediction and the target value. 
+The regression layer used (regressionoutput) calculates the loss of the mean square error for regression tasks.
+The mean square error (MSE) indicates the average of the squared difference between the model prediction and the target value.
 This value can be used as a measure of the quality of an estimator. For a single observation, the mean square error is given by:
 \begin{equation}
 	MSE = \sum_{i=1}^{R}\frac{{(t_i-y_i)}^2}{R}
 \end{equation}
-where $R$ is the number of responses, $t_i$ is the target output and $y_i$ is the prediction of the network for sample $i$. 
+where $R$ is the number of responses, $t_i$ is the target output and $y_i$ is the prediction of the network for sample $i$.
 For sequence-to-sequence regression networks such as SPENT, the loss function of the regression layer is half the mean square error of the predictions for each time step, normalised by $S$, not by $R$:
 \begin{equation}
 	loss = \frac{1}{2S} \sum_{i=1}^{S}\sum_{j=1}^{R}{({t_{ij}}-{y_{ij}})}^2
@@ -241,7 +219,7 @@ In relation to the KITTI data set (cars and vans), an RMSE of 0.025 was achieved
 
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: SANT
 \subsection{Single Association Network (SANT)}
-SANT stellt einen datenbasierten Ansatz dar, welcher lernen kann, das kombinatorische Non Deterministic Polynomial Time (NP) hard Optimierungsproblem der Datenassoziation vollständig zu lösen. 
+SANT stellt einen datenbasierten Ansatz dar, welcher lernen kann, das kombinatorische Non Deterministic Polynomial Time (NP) hard Optimierungsproblem der Datenassoziation vollständig zu lösen.
 Im Vergleich zu den meisten Assoziationsverfahren \cite{DL_RNN_mot.2016} \cite{DL_RNN_data_association.2019} \cite{DL_RNN_data_association.2019} stellt SANT einen Ansatz dar, welcher als Inputdaten keine definierte Distanzmatrix erhält, sondern die bestehenden Tracks sowie jede neue Messung (SO) erhält.
 Damit entfällt die Definition eines Abstandsmaßes, womit dem Netzwerk die Freiheit gegeben wurde, einer eigenen Assoziationslogik zu folgen bzw. diese datenbasiert zu lernen.
 Somit ersetzt SANT die Berechnung eines Abstandsmaßes sowie einen Assoziationsalgorithmus wie z.B. den Hungarian Algorithm (HA).
@@ -257,7 +235,7 @@ Für die Entwicklung des Single Association Networks (SANT) wurde die Datenassoz
 Das Datenassoziationsproblem beschreibt somit die Zuordnung von einem SO zu einem Set von Tracks.
 Die entsprechenden Tracks wurden aus dem KITTI Datensatz der gelabelten Kameraaufzeichnungen extrahiert.
 Allerdings existieren für das betrachtete Problem der Assoziation keine realen GT Daten.
-Um sicherzustellen, dass die Zuordnung eines Sensor Objekts (SOs) zu einem Track eines Tracksets genau eine korrekte Lösung besitzt, wurde das SO in einem Zeitschritt aus dem bestehenden Trackset eines Zeitschritts erzeugt. 
+Um sicherzustellen, dass die Zuordnung eines Sensor Objekts (SOs) zu einem Track eines Tracksets genau eine korrekte Lösung besitzt, wurde das SO in einem Zeitschritt aus dem bestehenden Trackset eines Zeitschritts erzeugt.
 Die Daten wurden entsprechend künstlich verrauscht, um aus den GT Daten realistische Sensordaten zu erzeugen.
 Das Datenformat wurde entsprechend gewählt, um eine indexbasierte Trackzuordnung für das Single Association Network (SANT) zu ermöglichen.
 Die Größe der Inputmatrix entspricht daher $m * n$. Mit $m = 2 * AnzahlZustandswerte$ und $n = Trackanzahl(t)$.
@@ -267,12 +245,12 @@ Das Netzwerk (Fig. \ref{SANT_network_arch}) ist als Sequenz-to-Classification au
 
 BILSTM,...
 Die vollständig verknüpfte Schicht (FC) gibt über die Anzahl der der Ausgabewerte die Klassenanzahl n vor. Die n Klassenwerte werden in der Softmax Schicht durch Anwendung der Softmaxfunktion
-in eine eindeutige Wahrscheinlichkeitsverteilung berechnet (wie in Kapitel 2.2.1 beschrieben). 
+in eine eindeutige Wahrscheinlichkeitsverteilung berechnet (wie in Kapitel 2.2.1 beschrieben).
 Durch Anwendung der Cross-Entropie-Operation in der Ausgabeschicht
 (Classout) konnte SANT auf einen korrekten Zuordnungswert (GT
 Klassenindex) trainiert werden.
 
-Die Cross-Entropie-Kostenfunktion (Kreuzentropie) berechnet den Cross-Entropie-Verlust zwischen Netzvorhersagen und Zielwerten für die eindeutige Zuordnungsaufgabe (für sich gegenseitig ausschließende Klassen). 
+Die Cross-Entropie-Kostenfunktion (Kreuzentropie) berechnet den Cross-Entropie-Verlust zwischen Netzvorhersagen und Zielwerten für die eindeutige Zuordnungsaufgabe (für sich gegenseitig ausschließende Klassen).
 Dabei wird mittels One-Hot-Kodierung die Klasse binär in einem Vektor dargestellt und somit ein 1-zu-n Code generiert.
 Nach folgender Formel werden die Crossentropie-Verlustwerte für jeden Eingabewert $Y_j$ und zugehörigen Zielwert (Targetvalue) $T_j$ elementweise berechnet:
 \begin{equation}
