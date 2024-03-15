@@ -30,36 +30,41 @@
 {Alex Bewley, Zongyuan Ge, Lionel Ott, Fabio Ramos, Ben Upcroft}, ``Simple
   online and realtime tracking,'' \emph{Paper}, 2016.
 
-\bibitem{DL_CNN_mot_sot_based.2017}
-{Qi Chu, Wanli Ouyang, Hongsheng Li, Xiaogang Wang, Bin Liu, Nenghai Yu},
-  ``Online multi-object tracking using cnn-based single object tracker with
-  spatial-temporal attention mechanism,'' 2017.
-
-\bibitem{DL_RNN_mot.2016}
-{Anton Milan, Seyed Rezatofighi, Anthony Dick, Ian Reid, Konrad Schindler},
-  ``Online multi-target tracking using recurrent neural networks,'' 2016.
-
-\bibitem{DL_RNN_data_association.2019}
-H.~L. H. Z.~C. Mertz, ``Deepda: Lstm-based deep data association network for
-  multi-targets tracking in clutter,'' 2019.
-
-\bibitem{DL_ATT_CNN_mot_sot_based.2017}
-Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using
-  cnn-based single object tracker with spatial-temporal attention mechanism,''
-  2017.
-
-\bibitem{DL_ATT_Trackformer.2022}
-T.~M. A. K. L. L.-T.~C. Feichtenhofer, ``Trackformer: Multi-object tracking
-  with transformers,'' 2022.
-
-\bibitem{DL_ATT_CNN_soda.2020}
-W.-C. H. H. K. T.-Y. L. Y. C.~R. Yu, ``Soda: Multi-object tracking with soft
-  data association,'' 2020.
-
 \bibitem{offline_mot.2017}
 {Roberto Henschel, Laura Leal-Taixé, Daniel Cremers, Bodo Rosenhahn}, ``Fusion
   of head and full-body detectors for multi-object tracking,'' \emph{Paper},
   2017.
+
+\bibitem{DL_RNN_mot.2016}
+{Anton Milan, Seyed Rezatofighi, Anthony Dick, Ian Reid, Konrad Schindler},
+  ``Online multi-target tracking using recurrent neural networks,''
+  \emph{Paper}, 2016.
+
+\bibitem{DL_CNN_mot_sot_based.2017}
+{Qi Chu, Wanli Ouyang, Hongsheng Li, Xiaogang Wang, Bin Liu, Nenghai Yu},
+  ``Online multi-object tracking using cnn-based single object tracker with
+  spatial-temporal attention mechanism,'' \emph{Paper}, 2017.
+
+\bibitem{DL_RNN_data_association.2019}
+H.~L. H. Z.~C. Mertz, ``Deepda: Lstm-based deep data association network for
+  multi-targets tracking in clutter,'' \emph{Paper}, 2019.
+
+\bibitem{DL_RNN_data_association.2020}
+{Johannes Fitz}, ``Datenassoziation f{\"u}r multi-objekt-verfolgung mittels
+  deep learning,'' \emph{Paper}, 2020.
+
+\bibitem{DL_ATT_CNN_soda.2020}
+W.-C. H. H. K. T.-Y. L. Y. C.~R. Yu, ``Soda: Multi-object tracking with soft
+  data association,'' \emph{Paper}, 2020.
+
+\bibitem{DL_ATT_CNN_mot_sot_based.2017}
+Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using
+  cnn-based single object tracker with spatial-temporal attention mechanism,''
+  \emph{Paper}, 2017.
+
+\bibitem{DL_ATT_Trackformer.2022}
+T.~M. A. K. L. L.-T.~C. Feichtenhofer, ``Trackformer: Multi-object tracking
+  with transformers,'' \emph{Paper}, 2022.
 
 \bibitem{KF_framework.2013}
 \BIBentryALTinterwordspacing
@@ -68,15 +73,12 @@ W.-C. H. H. K. T.-Y. L. Y. C.~R. Yu, ``Soda: Multi-object tracking with soft
   \url{https://ba-tuong.vo-au.com/codes.html}
 \BIBentrySTDinterwordspacing
 
-\bibitem{DL_RNN_data_association.2020}
-{Johannes Fitz}, ``Datenassoziation f{\"u}r multi-objekt-verfolgung mittels
-  deep learning,'' \emph{Paper}, 2020.
-
 \bibitem{DL_book.2019}
 I.~G. Y. B.~A. Courville, \emph{Deep Learning}.\hskip 1em plus 0.5em minus
   0.4em\relax MIT Press, 2019.
 
 \bibitem{DL_padding.2019}
-D.~M. R. N. V.~S. Reddy, ``Effect of padding on lstms and cnns,'' 2019.
+D.~M. R. N. V.~S. Reddy, ``Effect of padding on lstms and cnns,'' \emph{Paper},
+  2019.
 
 \end{thebibliography}

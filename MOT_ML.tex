@@ -32,7 +32,6 @@
 % \IEEEpubid{0000--0000/00\$00.00~\copyright~2021 IEEE}% Remember, if you use this you must call \IEEEpubidadjcol in the second% column for its text to clear the IEEEpubid mark.
 \maketitle
 
-
 % Unwritten rule: dont cite or reference figures or tables in the abstract
 \begin{abstract}
     In this paper, we develop Machine Learning (ML)-based methods for Multi Object Tracking (MOT)
@@ -54,19 +53,18 @@
     % hier müssen später noch unbedingt die wichtigsten konkreten Ergebnisse rein.
 \end{abstract}
 
-
 \begin{IEEEkeywords}
 	Article submission, IEEE, IEEEtran, journal, \LaTeX, paper, template, typesetting.
 \end{IEEEkeywords}
 
-
 \section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: Allgemeine Einführung MOT
 % MD: Hier sollten dann nur "klassische Paper zitiert werden, also keine ML Paper.
+% CH: ML Paper entfernt.
 \IEEEPARstart{T}{he}
 ongoing evolution of Advanced Driver Assistance Systems (ADAS) has brought the need for precise
 and reliable Multi Object Tracking (MOT) into the spotlight
-\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, DL_CNN_mot_sot_based.2017, DL_RNN_mot.2016, DL_RNN_data_association.2019, DL_ATT_CNN_mot_sot_based.2017, DL_ATT_Trackformer.2022, DL_ATT_CNN_soda.2020}. In complex and dynamic environments, as encountered in urban traffic, it is crucial to
+\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016}. In complex and dynamic environments, as encountered in urban traffic, it is crucial to
 simultaneously and accurately capture the positions and movements of multiple objects - a key challenge in computer vision (CV).
 
 In the commonly used Tracking-by-Detection (TbD) paradigm,
@@ -78,6 +76,18 @@ Tracking frameworks form the heart of ADAS systems that are used in millions of 
 
 In this work, we propose a data driven approach to tracking frameworks, which would allow the same system to be fine tuned for specific configurations relying only on data, thus increasing maintainability and adaptability. We do this preserving one of the biggest  strengths of classical approaches: its modularity, by replacing only single tracking components with ML models.
 
+% CH: Absatz in Intro kopiert
+In comparison to the Kalman filter, our Single Prediction Network (SPENT) is capable of predicting the state of individual objects without the need for a predefined state or observation model at runtime.
+SPENT holds the potential, particularly in terms of adaptability to various scenarios
+and the ability to effectively handle nonlinearities.
+Many conventional tracking systems rely on static methods for data association,
+often based on simple heuristics or fixed thresholds.
+In contrast, Single Association Network (SANT) employs machine learning to automate these processes and adapt more effectively to different scenarios.
+As a result, within the Tracking-by-Detection (TbD) MOT framework,
+SANT replaces the calculation of a distance metric and the Hungarian algorithm for
+the corresponding assignment.
+Furthermore, we integrate SPENT and SANT into an existing tracking system and demonstrate
+their performance through multiple tests and comparisons with established methods.
 
 % MD: Vielleicht können wir noch ein paar Arbeiten finden die ML für tracking nutzen.
 % MD: Wir sollten insgesamt auf 35++ zitierte Arbeiten kommen. Oft ist das Einfachste sich eine gute andere Arbeit aus möglichst dem Gleichen Themengebiet zu nehmen und zu schauen wen die gerade zitieren.
@@ -87,7 +97,15 @@ ADAS are embedded real-time applications where it is crucial to predict the stat
 Therefore, most recent approaches for tracking multiple objects rely on online methods
 that do not depend on future image information. Online methods use various features to estimate the similarity between the recognized objects and the existing tracks.
 This can be done on the basis of their predicted positions or even similarities in appearance
-\cite{KF_simple_online_realtime.2016, DL_CNN_mot_sot_based.2017, DL_RNN_data_association.2019, DL_RNN_mot.2016}.
+\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, 
+	DL_RNN_mot.2016,
+	DL_CNN_mot_sot_based.2017, 
+	DL_RNN_data_association.2019, 
+	DL_RNN_data_association.2020,
+	DL_CNN_mot_sot_based.2017,
+	DL_ATT_CNN_soda.2020,
+	DL_ATT_CNN_mot_sot_based.2017,
+	DL_ATT_Trackformer.2022}.
 
 \subsection{Tracked object prediction}
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: prediction
@@ -140,39 +158,26 @@ to build target trajectories or object tracks.
 	\label{MOT_Framework_Integration_SPENT_SANT}
 \end{figure}
 
-% MD: hier gehst du nochmal auf die beiden Modelle einzeln ein, das würde ich nach unten ziehen. Da gibt es doch einen Absatz nur für SPENT und einen nur für SANT. Und alles was eher Einleitungscharakter hat würde ich nach oben in die Introduction ziehen.
-In comparison to the Kalman filter, SPENT is capable of predicting the state of
-individual objects without the need for a predefined state or observation model at runtime.
-SPENT holds the potential, particularly in terms of adaptability to various scenarios
-and the ability to effectively handle nonlinearities.
-Many conventional tracking systems rely on static methods for data association,
-often based on simple heuristics or fixed thresholds.
-In contrast, SANT employs machine learning to automate these processes and adapt
-more effectively to different scenarios.
-As a result, within the TbD MOT framework,
-SANT replaces the calculation of a distance metric and the Hungarian algorithm for
-the corresponding assignment.
-Furthermore, we integrate SPENT and SANT into an existing tracking system and demonstrate
-their performance through multiple tests and comparisons with established methods.
-
 % MD: Das würde ich später nochmal anpassen: Was genau ist unsere Kontribution? Ich würde es auch verschieben: Entweder in die Einleitung oder in den Schluss. Hier sind wir gerade im technischen, erklärenden Teil "Overview of Models"
+% CH: dazu würde ich mich gerne noch einmal abstimmen :) (unsicher was gemeint ist)
 This work provides new insights and advancement in the
 development of Advanced Driver Assistance Systems (ADAS),
 contributing to the further evolution of technologies for autonomous driving (AD).
 
 \section{Tracking with Prediction and Association Networks}
-% MD: Warum brauchst du den nächsten Satz hier? Benutzt du das framework? Wenn ja, würde ich das schreiben. Sonst fehlt der Bezug zur Arbeit.
 We apply the tracking-by-detection (TbD) paradigm, in which a tracker fuses object
 fuses the object detections to generate object tracks that are consistent over time.
-\cite{KF_framework.2013}, for example, provides a framework for analyzing tracking approaches that follow the TbD paradigm.
+\cite{KF_framework.2013}, for example, provides a framework for analyzing tracking approaches that follow the TbD paradigm. This was used accordingly in this study.
 
 To enable our models to incorporate temporal information, we use Long Short-Term Memory (LSTM) and bidirectional Long Short-Term Memory (BiLSTM) networks. Both for the prediction (SPENT) and the association (SANT) of the sensor objects (SO) to the existing tracks.
 
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: SPENT
 \subsection{Single Prediction Network (SPENT)}
-Most existing tracking methods associate incoming detections pairwise with object states predicted by a simple motion model, e.g. a constant velocity model, using a Kalman filter. %cite 3 Artikel
+Most existing tracking methods associate incoming detections pairwise with object states predicted by a simple motion model, e.g. a constant velocity model, using a Kalman filter
+\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, KF_framework.2013}.
 However, recent work has demonstrated that aggregating temporal information as well as contextual information can improve the tracking of multiple objects by utilizing higher order information in addition to pairwise similarities between detections \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019, DL_RNN_data_association.2020, DL_ATT_CNN_soda.2020}.
 Our approach is to use the hidden states of the LSTM layer as an object-specific parameter set. %MD: Warum parameter set? Einstellbare Parameter sind es ja nicht.
+%CH: stimmmt. Parameter werden im Trainingsprozess definiert, jedoch werden die Hidden states dann pro Track aufgesetzt und pro Zeitschritt angepasst
 The values of the hidden states of the LSTM layer are updated in each time step based on the received measurement data.
 These updates therefore results in an internal correction over the course of the sequence.
 
