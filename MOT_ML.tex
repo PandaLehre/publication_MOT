@@ -140,8 +140,7 @@ to build target trajectories or object tracks.
 	\label{MOT_Framework_Integration_SPENT_SANT}
 \end{figure}
 
-% hier gehst du nochmal auf die beiden Modelle einzeln ein, das würde ich nach unten ziehen. Da gibt es doch einen Absatz nur für SPENT und einen nur für SANT. Und alles was eher Einleitungscharakter hat würde ich nach oben in die Introduction ziehen.
-
+% MD: hier gehst du nochmal auf die beiden Modelle einzeln ein, das würde ich nach unten ziehen. Da gibt es doch einen Absatz nur für SPENT und einen nur für SANT. Und alles was eher Einleitungscharakter hat würde ich nach oben in die Introduction ziehen.
 In comparison to the Kalman filter, SPENT is capable of predicting the state of
 individual objects without the need for a predefined state or observation model at runtime.
 SPENT holds the potential, particularly in terms of adaptability to various scenarios
@@ -156,30 +155,35 @@ the corresponding assignment.
 Furthermore, we integrate SPENT and SANT into an existing tracking system and demonstrate
 their performance through multiple tests and comparisons with established methods.
 
+% MD: Das würde ich später nochmal anpassen: Was genau ist unsere Kontribution? Ich würde es auch verschieben: Entweder in die Einleitung oder in den Schluss. Hier sind wir gerade im technischen, erklärenden Teil "Overview of Models"
 This work provides new insights and advancement in the
 development of Advanced Driver Assistance Systems (ADAS),
 contributing to the further evolution of technologies for autonomous driving (AD).
 
 \section{Tracking with Prediction and Association Networks}
+% MD: Warum brauchst du den nächsten Satz hier? Benutzt du das framework? Wenn ja, würde ich das schreiben. Sonst fehlt der Bezug zur Arbeit.
 We apply the tracking-by-detection (TbD) paradigm, in which a tracker fuses object
 fuses the object detections to generate object tracks that are consistent over time.
-\cite{KF_framework.2013}, for example, provides a framework for analysing tracking approaches
-of tracking approaches that follow the TbD paradigm.
-We propose a tracker with a Long Short-Term Memory (LSTM) / bidirectional Long Short-Term Memory (BiLSTM) network for the prediction and association of the sensor objects (SO) to the existing tracks.
+\cite{KF_framework.2013}, for example, provides a framework for analyzing tracking approaches that follow the TbD paradigm.
+
+To enable our models to incorporate temporal information, we use Long Short-Term Memory (LSTM) and bidirectional Long Short-Term Memory (BiLSTM) networks. Both for the prediction (SPENT) and the association (SANT) of the sensor objects (SO) to the existing tracks.
 
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: SPENT
 \subsection{Single Prediction Network (SPENT)}
-Most existing tracking methods associate incoming detections pairwise with object states predicted by a simple motion model, e.g. a constant velocity model, using a Kalman filter.
-However, recent work has demonstrated that aggregating temporal information as well as contextual information can improve the tracking of multiple objects by utilising higher order information in addition to pairwise similarities between detections \cite{DL_RNN_mot.2016} \cite{DL_RNN_data_association.2019} \cite{DL_RNN_data_association.2020} \cite{DL_ATT_CNN_soda.2020}.
-Our approach is to dispense with the motion models and instead use the hidden states of the LSTM layer as an object-specific parameter set.
-The initial values of the hidden states of the LSTM layer are updated in tracking based on the measurement data received.
-This update therefore results in an internal correction over the course of the sequence.
+Most existing tracking methods associate incoming detections pairwise with object states predicted by a simple motion model, e.g. a constant velocity model, using a Kalman filter. %cite 3 Artikel
+However, recent work has demonstrated that aggregating temporal information as well as contextual information can improve the tracking of multiple objects by utilizing higher order information in addition to pairwise similarities between detections \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019, DL_RNN_data_association.2020, DL_ATT_CNN_soda.2020}.
+Our approach is to use the hidden states of the LSTM layer as an object-specific parameter set. %MD: Warum parameter set? Einstellbare Parameter sind es ja nicht.
+The values of the hidden states of the LSTM layer are updated in each time step based on the received measurement data.
+These updates therefore results in an internal correction over the course of the sequence.
+
+%MD: Ich würde keine einzige Abbildung im Paper haben, auf die nicht im Text eingegangen wird. Es sollte im Text erläutert werden wie das Netzwerk aufgebaut ist. Die Abbildung ist sehr groß und versteckt trotzdem noch viel Informationen. Ich würde die genauen Input größen angeben, auch die genaue Zahl an connections und die Größe des hidden Layers. Einfach alle Details des Netzwerks. Ich würde die Abbildung kippen um Platz zu sparen.
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=0.4\linewidth]{figs/SPENT_network_arch.png}}
 	\caption{Schematic representation of the generic network structure of SPENT.}
 	\label{SPENT_network_arch}
 \end{figure}
 
+%%%%% MD: Bis hierhin habe ich gelesen bisher %%%%%%%%%%%%%%
 \paragraph{Data preprocessing}
 Corresponding ground truth (GT) data from the KITTI data set was used for the development.
 A GT Track contains the information of an object over time, starting with its appearance and ending with its exit from the sensor detection range.
