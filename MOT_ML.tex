@@ -97,10 +97,10 @@ ADAS are embedded real-time applications where it is crucial to predict the stat
 Therefore, most recent approaches for tracking multiple objects rely on online methods
 that do not depend on future image information. Online methods use various features to estimate the similarity between the recognized objects and the existing tracks.
 This can be done on the basis of their predicted positions or even similarities in appearance
-\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, 
+\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016,
 	DL_RNN_mot.2016,
-	DL_CNN_mot_sot_based.2017, 
-	DL_RNN_data_association.2019, 
+	DL_CNN_mot_sot_based.2017,
+	DL_RNN_data_association.2019,
 	DL_RNN_data_association.2020,
 	DL_CNN_mot_sot_based.2017,
 	DL_ATT_CNN_soda.2020,
@@ -190,41 +190,41 @@ These updates therefore results in an internal correction over the course of the
 
 %%%%% MD: Bis hierhin habe ich gelesen bisher %%%%%%%%%%%%%%
 \paragraph{Data preprocessing}
-Corresponding ground truth (GT) data from the KITTI data set was used for the development.
+Ground truth (GT) data in the form of tracks of vehicles from the KITTI data set was used for our development.
 A GT Track contains the information of an object over time, starting with its appearance and ending with its exit from the sensor detection range.
-In order to achieve better generalisation and to increase the chance that the training converges, the track state values at time t (predictors) and track state values at time t+1 (targets) were normalised.
-After \cite{DL_book.2019}, normalisation can be performed so that the predictors and targets have a mean value of zero and a unit variance.
-The mean value $\mu$ and the standard deviation $\sigma$ were calculated for all tracks using the following formulae:
+In order to achieve better generalization and to increase the chance that the training converges, the track state values at time t (predictors) and track state values at time t+1 (targets) were normalized following
+\cite{DL_book.2019}, such that the predictors and targets have a mean value of zero and a unit variance.  %Why use the word "predictors", why not predictions? And I would even write "possible predictions" for now these are only tracks, no predictions.
+The mean value $\mu$ and the standard deviation $\sigma$ were calculated for all tracks using the following equations:
 \begin{equation}
 	\mu = \frac{1}{N} \sum_{i = 1}^{N} A_i
+\quad\text{and}\quad
+	\sigma = \sqrt{{\frac{1}{N - 1}} \sum_{i = 1}^{N} |A_i - \mu|^2},
 \end{equation}
-\begin{equation}
-	\sigma = \sqrt{{\frac{1}{N - 1}} \sum_{i = 1}^{N} |A_i - \mu|^2}
-\end{equation}
 
-Pre-padding was also applied.
-\cite{DL_padding.2019} shows how padding influences the performance of neural networks in sequence-based tasks.
-The study suggests that although both pre-padding and post-padding are feasible, the choice of padding technique can have a significant impact on the efficiency of the model, especially for LSTM networks where the sequence context is crucial.
+where $A_i$ denotes the INSERT HERE and $N$ is the total number of tracks. %MD: Or time stamps? Even for me this is not exactly clear what is being normalized and how.
+We also apply pre-padding as described in \cite{DL_padding.2019} where Reddy et al. show how padding influences the performance of neural networks in sequence-based tasks. Their study suggests that although both pre-padding and post-padding are feasible, the choice of padding technique can have a significant impact on the efficiency of the model, especially for LSTM networks where the sequence context is crucial. %MD: And what does this mean for us? You say it is crucial and then it is not described any further. How did you apply padding?
 
-\paragraph{Network development}
-The Single Prediction Network (SPENT) was developed using the open-loop method, this means that the network predicts values for a future time step based on previously received data.
-For use in an online MOT process, the network is therefore able to make a prediction about the probable next state values using the state values received for an SO.
-The internal values (hidden states) of the LSTM layer are updated per time step based on the measurement data received.
-This updating process therefore provides an internal correction over the course of the sequence of each track.
+\paragraph{Network development} %MD: Nicht besser "Network architecture" oder so ähnlich? du spricht nicht davon wie du das Netz entwickelt hast, sondern was es jetzt kann (was auch besser ist)
+The Single Prediction Network (SPENT) was designed for an open-loop application, this means that the network predicts values for a future time step based on previously received data.
+For use in an online MOT process, the network is therefore able to make a prediction about the most likely next state values using the state values received for a given SO.
+The internal values (hidden states) of the LSTM layer are updated per time step based on the received measurement data.
+This updating process therefore provides a correction over the course of the sequence of each track.
 
-The regression layer used (regressionoutput) calculates the loss of the mean square error for regression tasks.
-The mean square error (MSE) indicates the average of the squared difference between the model prediction and the target value.
-This value can be used as a measure of the quality of an estimator. For a single observation, the mean square error is given by:
+On the output of the regression layer at the end of the network ("regressionoutput"), we calculate the loss through the mean square error (MSE) for the prediction of the state values.
+The MSE indicates the average of the squared difference between the model prediction and the target value, which we
+use as the measure of the quality of the prediction. For a single observation, the MSE is given by:
 \begin{equation}
 	MSE = \sum_{i=1}^{R}\frac{{(t_i-y_i)}^2}{R}
 \end{equation}
-where $R$ is the number of responses, $t_i$ is the target output and $y_i$ is the prediction of the network for sample $i$.
-For sequence-to-sequence regression networks such as SPENT, the loss function of the regression layer is half the mean square error of the predictions for each time step, normalised by $S$, not by $R$:
+%MD: next sentence: What a responses? Please add what exactly is predicted? How does a state vector look like?
+where $R$ is the number of responses, $t_i$ is the ground truth value (from the Kitti tracks) and $y_i$ is the prediction of the network for sample $i$.
+For sequence-to-sequence regression networks such as SPENT, the loss function of the regression layer is half the mean square error of the predictions for each time step, normalized by the sequence length $S$, not by the number of responses $R$: %MD: Check if the word "number of responses" be replaced by something easier to understand (see above)
 \begin{equation}
-	loss = \frac{1}{2S} \sum_{i=1}^{S}\sum_{j=1}^{R}{({t_{ij}}-{y_{ij}})}^2
+	loss = \frac{1}{2S} \sum_{i=1}^{S}\sum_{j=1}^{R}{({t_{ij}}-{y_{ij}})}^2.
 \end{equation}
-where $S$ is the sequence length. During training, the average loss is calculated using the observations in the mini-batch. Where $S$ is the mini-batch length.
-In relation to the KITTI data set (cars and vans), an RMSE of 0.025 was achieved for the position prediction of all objects in the dataset.
+During training, the average loss is calculated using the observations in the mini-batch, so $S$ equals the mini-batch length. %MD: So you dont have a sequence length anymore. So nothing is add up if there are no prediction on certain time stamps.
+% MD: More specific: "In relation", do you mean you calculated the RMSE with the same formular? Also: What does this mean? Is is good, is it bad? Will you talk about it later?
+In relation to the KITTI data set (cars and vans), a Root Mean Square Error (RMSE) of 0.025 was achieved for the position prediction of all objects in the dataset.
 
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: SANT
 \subsection{Single Association Network (SANT)}
