@@ -50,7 +50,8 @@
     Replacing single components allows us to get a clear evaluation of the impact of each ML model on the overall tracking system while maintaining the modularity of the system.
     The results reveal a modular, robust, and maintainable tracker,
     underscoring the potential of ML integration in ADAS.
-    % hier müssen später noch unbedingt die wichtigsten konkreten Ergebnisse rein.
+    % MD: hier müssen später noch unbedingt die wichtigsten konkreten Ergebnisse rein.
+	% CH: ?
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -91,27 +92,30 @@ their performance through multiple tests and comparisons with established method
 
 % MD: Vielleicht können wir noch ein paar Arbeiten finden die ML für tracking nutzen.
 % MD: Wir sollten insgesamt auf 35++ zitierte Arbeiten kommen. Oft ist das Einfachste sich eine gute andere Arbeit aus möglichst dem Gleichen Themengebiet zu nehmen und zu schauen wen die gerade zitieren.
+% CH: Paper aus der Thesis ergänzt. Zusäzliche Arbeiten müssen noch gesucht werden (aktuell ca. 15 Quellen angegeben)
 \section{Related work}
 \subsection{Real time applications}
 ADAS are embedded real-time applications where it is crucial to predict the state of objects immediately after their detection. This rules out offline tracking methods as presented in \cite{offline_mot.2017} that process the entire video material at once in a batch process.
 Therefore, most recent approaches for tracking multiple objects rely on online methods
 that do not depend on future image information. Online methods use various features to estimate the similarity between the recognized objects and the existing tracks.
 This can be done on the basis of their predicted positions or even similarities in appearance
-\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016,
+\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, 
 	DL_RNN_mot.2016,
-	DL_CNN_mot_sot_based.2017,
-	DL_RNN_data_association.2019,
+	DL_CNN_mot_sot_based.2017, 
+	DL_RNN_data_association.2019, 
 	DL_RNN_data_association.2020,
 	DL_CNN_mot_sot_based.2017,
 	DL_ATT_CNN_soda.2020,
 	DL_ATT_CNN_mot_sot_based.2017,
-	DL_ATT_Trackformer.2022}.
+	DL_ATT_Trackformer.2022,
+	DL_SIAM.2019,
+	DL_CNN_ATT_mot.2017}.
 
 \subsection{Tracked object prediction}
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: prediction
-One fundamental problem in TbD frameworks is the prediction of the states of the already tracked objects. In many approaches Kalman filters and their variants have proven to be effective for state prediction. %cite, kannst auch etwas nochmal citen
+One fundamental problem in TbD frameworks is the prediction of the states of the already tracked objects. In many approaches Kalman filters and their variants have proven to be effective for state prediction\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, KF_framework.2013}. %MD: cite, kannst auch etwas nochmal citen %CH: done.
 However, they reach their limits in more complex scenarios, particularly in the presence
-of non-linear motion patterns and interactions among multiple objects. % finden wir hier auch ein Paper? Grenzen von Kalman filtern, sowas?
+of non-linear motion patterns and interactions among multiple objects. %MD: finden wir hier auch ein Paper? Grenzen von Kalman filtern, sowas? %CH: ... 
 In this work, we introduce a novel MOT approach that leverages Machine Learning (ML)
 to overcome these challenges.
 We specifically focus on the development and implementation of Neural Networks (NN),
@@ -125,7 +129,7 @@ This aggregate of temporal information can be done for example using attention m
 Similar to the problem statement in Mertz et al \cite{DL_RNN_data_association.2019}, the aim of our work is to develop a data-based approach that can learn to completely solve the combinatorial Non Deterministic Polynomial Time (NP) hard optimization problem of data association.
 Mertz et al \cite{DL_RNN_data_association.2019} use a distance matrix based on the
 Euclidean distance measure as input for the developed association network,
-thus replacing an association algorithm such as the Hungarian Algorithm (HA). %cite for HA algorithm
+thus replacing an association algorithm such as the Hungarian Algorithm (HA) \cite{DA_hungarian.1955}. %MD: cite for HA algorithm %CH: done. 
 % MD: Du kannst dem Autor auch einfach schreiben und nachfragen.
 It can be assumed that the Euclidean distance measure was used as the basis for calculating
 the ground truth (GT) training data (distance matrices) and for the evaluation.
@@ -133,13 +137,12 @@ However, this is not explicitly stated.
 When the Euclidean distance is used to calculate the training data, the network will only learn to follow this logic. This deprives the network
 of the opportunity to follow a different association logic.
 In the context of this work, we put forward the hypothesis that a Gated
-Recurrent Unit (GRU)-based association network can be designed and trained using an undefined distance measure. %MD: Ich finde den nächsten Satz schwer zu verstehen. Kannst du das einfacher umschreiben? Was ist "assignment of temporal memory component"
-This can increase the assignment of the temporal memory component, i.e. the history, and thus boost performance.
-
+Recurrent Unit (GRU)-based association network can be designed and trained using an undefined distance measure. %MD: Ich finde den nächsten Satz schwer zu verstehen. Kannst du das einfacher umschreiben? Was ist "assignment of temporal memory component" %CH: Ergänzung und Verweis auf LSTM
+This can increase the assignment of the time-based memory units, i.e. the history, and thus boost performance. 
+For this purpose, the Long Short-Term Memory network layer (LSTM) is implemented, which enables the memory of information using hidden units over a time interval \cite{DL_LSTM.1997}.
 The goal of this work was therefore to develop an association network that is intended to solve
 the assignment of one or more sensor objects (SO) to an existing number of object tracks
 without a defined distance measure.
-
 
 \section{Overview of our proposed models}
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: Einführung unser Ansatz
@@ -151,7 +154,7 @@ The input for the proposed Single Prediction Network (SPENT) are the sensor obje
 SPENT predicts all vectors to the next time step where they are used as input to the Single Association Network (SANT)
 to build target trajectories or object tracks.
 
-%MD: Ist k als Index besser als t für time? Ich würde unter SANT und SPENT noch association / fusion and prediction schreiben (fusion passiert hier doch auch). Ich würde alle Pfeile beschriften, entweder mit einem Wort daneben oder so wie es hier gemacht wurde mit einer Abkürzung. Unter Delete steht delete_thr, was ist das? Bei den Hiddenstatevectors würde ich oben oder unten in der Beschreibung noch schreiben "one for each track". Warum sind die Pfeile oben dünner als die unten? Steht doch das gleiche drin und warum gibt es unten zwei verschiedene Farben? Steht doch auch das gleiche drin.
+%MD: Anmerkungen zur Grafik %CH: alle Punkte eingearbeitet. 
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=1.0\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
 	\caption{Schematic representation of the two integrated networks SPENT and SANT in a tracking-by-detection (TbD) framework.}

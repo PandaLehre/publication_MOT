@@ -66,12 +66,30 @@ Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using
 T.~M. A. K. L. L.-T.~C. Feichtenhofer, ``Trackformer: Multi-object tracking
   with transformers,'' \emph{Paper}, 2022.
 
+\bibitem{DL_SIAM.2019}
+P.~C.~H. Ling, ``Famnet: Joint learning of feature, affinity and
+  multi-dimensional assignment for online multiple object tracking,''
+  \emph{ICCV}, 2019.
+
+\bibitem{DL_CNN_ATT_mot.2017}
+Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using
+  cnn-based single object tracker with spatial-temporal attention mechanism,''
+  \emph{ICCV}, 2017.
+
 \bibitem{KF_framework.2013}
 \BIBentryALTinterwordspacing
 {Ba-Tuong Vo}, ``code set for research use: Multi-sensor multi-target
   tracking,'' 2013. [Online]. Available:
   \url{https://ba-tuong.vo-au.com/codes.html}
 \BIBentrySTDinterwordspacing
+
+\bibitem{DA_hungarian.1955}
+H.~W. Kuhn, ``The hungarian method for the assignment problem,'' \emph{Naval
+  Research Logistics Quarterly}, 1955.
+
+\bibitem{DL_LSTM.1997}
+S.~H.~J. Schmidhuber, ``Long short-term memory,'' \emph{Neural Computation},
+  1997.
 
 \bibitem{DL_book.2019}
 I.~G. Y. B.~A. Courville, \emph{Deep Learning}.\hskip 1em plus 0.5em minus
