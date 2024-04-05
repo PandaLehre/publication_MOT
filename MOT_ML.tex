@@ -90,29 +90,32 @@ the corresponding assignment.
 Furthermore, we integrate SPENT and SANT into an existing tracking system and demonstrate
 their performance through multiple tests and comparisons with established methods.
 
+This work provides new insights and advancement in the
+development of Advanced Driver Assistance Systems (ADAS),
+contributing to the further evolution of technologies for autonomous driving (AD).
+
 % MD: Vielleicht können wir noch ein paar Arbeiten finden die ML für tracking nutzen.
 % MD: Wir sollten insgesamt auf 35++ zitierte Arbeiten kommen. Oft ist das Einfachste sich eine gute andere Arbeit aus möglichst dem Gleichen Themengebiet zu nehmen und zu schauen wen die gerade zitieren.
 % CH: Paper aus der Thesis ergänzt. Zusäzliche Arbeiten müssen noch gesucht werden (aktuell ca. 15 Quellen angegeben)
+\newpage % CH: i.O?
 \section{Related work}
 \subsection{Real time applications}
 ADAS are embedded real-time applications where it is crucial to predict the state of objects immediately after their detection. This rules out offline tracking methods as presented in \cite{offline_mot.2017} that process the entire video material at once in a batch process.
 Therefore, most recent approaches for tracking multiple objects rely on online methods
 that do not depend on future image information. Online methods use various features to estimate the similarity between the recognized objects and the existing tracks.
 This can be done on the basis of their predicted positions or even similarities in appearance
-\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, 
-	DL_RNN_mot.2016,
-	DL_CNN_mot_sot_based.2017, 
-	DL_RNN_data_association.2019, 
-	DL_RNN_data_association.2020,
-	DL_CNN_mot_sot_based.2017,
-	DL_ATT_CNN_soda.2020,
-	DL_ATT_CNN_mot_sot_based.2017,
-	DL_ATT_Trackformer.2022,
-	DL_SIAM.2019,
-	DL_CNN_ATT_mot.2017}.
+\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016},
+\cite{	DL_RNN_mot.2016,
+		DL_CNN_mot_sot_based.2017, 
+		DL_RNN_data_association.2019, 
+		DL_RNN_data_association.2020,
+		DL_ATT_CNN_soda.2020,
+		DL_ATT_CNN_mot_sot_based.2017,
+		DL_ATT_Trackformer.2022,
+		DL_SIAM.2019,
+		DL_CNN_ATT_mot.2017	}.
 
 \subsection{Tracked object prediction}
-%%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: prediction
 One fundamental problem in TbD frameworks is the prediction of the states of the already tracked objects. In many approaches Kalman filters and their variants have proven to be effective for state prediction\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, KF_framework.2013}. %MD: cite, kannst auch etwas nochmal citen %CH: done.
 However, they reach their limits in more complex scenarios, particularly in the presence
 of non-linear motion patterns and interactions among multiple objects. %MD: finden wir hier auch ein Paper? Grenzen von Kalman filtern, sowas? %CH: ... 
@@ -122,9 +125,8 @@ We specifically focus on the development and implementation of Neural Networks (
 which can enable more precise and flexible data-driven object tracking.
 
 \subsection{Association}
-%%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: association
 Another fundamental problem in TbD framework is data association. For this some approaches only consider the current state of the tracks,
-while others integrate temporal information auch as the track history.
+while others integrate temporal information such as the track history.
 This aggregate of temporal information can be done for example using attention mechanisms as used in \cite{DL_ATT_CNN_soda.2020, DL_ATT_CNN_mot_sot_based.2017} or recurrent neural networks (RNNs) as in \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}. The latter is what we are also pursuing in this work.
 Similar to the problem statement in Mertz et al \cite{DL_RNN_data_association.2019}, the aim of our work is to develop a data-based approach that can learn to completely solve the combinatorial Non Deterministic Polynomial Time (NP) hard optimization problem of data association.
 Mertz et al \cite{DL_RNN_data_association.2019} use a distance matrix based on the
@@ -139,13 +141,12 @@ of the opportunity to follow a different association logic.
 In the context of this work, we put forward the hypothesis that a Gated
 Recurrent Unit (GRU)-based association network can be designed and trained using an undefined distance measure. %MD: Ich finde den nächsten Satz schwer zu verstehen. Kannst du das einfacher umschreiben? Was ist "assignment of temporal memory component" %CH: Ergänzung und Verweis auf LSTM
 This can increase the assignment of the time-based memory units, i.e. the history, and thus boost performance. 
-For this purpose, the Long Short-Term Memory network layer (LSTM) is implemented, which enables the memory of information using hidden units over a time interval \cite{DL_LSTM.1997}.
+For this purpose, the Long Short-Term Memory network (LSTM) layer is implemented, which enables the memory of information using hidden units over a time interval \cite{DL_LSTM.1997}.
 The goal of this work was therefore to develop an association network that is intended to solve
 the assignment of one or more sensor objects (SO) to an existing number of object tracks
 without a defined distance measure.
 
 \section{Overview of our proposed models}
-%%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: Einführung unser Ansatz
 Our primary contribution is the development and evaluation of three NN that we labeled:
 (i) the Single Prediction Network (SPENT), (ii) the Single Association Network (SANT),
 and (iii) the Multi Association Network (MANTa).
@@ -161,12 +162,6 @@ to build target trajectories or object tracks.
 	\label{MOT_Framework_Integration_SPENT_SANT}
 \end{figure}
 
-% MD: Das würde ich später nochmal anpassen: Was genau ist unsere Kontribution? Ich würde es auch verschieben: Entweder in die Einleitung oder in den Schluss. Hier sind wir gerade im technischen, erklärenden Teil "Overview of Models"
-% CH: dazu würde ich mich gerne noch einmal abstimmen :) (unsicher was gemeint ist)
-This work provides new insights and advancement in the
-development of Advanced Driver Assistance Systems (ADAS),
-contributing to the further evolution of technologies for autonomous driving (AD).
-
 \section{Tracking with Prediction and Association Networks}
 We apply the tracking-by-detection (TbD) paradigm, in which a tracker fuses object
 fuses the object detections to generate object tracks that are consistent over time.
@@ -174,38 +169,47 @@ fuses the object detections to generate object tracks that are consistent over t
 
 To enable our models to incorporate temporal information, we use Long Short-Term Memory (LSTM) and bidirectional Long Short-Term Memory (BiLSTM) networks. Both for the prediction (SPENT) and the association (SANT) of the sensor objects (SO) to the existing tracks.
 
-%%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: SPENT
 \subsection{Single Prediction Network (SPENT)}
 Most existing tracking methods associate incoming detections pairwise with object states predicted by a simple motion model, e.g. a constant velocity model, using a Kalman filter
 \cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, KF_framework.2013}.
 However, recent work has demonstrated that aggregating temporal information as well as contextual information can improve the tracking of multiple objects by utilizing higher order information in addition to pairwise similarities between detections \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019, DL_RNN_data_association.2020, DL_ATT_CNN_soda.2020}.
 Our approach is to use the hidden states of the LSTM layer as an object-specific parameter set. %MD: Warum parameter set? Einstellbare Parameter sind es ja nicht.
 %CH: stimmmt. Parameter werden im Trainingsprozess definiert, jedoch werden die Hidden states dann pro Track aufgesetzt und pro Zeitschritt angepasst
-The values of the hidden states of the LSTM layer are updated in each time step based on the received measurement data.
+The values of the hidden states of the LSTM layer are updated in each time step based on the received measurement data, as shown in Figure \ref{SPENT_network_arch}.
+
 These updates therefore results in an internal correction over the course of the sequence.
 
-%MD: Ich würde keine einzige Abbildung im Paper haben, auf die nicht im Text eingegangen wird. Es sollte im Text erläutert werden wie das Netzwerk aufgebaut ist. Die Abbildung ist sehr groß und versteckt trotzdem noch viel Informationen. Ich würde die genauen Input größen angeben, auch die genaue Zahl an connections und die Größe des hidden Layers. Einfach alle Details des Netzwerks. Ich würde die Abbildung kippen um Platz zu sparen.
+%MD: Es sollte im Text erläutert werden wie das Netzwerk aufgebaut ist. Die Abbildung ist sehr groß und versteckt trotzdem noch viel Informationen. Ich würde die genauen Input größen angeben, auch die genaue Zahl an connections und die Größe des hidden Layers. Einfach alle Details des Netzwerks. Ich würde die Abbildung kippen um Platz zu sparen.
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=0.4\linewidth]{figs/SPENT_network_arch.png}}
 	\caption{Schematic representation of the generic network structure of SPENT.}
 	\label{SPENT_network_arch}
 \end{figure}
 
-%%%%% MD: Bis hierhin habe ich gelesen bisher %%%%%%%%%%%%%%
 \paragraph{Data preprocessing}
 Ground truth (GT) data in the form of tracks of vehicles from the KITTI data set was used for our development.
 A GT Track contains the information of an object over time, starting with its appearance and ending with its exit from the sensor detection range.
 In order to achieve better generalization and to increase the chance that the training converges, the track state values at time t (predictors) and track state values at time t+1 (targets) were normalized following
-\cite{DL_book.2019}, such that the predictors and targets have a mean value of zero and a unit variance.  %Why use the word "predictors", why not predictions? And I would even write "possible predictions" for now these are only tracks, no predictions.
-The mean value $\mu$ and the standard deviation $\sigma$ were calculated for all tracks using the following equations:
+\cite{DL_book.2019}, such that the possible predictions and targets have a mean value of zero and a unit variance.
+The mean value $\mu$ and the standard deviation $\sigma$ for each state variable were calculated for all tracks using the following equations:
 \begin{equation}
 	\mu = \frac{1}{N} \sum_{i = 1}^{N} A_i
 \quad\text{and}\quad
-	\sigma = \sqrt{{\frac{1}{N - 1}} \sum_{i = 1}^{N} |A_i - \mu|^2},
+	\sigma = \sqrt{{\frac{1}{N - 1}} \sum_{i = 1}^{N} |A_i - \mu|^2}
 \end{equation}
 
-where $A_i$ denotes the INSERT HERE and $N$ is the total number of tracks. %MD: Or time stamps? Even for me this is not exactly clear what is being normalized and how.
-We also apply pre-padding as described in \cite{DL_padding.2019} where Reddy et al. show how padding influences the performance of neural networks in sequence-based tasks. Their study suggests that although both pre-padding and post-padding are feasible, the choice of padding technique can have a significant impact on the efficiency of the model, especially for LSTM networks where the sequence context is crucial. %MD: And what does this mean for us? You say it is crucial and then it is not described any further. How did you apply padding?
+where $A_i$ the combined length of all tracks and $N$ is the number of states. %MD: Or time 
+%stamps? Even for me this is not exactly clear what is being normalized and how. %CH: added explanation
+We also apply pre-padding as described in \cite{DL_padding.2019} where Reddy et al. show how padding influences the performance of neural networks in sequence-based tasks. 
+Their study suggests that although both pre-padding and post-padding are feasible, the choice of padding technique can have a significant impact on the efficiency of the model, especially for LSTM networks where the sequence context is crucial. 
+%MD: And what does this mean for us? You say it is crucial and then it is not described any further. How did you apply padding? &CH: added text and figure
+As \cite{DL_padding.2019} described, padding can lead to noise in the network, but one sequence adjustment per mini-batch is required for training LSTM networks. 
+To minimise the effect, the sequences of the training data were therefore sorted by length before the mini-batch padding. Figure \ref{figure_padding} clearly shows that the padding (turquoise area) is minimised by a sorted training data set per mini-batch. Without this modification, no convergence could be achieved in the training.
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=1.0\linewidth]{figs/padding.png}}
+	\caption{Mini-batch padding effect, training data for LSTM networks.}
+	\label{figure_padding}
+\end{figure}
 
 \paragraph{Network development} %MD: Nicht besser "Network architecture" oder so ähnlich? du spricht nicht davon wie du das Netz entwickelt hast, sondern was es jetzt kann (was auch besser ist)
 The Single Prediction Network (SPENT) was designed for an open-loop application, this means that the network predicts values for a future time step based on previously received data.
