@@ -150,8 +150,9 @@ without a defined distance measure.
 Our primary contribution is the development and evaluation of three NN that we labeled:
 (i) the Single Prediction Network (SPENT), (ii) the Single Association Network (SANT),
 and (iii) the Multi Association Network (MANTa).
-Figure \ref{MOT_Framework_Integration_SPENT_SANT} provides an overview of our approach (i) and (ii).
-The input for the proposed Single Prediction Network (SPENT) are the sensor objects (SO) in every time step. These objects consists of a fixed-dimensional state vector that contains information such as object position, orientation and dimension.
+Figure \ref{MOT_Framework_Integration_SPENT_SANT} provides an overview of our approach
+in which the association network can be represented by (ii) or (iii) and the prediction network is represented by (i).
+The input for the proposed Prediction Network (i) are the sensor objects (SO) in every time step. These objects consists of a fixed-dimensional state vector that contains information such as object position, orientation and dimension.
 SPENT predicts all vectors to the next time step where they are used as input to the Single Association Network (SANT)
 to build target trajectories or object tracks.
 
