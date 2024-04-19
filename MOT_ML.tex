@@ -51,7 +51,8 @@
     The results reveal a modular, robust, and maintainable tracker,
     underscoring the potential of ML integration in AD Tracking Systems.
     % MD: hier müssen später noch unbedingt die wichtigsten konkreten Ergebnisse rein.
-	% CH: ?
+	% CH: ? Quantisierung der Performance muss hier noch rein... SPENT: RMSE --> reduction of the RMSE by half to a basic KF implementaion, SANT / MANTA
+	% HINTERGRUND: Idee ist Einleitung + Zusammenfasssung der wichtigsdten Ergebnisse
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -60,8 +61,6 @@
 
 \section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher Absatztitel: Allgemeine Einführung MOT
-% MD: Hier sollten dann nur "klassische Paper zitiert werden, also keine ML Paper.
-% CH: ML Paper entfernt.
 \IEEEPARstart{T}{he}
 ongoing evolution of Advanced Driver Assistance Systems (ADAS) has brought the need for precise
 and reliable Multi Object Tracking (MOT) into the spotlight
@@ -97,28 +96,31 @@ contributing to the further evolution of technologies for autonomous driving (AD
 % MD: Vielleicht können wir noch ein paar Arbeiten finden die ML für tracking nutzen.
 % MD: Wir sollten insgesamt auf 35++ zitierte Arbeiten kommen. Oft ist das Einfachste sich eine gute andere Arbeit aus möglichst dem Gleichen Themengebiet zu nehmen und zu schauen wen die gerade zitieren.
 % CH: Paper aus der Thesis ergänzt. Zusäzliche Arbeiten müssen noch gesucht werden (aktuell ca. 15 Quellen angegeben)
-\newpage % CH: i.O?
 \section{Related work}
 \subsection{Real time applications}
 ADAS are embedded real-time applications where it is crucial to predict the state of objects immediately after their detection. This rules out offline tracking methods as presented in \cite{offline_mot.2017} that process the entire video material at once in a batch process.
 Therefore, most recent approaches for tracking multiple objects rely on online methods
 that do not depend on future image information. Online methods use various features to estimate the similarity between the recognized objects and the existing tracks.
 This can be done on the basis of their predicted positions or even similarities in appearance
-\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016},
-\cite{	DL_RNN_mot.2016,
-		DL_CNN_mot_sot_based.2017, 
-		DL_RNN_data_association.2019, 
-		DL_RNN_data_association.2020,
-		DL_ATT_CNN_soda.2020,
-		DL_ATT_CNN_mot_sot_based.2017,
-		DL_ATT_Trackformer.2022,
-		DL_SIAM.2019,
-		DL_CNN_ATT_mot.2017	}.
+% Cluster? --> maximale größe der Blöcke etwas reduzieren: ca. 3-4
+\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016}
+\cite{DL_RNN_mot.2016,
+	DL_CNN_mot_sot_based.2017, 
+	DL_RNN_data_association.2019, 
+	DL_RNN_data_association.2020}
+% Ergänzungen zu den einzerlnen Titeln, Inhalte etc. für relevante Paper
+\cite{DL_ATT_CNN_soda.2020,
+	DL_ATT_CNN_mot_sot_based.2017,
+	DL_ATT_Trackformer.2022,
+	DL_SIAM.2019,
+	DL_CNN_ATT_mot.2017	}
+.
 
 \subsection{Tracked object prediction}
-One fundamental problem in TbD frameworks is the prediction of the states of the already tracked objects. In many approaches Kalman filters and their variants have proven to be effective for state prediction\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, KF_framework.2013}. %MD: cite, kannst auch etwas nochmal citen %CH: done.
+One fundamental problem in TbD frameworks is the prediction of the states of the already tracked objects. In many approaches Kalman filters and their variants have proven to be effective for state prediction\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, KF_framework.2013}. 
 However, they reach their limits in more complex scenarios, particularly in the presence
-of non-linear motion patterns and interactions among multiple objects. %MD: finden wir hier auch ein Paper? Grenzen von Kalman filtern, sowas? %CH: ... 
+of non-linear motion patterns and interactions among multiple objects. %MD a): finden wir hier auch ein Paper? Grenzen von Kalman filtern, sowas? %CH: ... 
+% oder b): as similary motivated in cite / oder by name et al. cite 
 In this work, we introduce a novel MOT approach that leverages Machine Learning (ML)
 to overcome these challenges.
 We specifically focus on the development and implementation of Neural Networks (NN),
@@ -131,8 +133,9 @@ This aggregate of temporal information can be done for example using attention m
 Similar to the problem statement in Mertz et al \cite{DL_RNN_data_association.2019}, the aim of our work is to develop a data-based approach that can learn to completely solve the combinatorial Non Deterministic Polynomial Time (NP) hard optimization problem of data association.
 Mertz et al \cite{DL_RNN_data_association.2019} use a distance matrix based on the
 Euclidean distance measure as input for the developed association network,
-thus replacing an association algorithm such as the Hungarian Algorithm (HA) \cite{DA_hungarian.1955}. %MD: cite for HA algorithm %CH: done. 
+thus replacing an association algorithm such as the Hungarian Algorithm (HA) \cite{DA_hungarian.1955}. 
 % MD: Du kannst dem Autor auch einfach schreiben und nachfragen.
+% CH: ... bin dran
 It can be assumed that the Euclidean distance measure was used as the basis for calculating
 the ground truth (GT) training data (distance matrices) and for the evaluation.
 However, this is not explicitly stated.
@@ -174,8 +177,10 @@ To enable our models to incorporate temporal information, we use Long Short-Term
 Most existing tracking methods associate incoming detections pairwise with object states predicted by a simple motion model, e.g. a constant velocity model, using a Kalman filter
 \cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, KF_framework.2013}.
 However, recent work has demonstrated that aggregating temporal information as well as contextual information can improve the tracking of multiple objects by utilizing higher order information in addition to pairwise similarities between detections \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019, DL_RNN_data_association.2020, DL_ATT_CNN_soda.2020}.
-Our approach is to use the hidden states of the LSTM layer as an object-specific parameter set. %MD: Warum parameter set? Einstellbare Parameter sind es ja nicht.
+Our approach is to use the hidden states of the LSTM layer as an object-specific information storage. %MD: Warum parameter set? Einstellbare Parameter sind es ja nicht.
 %CH: stimmmt. Parameter werden im Trainingsprozess definiert, jedoch werden die Hidden states dann pro Track aufgesetzt und pro Zeitschritt angepasst
+The number of hidden units corresponds to the amount of information that the layer remembers between time steps. 
+The hidden state can contain information from all the previous time steps, regardless of the sequence length. 
 The values of the hidden states of the LSTM layer are updated in each time step based on the received measurement data, as shown in Figure \ref{SPENT_network_arch}.
 
 These updates therefore results in an internal correction over the course of the sequence.
@@ -207,12 +212,12 @@ Their study suggests that although both pre-padding and post-padding are feasibl
 As \cite{DL_padding.2019} described, padding can lead to noise in the network, but one sequence adjustment per mini-batch is required for training LSTM networks. 
 To minimise the effect, the sequences of the training data were therefore sorted by length before the mini-batch padding. Figure \ref{figure_padding} clearly shows that the padding (turquoise area) is minimised by a sorted training data set per mini-batch. Without this modification, no convergence could be achieved in the training.
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=1.0\linewidth]{figs/padding.png}}
+	\centerline{\includegraphics[width=0.8\linewidth]{figs/padding.png}}
 	\caption{Mini-batch padding effect, training data for LSTM networks.}
 	\label{figure_padding}
 \end{figure}
 
-\paragraph{Network development} %MD: Nicht besser "Network architecture" oder so ähnlich? du spricht nicht davon wie du das Netz entwickelt hast, sondern was es jetzt kann (was auch besser ist)
+\paragraph{Network architecture} 
 The Single Prediction Network (SPENT) was designed for an open-loop application, this means that the network predicts values for a future time step based on previously received data.
 For use in an online MOT process, the network is therefore able to make a prediction about the most likely next state values using the state values received for a given SO.
 The internal values (hidden states) of the LSTM layer are updated per time step based on the received measurement data.

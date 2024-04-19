@@ -31,8 +31,6 @@ function [est,eval] = run_MOT_func_03(model,meas,SPENT,SANT,options)
     eval.assignment_mat_00 = cell(meas.K,1);                        % Ergebnis Hungarian Algorithmus mit Input distmeas_mat_00
     eval.assignment_mat_SANT = cell(meas.K,1);                      % Ergebnis Hungarian Algorithmus mit Input distmeas_mat_SANT
 
-    
-
     % ID Tag / Kennzeichnung
     newIDTag = 1;
     
