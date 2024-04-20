@@ -40,7 +40,7 @@
     in the automotive industry, this work focuses on the integration of ML techniques into
     established tracking methodologies.
     Key contributions encompass the creation and evaluation of three specialized neural networks: (i)
-    the Single Prediction Network (SPENT) for predicting the trajectories of tracked objects,
+    the Prediction Network for predicting the trajectories of tracked objects,
     (ii) the Single Association Network (SANT) for associating incoming sensor objects
     with existing tracks sequential, (iii) and the Multi Association Network (MANTa) for associating
     multiple sensor objects with existing tracks within one timestep.
@@ -77,8 +77,8 @@ Tracking frameworks form the heart of ADAS systems that are used in millions of 
 In this work, we propose a data driven approach to tracking frameworks, which would allow the same system to be fine tuned for specific configurations relying only on data, thus increasing maintainability and adaptability. We do this preserving one of the biggest  strengths of classical approaches: its modularity, by replacing only single tracking components with ML models.
 
 % CH: Absatz in Intro kopiert
-In comparison to the Kalman filter, our Single Prediction Network (SPENT) is capable of predicting the state of individual objects without the need for a predefined state or observation model at runtime.
-SPENT holds the potential, particularly in terms of adaptability to various scenarios
+In comparison to the Kalman filter, our Prediction Network is capable of predicting the state of individual objects without the need for a predefined state or observation model at runtime.
+Our Prediction Network holds the potential, particularly in terms of adaptability to various scenarios
 and the ability to effectively handle nonlinearities.
 Many conventional tracking systems rely on static methods for data association,
 often based on simple heuristics or fixed thresholds.
@@ -86,7 +86,7 @@ In contrast, Single Association Network (SANT) employs machine learning to autom
 As a result, within the Tracking-by-Detection (TbD) MOT framework,
 SANT replaces the calculation of a distance metric and the Hungarian algorithm for
 the corresponding assignment.
-Furthermore, we integrate SPENT and SANT into an existing tracking system and demonstrate
+Furthermore, we integrate the Prediction Network and SANT into an existing tracking system and demonstrate
 their performance through multiple tests and comparisons with established methods.
 
 This work provides new insights and advancement in the
@@ -151,18 +151,18 @@ without a defined distance measure.
 
 \section{Overview of our proposed models}
 Our primary contribution is the development and evaluation of three NN that we labeled:
-(i) the Single Prediction Network (SPENT), (ii) the Single Association Network (SANT),
+(i) the Prediction Network, (ii) the Single Association Network (SANT),
 and (iii) the Multi Association Network (MANTa).
 Figure \ref{MOT_Framework_Integration_SPENT_SANT} provides an overview of our approach
 in which the association network can be represented by (ii) or (iii) and the prediction network is represented by (i).
 The input for the proposed Prediction Network (i) are the sensor objects (SO) in every time step. These objects consists of a fixed-dimensional state vector that contains information such as object position, orientation and dimension.
-SPENT predicts all vectors to the next time step where they are used as input to the Single Association Network (SANT)
+The Prediction Network predicts all vectors to the next time step where they are used as input to the Single Association Network (SANT)
 to build target trajectories or object tracks.
 
 %MD: Anmerkungen zur Grafik %CH: alle Punkte eingearbeitet. 
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=1.0\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
-	\caption{Schematic representation of the two integrated networks SPENT and SANT in a tracking-by-detection (TbD) framework.}
+	\caption{Schematic representation of the two integrated networks in a tracking-by-detection (TbD) framework.}
 	\label{MOT_Framework_Integration_SPENT_SANT}
 \end{figure}
 
@@ -171,26 +171,65 @@ We apply the tracking-by-detection (TbD) paradigm, in which a tracker fuses obje
 fuses the object detections to generate object tracks that are consistent over time.
 \cite{KF_framework.2013}, for example, provides a framework for analyzing tracking approaches that follow the TbD paradigm. This was used accordingly in this study.
 
-To enable our models to incorporate temporal information, we use Long Short-Term Memory (LSTM) and bidirectional Long Short-Term Memory (BiLSTM) networks. Both for the prediction (SPENT) and the association (SANT) of the sensor objects (SO) to the existing tracks.
+To enable our models to incorporate temporal information, we use Long Short-Term Memory (LSTM) and bidirectional Long Short-Term Memory (BiLSTM) networks. Both for the prediction and the association (SANT) of the sensor objects (SO) to the existing tracks.
 
-\subsection{Single Prediction Network (SPENT)}
+\subsection{Prediction Network}
 Most existing tracking methods associate incoming detections pairwise with object states predicted by a simple motion model, e.g. a constant velocity model, using a Kalman filter
 \cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, KF_framework.2013}.
 However, recent work has demonstrated that aggregating temporal information as well as contextual information can improve the tracking of multiple objects by utilizing higher order information in addition to pairwise similarities between detections \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019, DL_RNN_data_association.2020, DL_ATT_CNN_soda.2020}.
-Our approach is to use the hidden states of the LSTM layer as an object-specific information storage. %MD: Warum parameter set? Einstellbare Parameter sind es ja nicht.
-%CH: stimmmt. Parameter werden im Trainingsprozess definiert, jedoch werden die Hidden states dann pro Track aufgesetzt und pro Zeitschritt angepasst
-The number of hidden units corresponds to the amount of information that the layer remembers between time steps. 
-The hidden state can contain information from all the previous time steps, regardless of the sequence length. 
-The values of the hidden states of the LSTM layer are updated in each time step based on the received measurement data, as shown in Figure \ref{SPENT_network_arch}.
+Our approach is to use the hidden states of the LSTM layer as an object-specific information storage. 
+The Prediction Network was designed for an open-loop application, this means that the network predicts values for a future time step based on previously received data.
+For use in an online MOT process, the network is therefore able to make a prediction about the most likely next state values using the state values received for a given Statevector of a Sensorobject (SO).
 
-These updates therefore results in an internal correction over the course of the sequence.
-
-%MD: Es sollte im Text erläutert werden wie das Netzwerk aufgebaut ist. Die Abbildung ist sehr groß und versteckt trotzdem noch viel Informationen. Ich würde die genauen Input größen angeben, auch die genaue Zahl an connections und die Größe des hidden Layers. Einfach alle Details des Netzwerks. Ich würde die Abbildung kippen um Platz zu sparen.
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=0.4\linewidth]{figs/SPENT_network_arch.png}}
-	\caption{Schematic representation of the generic network structure of SPENT.}
+	\centerline{\includegraphics[width=0.90\linewidth]{figs/SPENT_network_arch.png}}
+	\caption{Schematic representation of the generic prediction network structure.}
 	\label{SPENT_network_arch}
 \end{figure}
+
+%MD: Warum parameter set? Einstellbare Parameter sind es ja nicht.
+%CH: stimmmt. Parameter werden im Trainingsprozess definiert, jedoch werden die Hidden states dann pro Track aufgesetzt und pro Zeitschritt angepasst
+\paragraph{Network architecture} 
+The internal values (hidden states) of the LSTM layer are updated per time step based on the received measurement data.
+This updating process therefore provides a correction over the course of the sequence of each track.
+The number of hidden units (cells) corresponds to the amount of information that the layer remembers between time steps, as shown in Figure \ref{SPENT_network_arch}. 
+The hidden states can contain information from all the previous time steps, regardless of the sequence length. 
+The values of the hidden states of the LSTM layer are updated in each time step based on the received measurement data and the hidden states of the past timestep.
+These updates therefore results in an internal correction over the course of the sequence.
+%BATCHNORM
+In our prediction network, we have placed a batch normalisation layer directly after the LSTM layer. This means that the output of the LSTM layer is normalised before being passed on to the subsequent Relu layer. This helped speed up training and improve convergence by reducing internal covariate shifts \cite{DL_batch_norm.2015}.
+%RELU
+A Relu layer performs a threshold operation to each element of the input, where any value less than zero is set to zero.
+The Relu function, also known as Rectified Linear Unit, is defined as follows:
+\begin{equation}
+	\text{ReLU}(x) = \max(0, x)
+\end{equation}
+%DROPOUT
+At training time, a dropout layer randomly sets input elements to zero with a given probability.
+This operation effectively changes the underlying network architecture between iterations and helps prevent the network from overfitting \cite{DL_dropout.2014}.
+%FC
+The Fully Connected (FC) Layers multiplies the input by a weight matrix and then adds a bias vector. As shown in Figure \ref{SPENT_network_arch} all neurons in a FC layer connect to all the neurons in the previous layer. This layer combines all of the local information learned by the previous layers. 
+The last FC layer must be equal to the number of response variables in the Regression Output layer \cite{DL_FC.2010}.
+%REGRESSION OUT
+The regression layer computes the half-mean-squared-error loss. 
+On the output of the regression layer at the end of the network ("regressionoutput"), the network calculates the loss through the mean square error (MSE) for the prediction for each state value.
+The MSE indicates the average of the squared difference between the model prediction and the target value, which we
+use as the measure of the quality of the prediction. For a single observation, the MSE is given by:
+\begin{equation}
+	MSE = \sum_{i=1}^{R}\frac{{(t_i-y_i)}^2}{R}
+\end{equation}
+%MD: next sentence: What a responses? Please add what exactly is predicted? How does a state vector look like?
+%CH: predicted states
+where $R$ is the number of predicted states, $t_i$ is the ground truth value (from the Kitti tracks) and $y_i$ is the prediction of the network for sample $i$.
+For our sequence-to-sequence regression network the loss function of the regression layer is half the mean square error of the predictions for each time step, normalized by the sequence length $S$, not by the number of the predicted Statevector $R$: %MD: Check if the word 
+\begin{equation}
+	loss = \frac{1}{2S} \sum_{i=1}^{S}\sum_{j=1}^{R}{({t_{ij}}-{y_{ij}})}^2.
+\end{equation}
+During training, the average loss is calculated using the observations in the mini-batch, so $S$ equals the mini-batch length. %MD: So you dont have a sequence length anymore. So nothing is add up if there are no prediction on certain time stamps.
+% MD: More specific: "In relation", do you mean you calculated the RMSE with the same formular? Also: What does this mean? Is is good, is it bad? Will you talk about it later?
+In relation to the KITTI data set (cars and vans), a Root Mean Square Error (RMSE) of 0.025 was achieved for the position prediction of all objects in the dataset.
+Using a standard Kalman filter (KF), an RMSE of 0.066 was achieved on the same data set.
+
 
 \paragraph{Data preprocessing}
 Ground truth (GT) data in the form of tracks of vehicles from the KITTI data set was used for our development.
@@ -216,28 +255,6 @@ To minimise the effect, the sequences of the training data were therefore sorted
 	\caption{Mini-batch padding effect, training data for LSTM networks.}
 	\label{figure_padding}
 \end{figure}
-
-\paragraph{Network architecture} 
-The Single Prediction Network (SPENT) was designed for an open-loop application, this means that the network predicts values for a future time step based on previously received data.
-For use in an online MOT process, the network is therefore able to make a prediction about the most likely next state values using the state values received for a given SO.
-The internal values (hidden states) of the LSTM layer are updated per time step based on the received measurement data.
-This updating process therefore provides a correction over the course of the sequence of each track.
-
-On the output of the regression layer at the end of the network ("regressionoutput"), we calculate the loss through the mean square error (MSE) for the prediction of the state values.
-The MSE indicates the average of the squared difference between the model prediction and the target value, which we
-use as the measure of the quality of the prediction. For a single observation, the MSE is given by:
-\begin{equation}
-	MSE = \sum_{i=1}^{R}\frac{{(t_i-y_i)}^2}{R}
-\end{equation}
-%MD: next sentence: What a responses? Please add what exactly is predicted? How does a state vector look like?
-where $R$ is the number of responses, $t_i$ is the ground truth value (from the Kitti tracks) and $y_i$ is the prediction of the network for sample $i$.
-For sequence-to-sequence regression networks such as SPENT, the loss function of the regression layer is half the mean square error of the predictions for each time step, normalized by the sequence length $S$, not by the number of responses $R$: %MD: Check if the word "number of responses" be replaced by something easier to understand (see above)
-\begin{equation}
-	loss = \frac{1}{2S} \sum_{i=1}^{S}\sum_{j=1}^{R}{({t_{ij}}-{y_{ij}})}^2.
-\end{equation}
-During training, the average loss is calculated using the observations in the mini-batch, so $S$ equals the mini-batch length. %MD: So you dont have a sequence length anymore. So nothing is add up if there are no prediction on certain time stamps.
-% MD: More specific: "In relation", do you mean you calculated the RMSE with the same formular? Also: What does this mean? Is is good, is it bad? Will you talk about it later?
-In relation to the KITTI data set (cars and vans), a Root Mean Square Error (RMSE) of 0.025 was achieved for the position prediction of all objects in the dataset.
 
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: SANT
 \subsection{Single Association Network (SANT)}
