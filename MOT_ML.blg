@@ -19,37 +19,37 @@ Database file #2: lit.bib
 Done.
 You've used 20 entries,
             4087 wiz_defined-function locations,
-            1441 strings with 20635 characters,
-and the built_in function-call counts, 7292 in all, are:
-= -- 584
-> -- 107
+            1442 strings with 20682 characters,
+and the built_in function-call counts, 7543 in all, are:
+= -- 593
+> -- 136
 < -- 0
-+ -- 52
-- -- 26
-* -- 276
-:= -- 1419
++ -- 66
+- -- 33
+* -- 293
+:= -- 1440
 add.period$ -- 40
 call.type$ -- 20
 change.case$ -- 19
 chr.to.int$ -- 0
 cite$ -- 20
-duplicate$ -- 666
-empty$ -- 725
-format.name$ -- 29
-if$ -- 1604
+duplicate$ -- 681
+empty$ -- 739
+format.name$ -- 37
+if$ -- 1663
 int.to.chr$ -- 0
 int.to.str$ -- 20
-missing$ -- 108
+missing$ -- 115
 newline$ -- 85
 num.names$ -- 20
-pop$ -- 293
+pop$ -- 315
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 575
+skip$ -- 589
 stack$ -- 0
 substring$ -- 19
-swap$ -- 332
+swap$ -- 347
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 5
