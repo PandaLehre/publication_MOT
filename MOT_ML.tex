@@ -12,11 +12,12 @@
 \usepackage{cite}
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 % updated with editorial comments 8/9/2021
+% --> 6 pages at all
 
 
 \begin{document}
 
-\title{Multi-object tracking (MOT) without dynamic models and hard association metrics}
+\title{Multi-object tracking without dynamic models and hard association metrics}
 
 \author{Christian Alexander Holz, Christian Bader, Matthias Drüppel
 	\thanks{C. Holz is with Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany}
@@ -268,27 +269,33 @@ To minimise the effect, the sequences of the training data were therefore sorted
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: SANT
-\subsection{Single Association Network (SANT)}
-SANT stellt einen datenbasierten Ansatz dar, welcher lernen kann, das kombinatorische Non Deterministic Polynomial Time (NP) hard Optimierungsproblem der Datenassoziation vollständig zu lösen.
+\subsection{Association Network (Single Association Network)}
+Das Assoziationsnetzwerk stellt einen datenbasierten Ansatz dar, welcher lernen kann, das kombinatorische Non Deterministic Polynomial Time (NP) hard Optimierungsproblem der Datenassoziation vollständig zu lösen.
 Im Vergleich zu den meisten Assoziationsverfahren \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019} stellt SANT einen Ansatz dar, welcher als Inputdaten keine definierte Distanzmatrix erhält, sondern die bestehenden Tracks sowie jede neue Messung (SO) erhält.
 Damit entfällt die Definition eines Abstandsmaßes, womit dem Netzwerk die Freiheit gegeben wurde, einer eigenen Assoziationslogik zu folgen bzw. diese datenbasiert zu lernen.
-Somit ersetzt SANT die Berechnung eines Abstandsmaßes sowie einen Assoziationsalgorithmus wie z.B. den Hungarian Algorithm (HA).
-
-\begin{figure}[htbp]
-	\centerline{\includegraphics[width=0.4\linewidth]{figs/SANT_network_arch.png}}
-	\caption{Schematic representation of the generic network structure of SANT.}
-	\label{SANT_network_arch}
-\end{figure}
+Somit ersetzt das Assoziationsnetzwerk die Berechnung eines Abstandsmaßes sowie einen Assoziationsalgorithmus wie z.B. den Hungarian Algorithm (HA) \cite{DA_hungarian.1955}.
 
 \paragraph{Datenvorverarbeitung}
-Für die Entwicklung des Single Association Networks (SANT) wurde die Datenassoziation als zeitlich gegliedertes Problem (Sequenz-zu-Vektor) betrachtet.
-Das Datenassoziationsproblem beschreibt somit die Zuordnung von einem SO zu einem Set von Tracks.
+Für die Entwicklung eines Single Association Networks (SANT) wurde die Datenassoziation als zeitlich gegliedertes Problem (Sequenz-zu-Vektor) betrachtet.
+Das Datenassoziationsproblem beschreibt somit die Zuordnung von genau einem SO zu einem Set von Tracks.
 Die entsprechenden Tracks wurden aus dem KITTI Datensatz der gelabelten Kameraaufzeichnungen extrahiert.
 Allerdings existieren für das betrachtete Problem der Assoziation keine realen GT Daten.
 Um sicherzustellen, dass die Zuordnung eines Sensor Objekts (SOs) zu einem Track eines Tracksets genau eine korrekte Lösung besitzt, wurde das SO in einem Zeitschritt aus dem bestehenden Trackset eines Zeitschritts erzeugt.
 Die Daten wurden entsprechend künstlich verrauscht, um aus den GT Daten realistische Sensordaten zu erzeugen.
+Pro Zeitschritt wurden alle existierenden GT Tracks einzeln verrauscht.
+Dafür wurde jedem Wert des aktuellen Zustandsvektors maximal 3\% zufällig abgezogen oder dazu addiert. 
+Der Datensatz wurde in 7 Iterationen erstellt, sodass pro Iteration die Rauschintensität um 0.5\% gesteigert wurde.
+
 Das Datenformat wurde entsprechend gewählt, um eine indexbasierte Trackzuordnung für das Single Association Network (SANT) zu ermöglichen.
-Die Größe der Inputmatrix entspricht daher $m * n$. Mit $m = 2 * AnzahlZustandswerte$ und $n = Trackanzahl(t)$.
+Die Größe der Inputmatrix entspricht daher $m * n + 1$. 
+Mit $m = Anzahl der Zustandswerte$ und $n = Trackanzahl(t)$.
+
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=1.0\linewidth]{figs/SANT_network_arch.png}}
+	\caption{Schematic representation of the generic network structure of SANT.}
+	\label{SANT_network_arch}
+\end{figure}
+
 
 \paragraph{Netzwerkentwicklung}
 Das Netzwerk (Fig. \ref{SANT_network_arch}) ist als Sequenz-to-Classification ausgelegt, wobei der sequenceinput die beschriebene Inputmatrix pro Zeitschritt darstellt.
