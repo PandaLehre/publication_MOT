@@ -10,6 +10,10 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{cite}
+
+\usepackage{capt-of}  % <---
+\usepackage{cuted}    % <===
+
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 % updated with editorial comments 8/9/2021
 % --> 6 pages at all
@@ -214,10 +218,10 @@ These updates therefore results in an internal correction over the course of the
 In our prediction network, we have placed a batch normalisation layer directly after the LSTM layer. This means that the output of the LSTM layer is normalised before being passed on to the subsequent Relu layer. This helped speed up training and improve convergence by reducing internal covariate shifts \cite{DL_batch_norm.2015}.
 %RELU
 A Relu layer performs a threshold operation to each element of the input, where any value less than zero is set to zero.
-The Relu function, also known as Rectified Linear Unit, is defined as follows:
-\begin{equation}
-	\text{ReLU}(x) = \max(0, x)
-\end{equation}
+%The Relu function, also known as Rectified Linear Unit, is defined as follows:
+%\begin{equation}
+%	\text{ReLU}(x) = \max(0, x)
+%\end{equation}
 %DROPOUT
 At training time, a dropout layer randomly sets input elements to zero with a given probability.
 This operation effectively changes the underlying network architecture between iterations and helps prevent the network from overfitting \cite{DL_dropout.2014}.
@@ -268,27 +272,29 @@ To minimise the effect, the sequences of the training data were therefore sorted
 	\label{figure_padding}
 \end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: SANT
-\subsection{Association Network (Single Association Network)}
-Das Assoziationsnetzwerk stellt einen datenbasierten Ansatz dar, welcher lernen kann, das kombinatorische Non Deterministic Polynomial Time (NP) hard Optimierungsproblem der Datenassoziation vollständig zu lösen.
-Im Vergleich zu den meisten Assoziationsverfahren \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019} stellt SANT einen Ansatz dar, welcher als Inputdaten keine definierte Distanzmatrix erhält, sondern die bestehenden Tracks sowie jede neue Messung (SO) erhält.
-Damit entfällt die Definition eines Abstandsmaßes, womit dem Netzwerk die Freiheit gegeben wurde, einer eigenen Assoziationslogik zu folgen bzw. diese datenbasiert zu lernen.
-Somit ersetzt das Assoziationsnetzwerk die Berechnung eines Abstandsmaßes sowie einen Assoziationsalgorithmus wie z.B. den Hungarian Algorithm (HA) \cite{DA_hungarian.1955}.
+%%%%%%%%%%%%%%%%%%%%%% Absatztitel: SANT
+\subsection{Association network for a single sensor object}
+The association network enables a data-based approach to solve the combinatorial Non Deterministic Polynomial Time (NP) hard optimisation problem of data association.
+Compared to most association methods \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}, the single association network (SANT) is an approach that does not receive a defined distance matrix as input data, but instead receives the existing tracks and each new measured sensor object (SO).
 
-\paragraph{Datenvorverarbeitung}
-Für die Entwicklung eines Single Association Networks (SANT) wurde die Datenassoziation als zeitlich gegliedertes Problem (Sequenz-zu-Vektor) betrachtet.
-Das Datenassoziationsproblem beschreibt somit die Zuordnung von genau einem SO zu einem Set von Tracks.
-Die entsprechenden Tracks wurden aus dem KITTI Datensatz der gelabelten Kameraaufzeichnungen extrahiert.
-Allerdings existieren für das betrachtete Problem der Assoziation keine realen GT Daten.
-Um sicherzustellen, dass die Zuordnung eines Sensor Objekts (SOs) zu einem Track eines Tracksets genau eine korrekte Lösung besitzt, wurde das SO in einem Zeitschritt aus dem bestehenden Trackset eines Zeitschritts erzeugt.
-Die Daten wurden entsprechend künstlich verrauscht, um aus den GT Daten realistische Sensordaten zu erzeugen.
-Pro Zeitschritt wurden alle existierenden GT Tracks einzeln verrauscht.
-Dafür wurde jedem Wert des aktuellen Zustandsvektors maximal 3\% zufällig abgezogen oder dazu addiert. 
-Der Datensatz wurde in 7 Iterationen erstellt, sodass pro Iteration die Rauschintensität um 0.5\% gesteigert wurde.
+This eliminates the need to define a distance measure, giving the network the freedom to follow its own association logic and learn it based on the training data.
+Therefore, the association network replaces the calculation of a distance metric and an association algorithm such as the Hungarian Algorithm (HA) \cite{DA_hungarian.1955}.
 
-Das Datenformat wurde entsprechend gewählt, um eine indexbasierte Trackzuordnung für das Single Association Network (SANT) zu ermöglichen.
-Die Größe der Inputmatrix entspricht daher $m * n + 1$. 
-Mit $m = Anzahl der Zustandswerte$ und $n = Trackanzahl(t)$.
+\paragraph{Data preprocessing}
+In order to develop the single association network (SANT), the data association was considered as a time-structured problem (sequence-to-vector).
+The data association problem is therefore the assignment of exactly one sensor object (SO) $Z_{(t,1)}$ to a set of tracks $X_{(t,1:n)}$.
+The corresponding tracks were extracted from the KITTI data set of the labelled camera recordings.
+However, no real GT data exist for the association problem under consideration.
+To ensure that the assignment of a sensor object (SO) to a track of a track set has exactly one correct solution, the SO was generated in a time step from the existing track set of a time step.
+The data was noised artificially in order to generate realistic sensor data from the GT data.
+All existing GT tracks were noised one by one for each time step.
+To achieve this, a maximum of 3\% of the value of the current state vector was randomly subtracted or added to each value. 
+The data set was created in 7 iterations, so that the noise intensity was increased by 0.5\% per iteration.
+
+As shown in figure  \ref{SANT_network_arch} the data format was created accordingly to enable index-based track assignment for the Single Association Network (SANT).
+The size of the input matrix therefore corresponds to $m * n + 1$. 
+With $m = 5$ (number of state values in this investigation) and $n(t)$ (current number of tracks per time step).
+The number of tracks currently existing in the time step can vary between 0 and a maximum of 16 objects in relation to the data set (KITTI) and the selected objects (cars and vans).
 
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=1.0\linewidth]{figs/SANT_network_arch.png}}
@@ -296,35 +302,90 @@ Mit $m = Anzahl der Zustandswerte$ und $n = Trackanzahl(t)$.
 	\label{SANT_network_arch}
 \end{figure}
 
+\paragraph{Network architecture}
+The network ( fig. \ref{SANT_network_arch}) is designed as a sequence-to-classification network, using the sequenceinput to represent the described input matrix per time step.
 
-\paragraph{Netzwerkentwicklung}
-Das Netzwerk (Fig. \ref{SANT_network_arch}) ist als Sequenz-to-Classification ausgelegt, wobei der sequenceinput die beschriebene Inputmatrix pro Zeitschritt darstellt.
+By combining the outputs of two LSTM layers that pass the information in opposite directions, \cite{DL_LSTM.1997} demonstrates the ability to capture the context from both ends of the sequence. 
+The resulting architecture is called Bidirectional / Bidirectional Long Short-Term Memory Network (biLSTM).
+As part of these investigations, the best association performance was achieved with the biLSTM layer.
+Architectures with RNN, GNU, LSTM and biLSTM layers were tested.
+The network shown in Figure \ref{SANT_network_arch} achieved the best performance in comparison with a Training and Validation Accuracy of 95\%.
+The output mode 'last' has been configured in the biLSTM layer. 
+This layer is therefore able to receive a sequence as input and output a single value or value vector. 
+This form of dimension reduction is necessary in order to carry out a corresponding classification.
 
-BILSTM,...
-Die vollständig verknüpfte Schicht (FC) gibt über die Anzahl der der Ausgabewerte die Klassenanzahl n vor. Die n Klassenwerte werden in der Softmax Schicht durch Anwendung der Softmaxfunktion
-in eine eindeutige Wahrscheinlichkeitsverteilung berechnet (wie in Kapitel 2.2.1 beschrieben).
-Durch Anwendung der Cross-Entropie-Operation in der Ausgabeschicht
-(Classout) konnte SANT auf einen korrekten Zuordnungswert (GT
-Klassenindex) trainiert werden.
-
-Die Cross-Entropie-Kostenfunktion (Kreuzentropie) berechnet den Cross-Entropie-Verlust zwischen Netzvorhersagen und Zielwerten für die eindeutige Zuordnungsaufgabe (für sich gegenseitig ausschließende Klassen).
-Dabei wird mittels One-Hot-Kodierung die Klasse binär in einem Vektor dargestellt und somit ein 1-zu-n Code generiert.
-Nach folgender Formel werden die Crossentropie-Verlustwerte für jeden Eingabewert $Y_j$ und zugehörigen Zielwert (Targetvalue) $T_j$ elementweise berechnet:
+% FC SOFTMAX STACK
+The last fully connected layer (FC) specifies the number of classes via the number of output values. 
+The classes are calculated in the Softmax layer by applying the Softmax function
+into a unique probability distribution.
+The softmax function converts a number of values $z_i$ into a probability vector
+with $i$ values. 
+A high numerical value leads to a high probability in the resulting output vector (basis for one-hot encoding). 
+The outstanding feature of this function is that the sum of the output values (probability values) is always less than or equal to 1:
 \begin{equation}
-loss_j = -(T_j ln Y_j + (1 - T_j) ln(1 - Y_j))
+	g(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_i}} 
 \end{equation}
-Um einen Skalar $loss$ zu erhalten werden alle Verlustwerte $loss_j$ aufsummiert und durch die Anzahl der Samples $N$ geteilt. Optional können die Verlustwerte von definierten Samples mit dem Gewichtungsfaktor $w_j$ gewichtet werden:
+
+By using the cross-entropy operation in the output layer, SANT could be trained to a correct assignment value (GT class index).
+The cross-entropy cost function (cross-entropy) calculates the cross-entropy loss between network predictions and target values for the unique assignment task (for mutually exclusive classes):
+One-hot coding is used to represent the class in binary form in a vector and thus generate a 1-to-n code.
+The following formula is used to calculate the cross-entropy loss values for each input value $Y_j$ and associated target value $T_j$ element by element:
 \begin{equation}
-loss = \frac{1}{N} \sum_{}loss_j w_j
+	loss_j = -(T_j ln Y_j + (1 - T_j) ln(1 - Y_j))
 \end{equation}
+To obtain a scalar $loss$, all loss values $loss_j$ are totalled and divided by the number of samples $N$. 
+Optionally, the loss values of defined samples can be weighted with a weighting factor $w_j$:
+\begin{equation}
+	loss = \frac{1}{N} \sum_{}loss_j w_j
+\end{equation}
+
 Eine entsprechende Nutzung des Gewichtungsfaktors $w_j$ kann bei Datensätzen mit unausgewogenen (imbalanced) Klassenverteilung hilfreich sein.
 
 
 
-%%%%%%%%%%%%%%%%%%%%%% gedanklicher :) Absatztitel: MANTa
+%%%%%%%%%%%%%%%%%%%%%% Absatztitel: MANTa
 \subsection{Multi Association Network (MANTa)}
+The developed single association network (SANT) shows that a data-based association logic can be learnt from a deep learning model. 
+The aim was also to develop a network to recognise a number of m
+sensor objects SO to an existing number of n tracks in one operation step.
+in one operation step. 
+A multi association network (MANTa) was developed, which is able to solve the following association problems:
+\begin{itemize}
+	\item \textbf{1 to n} - one SO to $n$ tracks
+	\item \textbf{m to 1} - $m$ SO to one track
+	\item \textbf{m to n} - $m$ SO to $n$ tracks
+	\item \textbf{m to 0} - $m$ SO to no tracks
+	\item \textbf{0 to n} - no SO to $n$ tracks
+	\item \textbf{0 to 0} - no SO to no tracks
+\end{itemize}
+With the integration of a multi association network (MANTa) into a Multi Object Tracking (MOT) framework, the question can be asked whether a 0 to n and 0 to 0 assignment is a task to be solved. 
+If no new SO is detected, the prediction of the last operation step can be continued until the track is deleted on the basis of the decreasing probability of existence within the track management module. 
+The association algorithm or the MANTa does not need to be called if no tracks and sensor objects are detected. 
+Although these assignment options can therefore be resolved via the programme structure in the MOT framework, these options are also taken into account. 
+This is intended to ensure that the network also learns to deal with SOs and tracks that are no longer available.
 
 \paragraph{Datenvorverarbeitung}
+Der Datensatz für das Training und die Validierung von MANTa wurde entsprechend der beschriebenen Zielsetzung erstellt. 
+Abbildung \ref{pic::MANTaData} zeigt die Inputdatenstruktur mit entsprechenden Zuordnungsaufgaben im dargestellten Zeitschritt (85) der Sequenz 20 des KITTI Datensatzes. 
+Über alle Sequenzen wurden die jeweiligen Tracks pro Zeitschritt extrahiert.
+Die extrahierten Tracks wurden wie bei der SANT Entwicklung jeweils mit einem Rauschen modifiziert und im Anschluss normiert.
+Die so erhaltenen Werte wurden wie in Abb. \ref{pic::MANTaData} dargestellt als Messungen in pseudo-zufälliger Reihenfolge pro Zeitschritt einer $F * T_{max}$ Matrix zugeordnet.
+Wobei $F$ die Anzahl der Feature darstellt (hier 10).
+Die Featureanzahl ergibt sich aus den Zustandswerten pro Track und SO Set.
+$T_{max}$ steht für die maximale Anzahl an existierenden Tracks pro Zeitschritt.
+Für den definierten Untersuchungsfall mit Cars und Vans ergibt sich aus dem KITTI Datensatz ein $T_{max} = 16$.
+Im dargestellten Zeitschritt der Sequenz existieren 7 Tracks.
+Jeder Track erhält in diesem Zeitschritt eine neue Messung, zusätzlich wurde ein weiteres Objekt entdeckt (neues sensor object).
+Die GT Zuordnung ist im unteren Teil des Ausschnitts ausgegeben.
+Die Werte zeigen den korrekten Index, der Zuordnung für 1 bis 16 ($T_{max}$) bezogen auf das existierende Trackset. 
+Der Wert 99 wurde als Klassenindex für neue bzw. nicht zuzuordnende Messungen definiert.
+Entsprechend ist die Messung in der zweiten Spalte ein neues Objekt und sollte keinem bestehenden Track zugeordnet werden.
+
+\begin{strip} % <--- defined in "cuted"
+		\includegraphics[width=\linewidth]{figs/MANTa_data.png}
+		\captionof{figure}{MANTa, data structure, input / output}
+		\label{pic::MANTaData}
+\end{strip}
 
 \paragraph{Netzwerkentwicklung}
 
