@@ -307,44 +307,58 @@ The data set was created in 7 iterations, so that the noise intensity was increa
 %MD: Jetzt ist die Anzahl an Positionen im State Vector auf einmal m, vorher war es doch R??
 As shown in figure \ref{pic::SantArch} the data format was created accordingly to enable index-based track assignment for SANT.
 The size of the input matrix therefore corresponds to $m \times n + 1$.
-With $m = 5$ (number of state values in this investigation) and $n(t)$ (current number of tracks per time step).
-The number of tracks currently existing in the time step can vary between 0 and a maximum of 16 objects in relation to the data set (KITTI) and the selected objects (cars and vans).
+With $m = 5$ as the number of state values for our work and $n=16$ as the maximum number of tracks per time step. %MD: Das stimmt so oder? n hängt ja nicht von t ab. Die Dimension bleibt immer gleich, nur stehen eben manchmal Nullen drin. Ich habe aber die Vermutung, dass du das anders meinst. Warum sollen wir denn überhaupt ein n einführen für die Anzahl an nicht-null Tracks? Das ist dem Netz doch egal. FÜr die Architektur ist nur die Max Anzahl wichtig.
 
-%MD: =========== Bis hierhin habe ich gelesen ====================
+%MD: Ich habe den nächsten Absatz mal raus genommen. Was meinst du mit "in relation to"? Machen die das genau so? Dann schreib das konkret so. Das weiß ja keiner auswendig
 
+% The actual number of tracks can vary between 0 and a maximum of 16 objects in relation to the data set (KITTI) and the selected objects (cars and vans).
+
+% MD: Normalization -> Batch Normalization
+% Warum ist im Dropout Layer ein Kreis rot? Soll das andeuten, dass der weg kommt? Dann vielleicht mehrere Kreise gestrichelt reichnen
+%MD: Oben steht concatenation of the "Prediction Network Output" Das würde ich hier komplett weg lassen. Das verwirrt, weil du es Output nennst, es aber hier der Input für das vorgestellte Modell ist, der zufällig noch der Output vom letzten Modell ist.
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=1.0\linewidth]{figs/SANT_network_arch.png}}
-	\caption{Schematic representation of the generic network structure of SANT.}
+	\caption{Schematic representation of the generic network structure of the Single Association Network (SANT).}
 	\label{pic::SantArch}
 \end{figure}
 
 \paragraph{Network architecture}
-The network ( fig. \ref{pic::SantArch}) is designed as a sequence-to-classification network, using the sequenceinput to represent the described input matrix per time step.
+The network as depicted in fig. \ref{pic::SantArch} is designed as a sequence-to-classification network. At each time step, a matrix is passed as input holding both, the information of to-be-assigned sensor object and the currently tracked objects.
 
+%MD: Bitte diesen Absatz nochmal anschauen. Der ist von der Struktur und von den Formulierungen noch sehr holprig. Ich würde erst sagen was du ausprobiert hast und dann sagen was das beste war, auch muss dann nur einmal erklärt werden was ein biLSTM layer ist.
 By combining the outputs of two LSTM layers that pass the information in opposite directions, \cite{DL_LSTM.1997} demonstrates the ability to capture the context from both ends of the sequence.
+%MD: Darüber sollten wir nochmal sprechen: Bidirectional geht doch gar nicht für Tracking? Du kannst doch nur von links nach rechts gehen oder wie sollte das laufen "online"?
+%MD: Zwei mal Bidirectional ist bestimmt nicht richtig.
 The resulting architecture is called Bidirectional / Bidirectional Long Short-Term Memory Network (biLSTM).
 As part of these investigations, the best association performance was achieved with the biLSTM layer.
+%MD: Wir haben nie über Datensplit gesprochen. Das muss unbedingt rein. Wie groß ist das Val set und wie wurde es erstellt? Oder wird das direkt von Kitti geliefert, aber das dann auch schreiben. Und zwar lange vor diesem Kapitel. Oder habe ich es selbst überlesen? Ist aber total wichtig.
+%MD: Ist hier wirklich Training exakt gleich Val Performance? Das kann ich mir kaum vorstellen und wenn doch, dann sollte das explizit gesagt und kommentiert werden.
 Architectures with RNN, GNU, LSTM and biLSTM layers were tested.
 The network shown in Figure \ref{pic::SantArch} achieved the best performance in comparison with a Training and Validation Accuracy of 95\%.
+%MD: Was heißt "last". Bitte erklären oder anders umschreiben.
 The output mode 'last' has been configured in the biLSTM layer.
 This layer is therefore able to receive a sequence as input and output a single value or value vector.
 This form of dimension reduction is necessary in order to carry out a corresponding classification.
 
 % FC SOFTMAX STACK
 The last fully connected layer (FC) specifies the number of classes via the number of output values.
-The classes are calculated in the Softmax layer by applying the Softmax function
-into a unique probability distribution.
+The classes are calculated in the softmax layer by applying the softmax function resulting in a probability distribution.
 The softmax function converts a number of values $z_i$ into a probability vector
 with $i$ values.
-A high numerical value leads to a high probability in the resulting output vector (basis for one-hot encoding).
-The outstanding feature of this function is that the sum of the output values (probability values) is always less than or equal to 1:
-\begin{equation}
-	g(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_i}}
-\end{equation}
 
+%MD: Das würde ich als Basiswissen sehen und hier weg lassen.
+
+% A high numerical value leads to a high probability in the resulting output vector (basis for one-hot encoding).
+% The outstanding feature of this function is that the sum of the output values (probability values) is always less than or equal to 1:
+% \begin{equation}
+% 	g(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_i}}
+% \end{equation}
+
+%MD: was ist die cross-entropy operation? Du meinst du berechnest den Loss über die cross-entropy loss functions. So würde ich das schreiben. Und das macht nicht der Output Layer, sondern dafür nimmt man die Predictions des Models.
 By using the cross-entropy operation in the output layer, SANT could be trained to a correct assignment value (GT class index).
 The cross-entropy cost function (cross-entropy) calculates the cross-entropy loss between network predictions and target values for the unique assignment task (for mutually exclusive classes):
 One-hot coding is used to represent the class in binary form in a vector and thus generate a 1-to-n code.
+%MD: Die Formel ist die binary Cross Entropy. Die gilt nur für genau zwei Klassen. Das kann also hier nicht benutzt worden sein. Bitte nochmal nach schauen. Auch weiß ich nicht genau, warum manchmal große und manchmal kleine Buchstaben genutzt werden. Das sollte einer klaren Regel entsprechen.
 The following formula is used to calculate the cross-entropy loss values for each input value $Y_j$ and associated target value $T_j$ element by element:
 \begin{equation}
 	loss_j = -(T_j ln Y_j + (1 - T_j) ln(1 - Y_j))
@@ -357,7 +371,7 @@ Optionally, the loss values of defined samples can be weighted with a weighting 
 
 A respective use of the weighting factor $w_j$ can be helpful for data sets with an imbalanced class distribution. In this study, no significant improvements could be achieved by adjusting the weighting factor.
 
-
+%================ Bis hier habe ich gelesen MD ===============
 
 %%%%%%%%%%%%%%%%%%%%%% Absatztitel: MANTa
 \subsection{Association network for multiple sensor objects}
