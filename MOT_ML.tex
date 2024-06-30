@@ -15,15 +15,18 @@
 \usepackage{cuted}    % <===
 
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
-% updated with editorial comments 8/9/2021
 % --> 6 pages at all
 
 % MD: Der größte Angriffspunkt für dieses Paper ist doch: Wir nutzen KITTI Tracks, damit können wir nie besser werden als die KITTI Tracks. Die Tracks selbst sind aber mit einem Kalman Filter erstellt. Damit kann das Prediction Network auch nie besser werden als ein Kalman filter. Oder sehe ich das falsch?
+% CH: Die KITTI Tracks wurden für das Training aus den GT Daten mit entsprechendem Rauschen erzeugt. Daher ist kein direkter Einfluss von KF für die einzelnen Prädiktionen gegeben.
 
 \begin{document}
 
-% MD: Lass uns nochmal über den Titel sprechen. Können wir das nicht irgendwie positiv formulieren? Also das without ersetzen durch das, was wir machen.
-\title{Multi-object tracking without dynamic models and hard association metrics}
+% MD: Lass uns nochmal über den Titel sprechen. Können wir das nicht irgendwie positiv formulieren? Also das without ersetzen durch das, was wir machen. -->
+% \title{Multi-object tracking without dynamic models and hard association metrics}
+% --> CH: with machine learning based predictions and soft association?
+
+\title{Multi-Object Tracking with Machine Learning based trajectories prediction and soft track-association}
 
 \author{Christian Alexander Holz, Christian Bader, Matthias Drüppel
 	\thanks{C. Holz is with Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany}
@@ -42,18 +45,18 @@
 % Unwritten rule: dont cite or reference figures or tables in the abstract
 %MD: Das Abstract darf nicht zu lang werden, daher habe ich es gekürzt. Ergebnisse mit auf nehmen ist aber genau richtig.
 \begin{abstract}
-    In this paper, we develop Machine Learning (ML)-based methods for Multi Object Tracking (MOT) within the context of Advanced Driver Assistance Systems (ADAS).
+    In this paper, we develop Machine Learning (ML)-based methods for Multi-Object Tracking (MOT) within the context of Advanced Driver Assistance Systems (ADAS).
     Given the increasing complexity and demand for precise and efficient object tracking systems in the automotive industry, this work focuses on the integration of ML techniques into established tracking methodologies.
     Key contributions encompass the creation and evaluation of three specialized neural networks: (i) the Prediction Network for predicting the trajectories of tracked objects,
     (ii) the Single Association Network (SANT) for associating single incoming sensor object
-    to $n$ existing tracks, (iii) and the Multi Association Network (MANTa) for associating multiple sensor objects to the $n$ existing tracks.
+    to $n$ existing tracks, (iii) and the Multi-Association Network (MANTa) for associating multiple sensor objects to the $n$ existing tracks.
     We combine our ML methods with a traditional Kalman filter framework,
     offering a data driven approach to address MOT challenges while maintaining the modularity and interpretability of classical filter approaches.
     We asses both, the performance of all three models alone as well as their impact on the performance when they are integrated in the Kalman framework.
     The results reveal a modular, robust, and maintainable tracker,
     underscoring the potential of ML integration in ADAS Tracking Systems.
 
-    (i) Our results for the Prediction Network show a reduction in the Root Mean Square Error on the KITTI tracking data set car by half compared to a basic Kalman Filter. (ii) The Single Association Network (SANT) was developed as a replacement of the Global Nearest Neighbor method and enables a purely data-based assignment method, achieving a validation accuracy of 95\% on KITTI cars. (iii) The Multi Association Network (MANTa) similarly achieves an accuracy of 95\% on the same validation set, but enables an assignment of now $m$ sensor objects to a set of $n$ tracks.
+    (i) Our results for the Prediction Network show a reduction in the Root Mean Square Error on the KITTI tracking data set car by half compared to a basic Kalman Filter. (ii) The Single Association Network (SANT) was developed as a replacement of the Global Nearest Neighbor method and enables a purely data-based assignment method, achieving a validation accuracy of 95\% on KITTI cars. (iii) The Multi-Association Network (MANTa) similarly achieves an accuracy of 95\% on the same validation set, but enables an assignment of now $m$ sensor objects to a set of $n$ tracks.
 
 
 
@@ -114,8 +117,7 @@ However, they reach their limits in more complex scenarios, particularly in the 
 of non-linear motion patterns and interactions among multiple objects.
 %MD a): finden wir hier auch ein Paper? Grenzen von Kalman filtern, sowas? %CH: ...
 % oder b): as similary motivated in cite / oder by name et al. cite
-In this work, we introduce a novel MOT approach that leverages Machine Learning (ML)
-to overcome these challenges.
+In this work, we introduce a novel MOT approach that leverages Machine Learning to overcome these challenges.
 We specifically focus on the development and implementation of Neural Networks (NN),
 which can enable more precise and flexible data-driven object tracking.
 
@@ -129,15 +131,15 @@ Similar to the problem statement in Mertz et al \cite{DL_RNN_data_association.20
 Mertz et al \cite{DL_RNN_data_association.2019} use a distance matrix based on the
 Euclidean distance measure as input for the developed association network,
 thus replacing an association algorithm such as the Hungarian Algorithm (HA) \cite{DA_hungarian.1955}.
+%MD: Das Kapitel hier is related work, aber du stellst du nochmal ziemlich ausfühlich den Ansatz vor, das würde ich in verschieben oder kürzen -->
+In the context of this work, we put forward the hypothesis that a Gated Recurrent Unit (GRU)-based association network can be designed and trained using an undefined distance measure.
+% --> CH: Aufstellung der Hypothese als Abschluss des Abschnitts i.O.? Rest dann später.
 
-%MD: Das Kapitel hier is related work, aber du stellst du nochmal ziemlich ausfühlich den Ansatz vor, das würde ich in verschieben oder kürzen
-In the context of this work, we put forward the hypothesis that a Gated
-Recurrent Unit (GRU)-based association network can be designed and trained using an undefined distance measure.
-This can increase the assignment of the time-based memory units, i.e. the history, and thus boost performance.
-For this purpose, the Long Short-Term Memory network (LSTM) layer is implemented, which enables the model to make predictions based on the history of its inputs using hidden units \cite{DL_LSTM.1997}.
-The goal of this work was therefore to develop an association network that is intended to solve
-the assignment of one or more sensor objects (SO) to an existing number of object tracks
-without a defined distance measure.
+%This can increase the assignment of the time-based memory units, i.e. the history, and thus boost performance.
+%For this purpose, the Long Short-Term Memory network (LSTM) layer is implemented, which enables the model to make predictions based on the history of its inputs using hidden units \cite{DL_LSTM.1997}.
+%The goal of this work was therefore to develop an association network that is intended to solve
+%the assignment of one or more sensor objects (SO) to an existing number of object tracks
+%without a defined distance measure.
 
 %mehr Zitate hierfür?
 \subsection{Real time applications}
@@ -146,10 +148,11 @@ Therefore, most recent approaches for tracking multiple objects rely on online m
 that do not depend on future image information. Online methods use various features to estimate the similarity between the recognized objects and the existing tracks.
 This can be done on the basis of their predicted positions or even similarities in appearance.
 
-% MD: Finden wir einen Anknüfungspunkt an unsere Arbeit? Wenn ja wäre das schön, wenn nein, würde ich es trotzdem nicht löschen.
+% MD: Finden wir einen Anknüfungspunkt an unsere Arbeit? Wenn ja wäre das schön, wenn nein, würde ich es trotzdem nicht löschen. -->
+% --> CH: Anknüpfung auch ein tracker KF Framework (TbD)? ...
 \paragraph{Kalman Filter based tracker}
 \cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, KF_framework.2013}
-propose a Kalman Filter (KF) based TbD multi-object tracker.
+propose a Kalman Filter based TbD multi-object tracker.
 \cite{KF_simple_cues.2022} presents a MOT approach based on simple visual cues. The authors contend that many existing multi-object trackers are too complex and require a large amount of computational resources.
 Instead, they propose a simpler approach based on basic visual features such as color, shape and motion.
 These visual cues are used to track objects at the image level and make associations between frames.
@@ -164,7 +167,8 @@ The approach presented in my Mertz et al. \cite{DL_RNN_data_association.2019} fo
 The developed DeepDA model represents an LSTM-based Deep Data Association Network to learn and perform the association of objects between frames.
 By learning association patterns from the data, the tracker can achieve robust and reliable tracking results even in highly disturbed environments.
 Mertz et al. use a distance matrix based on the Euclidean distance measure as input data for the developed DeepDA network, thus replacing an association algorithm such as the Hungarian Algorithm (HA).
-It can be assumed that the Euclidean distance measure was also used as the basis for generating the ground truth (GT) training data (distance matrices) and for the evaluation. %MD: hast du hier nachgefragt? Der Satz klingt so nach "wir raten das jetzt mal"
+It can be assumed that the Euclidean distance measure was also used as the basis for generating the ground truth (GT) training data (distance matrices) and for the evaluation. %MD: hast du hier nachgefragt? Der Satz klingt so nach "wir raten das jetzt mal" -->
+% --> CH: Anfrage ist raus
 However, this is not explicitly stated.
 It can therefore be argued that this preprocessing step deprives the network opportunity to follow a different association logic or to learn it data based.
 
@@ -184,7 +188,7 @@ This allows the model to learn long-term and highly interactive relationships be
 \section{Overview of our proposed models}
 Our primary contribution is the development and evaluation of three NN that we label:
 (i) the Prediction Network, (ii) the Single Association Network (SANT),
-and (iii) the Multi Association Network (MANTa).
+and (iii) the Multi-Association Network (MANTa).
 Figure \ref{pic::MotFramework} provides an overview of our approach
 in which the association network can be implemented using either SANT or MANTa.
 The input for the proposed Prediction Network (i) are the sensor objects in every time step. If new objects are detected, these are stored in a fixed-dimensional state vector that contains information such as object position, orientation and dimension.
@@ -204,16 +208,10 @@ To enable our models to incorporate temporal information, we use Long Short-Term
 
 
 \subsection{Prediction Network}
-%MD: Der erste Absatz hier sollte in related work.
-Most existing tracking methods associate incoming detections pairwise with object states predicted by a simple motion model, e.g. a constant velocity model, using a Kalman filter
-\cite{KF_simple_cues.2022, KF_simple_online_realtime.2016, KF_framework.2013}.
-However, recent work has demonstrated that aggregating temporal information as well as contextual information can improve the tracking of multiple objects by utilizing higher order information in addition to pairwise similarities between detections \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019, DL_RNN_data_association.2020, DL_ATT_CNN_soda.2020}.
-%MD: bis hier
 Our approach is to use the hidden states of the LSTM layer as an object-specific information storage.
 The Prediction Network was designed for an open-loop application, this means that the network predicts values for a future time step based on previously received data.
 For use in an online MOT process, the network is therefore able to make a prediction about the most likely next state values using the state values received for a given state vector of a sensor object.
 
-%MD: NOrmalization layer umbennen in Batch-Normalization Layer
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=0.90\linewidth]{figs/SPENT_network_arch.png}}
 	\caption{Schematic representation of the generic prediction network structure.}
@@ -240,7 +238,8 @@ The last FC layer must be equal to the number of response variables in the outpu
 The basis for our loss is the mean-squared-error (MSE) calculated from the prediction for each state value.
 The MSE indicates the average of the squared difference between the model prediction and the target value, which we
 use as the measure of the quality of the prediction. For a single observation, the MSE is given by:
-%MD: Ich würde unbedingt vermeiden Variablen Doppel-character zu geben. also gt, da denkt man oft erst das heißt g*t
+%MD: Ich würde unbedingt vermeiden Variablen Doppel-character zu geben. also gt, da denkt man oft erst das heißt g*t -->
+% --> CH: Bezogen auf? MSE? 
 \begin{equation}
 	MSE = \frac{1}{R}\sum_{i=1}^{R}{(y_i-\hat{y}_i)}^2,
 \end{equation}
@@ -262,23 +261,34 @@ In order to achieve better generalization and to increase the chance that the tr
 \cite{DL_book.2019}, such that the possible predictions and targets have a mean value of zero and a unit variance.
 The mean value $\mu$ and the standard deviation $\sigma$ for each state variable were calculated for all tracks using the following equations:
 \begin{equation}
-	\mu = \frac{1}{N} \sum_{i = 1}^{N} A_i
+	\mu = \frac{1}{R} \sum_{i = 1}^{R} S_i
 \quad\text{and}\quad
-	\sigma = \sqrt{{\frac{1}{N - 1}} \sum_{i = 1}^{N} |A_i - \mu|^2}
+	\sigma = \sqrt{{\frac{1}{R - 1}} \sum_{i = 1}^{R} |S_i - \mu|^2}
 \end{equation}
-% MD: Ich dachte R ist die Länge des State Vektors? Warum jetzt N? Und A_i war vorher S... Auch ist die Bezeichnung "length of all tracks" nicht genau genug. Du meinst die Anzahl an time stamps? du meinst bestimmt nicht die Länge in Metern. Die Normalisierung ist mir immer noch nicht klar.
-where $A_i$ the combined length of all tracks and $N$ is the number of states.
+% MD: Ich dachte R ist die Länge des State Vektors? Warum jetzt N? Und A_i war vorher S... Auch ist die Bezeichnung "length of all tracks" nicht genau genug. Du meinst die Anzahl an time stamps? du meinst bestimmt nicht die Länge in Metern. Die Normalisierung ist mir immer noch nicht klar. -->
+% --> CH: Konsistenz (R für Länge State Vektor), S für time stamps pro Sequence. Si über alle Sequenzen 1 bis i.
+where $S_i$ the total number of all time stamps of all tracks and $R$ is the number of states per track.
+
 We also apply pre-padding as described in \cite{DL_padding.2019} where Reddy et al. show how padding influences the performance of neural networks in sequence-based tasks.
 Their study suggests that although both pre-padding and post-padding are feasible, the choice of padding technique can have a significant impact on the efficiency of the model, especially for LSTM networks where the sequence context is crucial.
+
 %MD: And what does this mean for us? You say it is crucial and then it is not described any further. How did you apply padding? &CH: added text and figure
 %MD: Warum genau "one sequence adjustment" was heißt das?
-%MD: Bitte erkläre hier einmal was überhaupt padding in diesem Kontext heißt. Du ergänzt Nullen am Anfang der Sequenz oder wie?
-As \cite{DL_padding.2019} described, padding can lead to noise in the network, but one sequence adjustment per mini-batch is required for training LSTM networks.
+% --> CH: ... a sequence adjustment ...
+%MD: Bitte erkläre hier einmal was überhaupt padding in diesem Kontext heißt. Du ergänzt Nullen am Anfang der Sequenz oder wie? -->
+% --> CH: done
+To handle sequences of varying lengths in our LSTM network, we utilized the padding technique. In this process, shorter sequences are padded with special padding tokens so that all sequences within a batch have the same length. We used zeros as padding tokens, which were appended to the end of a sequence as needed. This allows for efficient batch processing and ensures consistent training of the network without the model performance being affected by the varying sequence lengths.
+This allows for efficient batch processing and ensures consistent training of the network without the model performance being affected by the varying sequence lengths.
+
+As \cite{DL_padding.2019} described, padding can lead to noise in the network, but a sequence adjustment per mini-batch is required for training LSTM networks.
 To minimize the effect, the sequences of the training data were therefore sorted by length before the mini-batch padding. Figure \ref{pic::Padding} clearly shows that the padding (turquoise area) is minimized by a sorted training data set per mini-batch. Without this modification, no convergence could be achieved in the training.
-%MD: Die Unterschrift würde ich auch ausführlicher schreiben.
+%MD: Die Unterschrift würde ich auch ausführlicher schreiben. -->
+% --> CH: vielleicht nun etwas zu ausführlich :)
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=0.8\linewidth]{figs/padding.png}}
-	\caption{Mini-batch padding effect, training data for LSTM networks.}
+	\caption{The impact of padding on unsorted and sorted training data. The figure illustrates the padding effect in an LSTM network when sequences have varying lengths.
+	Top: Unsorted data results in a high padding requirement, as shorter sequences need substantial padding to match the length of the longest sequence in the batch.
+	Bottom: Sorted data minimizes the padding requirement by grouping sequences of similar length within the same batch. This leads to more efficient use of computational resources and can improve training efficiency and model performance.}
 	\label{pic::Padding}
 \end{figure}
 
@@ -379,7 +389,7 @@ The developed single association network (SANT) shows that a data-based associat
 The aim was also to develop a network to recognise a number of m
 sensor objects SO to an existing number of n tracks in one operation step.
 in one operation step.
-A multi association network (MANTa) was developed, which is able to solve the following association problems:
+A multi-association network (MANTa) was developed, which is able to solve the following association problems:
 \begin{itemize}
 	\item \textbf{1 to n} - one SO to $n$ tracks
 	\item \textbf{m to 1} - $m$ SO to one track
@@ -388,7 +398,7 @@ A multi association network (MANTa) was developed, which is able to solve the fo
 	\item \textbf{0 to n} - no SO to $n$ tracks
 	\item \textbf{0 to 0} - no SO to no tracks
 \end{itemize}
-With the integration of a multi association network (MANTa) into a Multi Object Tracking (MOT) framework, the question can be asked whether a 0 to n and 0 to 0 assignment is a task to be solved.
+With the integration of a multi-association network (MANTa) into a Multi-Object Tracking (MOT) framework, the question can be asked whether a 0 to n and 0 to 0 assignment is a task to be solved.
 If no new SO is detected, the prediction of the last operation step can be continued until the track is deleted on the basis of the decreasing probability of existence within the track management module.
 The association algorithm or the MANTa does not need to be called if no tracks and sensor objects are detected.
 Although these assignment options can therefore be resolved via the programme structure in the MOT framework, these options are also taken into account.
@@ -423,7 +433,7 @@ The section of the one-hot vector shown (1:18) thus shows the GT assignment of t
 
 \paragraph{Network development}
 The schematic representation \ref{pic::MantaArch} shows the developed network architectures for the simultaneous association of a large number of sensor objects to a large number of tracks.
-This is what we call a Multi Association Network (MANTa).
+This is what we call a Multi-Association Network (MANTa).
 
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=1.0\linewidth]{figs/MANTa_network_arch.png}}
@@ -452,7 +462,7 @@ Then, all scalars obtained per time step are summarised and divided by the numbe
 	loss = \frac{1}{N} \sum{} loss_k
 \end{equation}
 
-With the described procedure, the Multi Association Network (MANTa) could be trained, for assigning a list of sensor objects SO to a list of tracks in one operation step.
+With the described procedure, the Multi-Association Network (MANTa) could be trained, for assigning a list of sensor objects SO to a list of tracks in one operation step.
 
 \section{Experimental Evaluation}
 In relation to the entire KITTI data set (Cars and Vans objects), MANTa achieves an average allocation accuracy of 70\%.
