@@ -24,14 +24,12 @@
 %		Oder sehe ich das falsch?
 % CH: Die KITTI Tracks wurden für das Training aus den GT Daten mit entsprechendem Rauschen erzeugt.
 %		Daher ist kein direkter Einfluss von KF für die einzelnen Prädiktionen gegeben.
-
 \begin{document}
 
 % MD: Lass uns nochmal über den Titel sprechen. Können wir das nicht irgendwie positiv formulieren?
 % 		Also das without ersetzen durch das, was wir machen.
 % CH: with machine learning based predictions and soft association?
 % 		\title{Multi-object tracking without dynamic models and hard association metrics}
-
 \title{Multi-Object Tracking with Machine Learning based trajectories prediction
 and soft track-association}
 
@@ -55,7 +53,7 @@ and soft track-association}
 % MD: Das Abstract darf nicht zu lang werden, daher habe ich es gekürzt.
 %		Ergebnisse mit auf nehmen ist aber genau richtig.
 \begin{abstract}
-% CH: Generiertes Abstract aus geschriebenem ABstract (I)
+% CH: Generiertes Abstract aus geschriebenem Abstract (I)
 	This study introduces Machine Learning (ML)-based methodologies for Multi-Object Tracking (MOT)
 	tailored to Advanced Driver Assistance Systems (ADAS), addressing the growing complexity and
 	precision requirements in the automotive sector.
@@ -292,7 +290,7 @@ the ground truth (GT) training data (i.e., distance matrices)
 but also for the subsequent evaluation process.
 % MD: hast du hier nachgefragt?
 %		Der Satz klingt so nach "wir raten das jetzt mal"
-% --> CH: Anfrage ist raus, Satz schon einmal etwas angepasst.
+% CH: Anfrage ist raus, Satz schon einmal etwas angepasst.
 However, this is not explicitly stated.
 It can therefore be argued that this preprocessing step deprives the
 network opportunity to follow a different association logic or to learn it data based.
@@ -487,10 +485,10 @@ our model attained a Root Mean Square Error of 0.029 for the positional predicti
 within the validation dataset.
 This performance metric translates to an average deviation of 0.38 meters for predictions
 pertaining to the X coordinate and 0.21 meters for those related to the Y coordinate.
-%MD: Das muss erklärt werden. Was heißt "standard Kalman Filter",
+% MD: Das muss erklärt werden. Was heißt "standard Kalman Filter",
 %		sonst hilft der Vergleich nicht viel.
 %		Hier muss eigentlich nochmal der ganze Kalman Filter vorgestellt werden, mit dem du vergleichst.
-% --> CH: wie besprochen ...inhouse implemented ...
+% CH: wie besprochen ...inhouse implemented ...
 Using an inhouse implemented Kalman Filter carried by Daimler Truck Research Group
 following \cite{KF_BoundingBD.2023,KF_Bewley.2016}, an RMSE of 0.066 was achieved on the same data set.
 
@@ -516,7 +514,8 @@ were computed across all tracks, employing the subsequent equations:
 %		Die Normalisierung ist mir immer noch nicht klar.
 % CH: Konsistenz (m für Länge State Vektor), T für time stamps pro Sequence.
 %		Si über alle Sequenzen 1 bis i.
-%		Formel für die Normalisierung aus: standard diviation https://de.mathworks.com/help/matlab/ref/std.html
+%		Formel für die Normalisierung aus: standard diviation
+%		https://de.mathworks.com/help/matlab/ref/std.html
 where $S_i$ the total number of all time stamps of all tracks
 and $m$ is the number of states per track.
 
@@ -532,7 +531,7 @@ is paramount for optimal performance.
 % CH: added text and figure
 % MD: Warum genau "one sequence adjustment" was heißt das?
 % CH: ... a sequence adjustment ...
-%MD: Bitte erkläre hier einmal was überhaupt padding in diesem Kontext heißt.
+% MD: Bitte erkläre hier einmal was überhaupt padding in diesem Kontext heißt.
 %		Du ergänzt Nullen am Anfang der Sequenz oder wie?
 % CH: done
 To handle sequences of varying lengths in our LSTM network, we utilized the padding technique.
