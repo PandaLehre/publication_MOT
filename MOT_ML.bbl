@@ -21,30 +21,24 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{KF_Bewley.2016}
+A.~Bewley, Z.~Ge, L.~Ott, F.~Ramos, and B.~Upcroft, ``Sort: Simple online and
+  realtime tracking,'' in \emph{2016 IEEE International Conference on Image
+  Processing (ICIP)}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2016, pp.
+  3464--3468.
+
 \bibitem{KF_simple_cues.2022}
 {Jenny Seidenschwarz, Guillem Bras{\'o}, Victor Serrano, Ismail Elezi, Laura
   Leal-Taix{\'e}}, ``Simple cues lead to a strong multi-object tracker,''
   \emph{Paper}, 2022.
 
-\bibitem{KF_simple_online_realtime.2016}
-{Alex Bewley, Zongyuan Ge, Lionel Ott, Fabio Ramos, Ben Upcroft}, ``Simple
-  online and realtime tracking,'' \emph{Paper}, 2016.
-
-\bibitem{KF_framework.2013}
+\bibitem{KF_BoundingBD.2023}
 \BIBentryALTinterwordspacing
-{Ba-Tuong Vo}, ``code set for research use: Multi-sensor multi-target
-  tracking,'' 2013. [Online]. Available:
-  \url{https://ba-tuong.vo-au.com/codes.html}
+J.~Krejc{\'i}, O.~Kost, O.~Straka, and J.~Dun{\'i}k, ``Bounding box dynamics in
+  visual tracking: Modeling and noise covariance estimation,'' \emph{2023 26th
+  International Conference on Information Fusion (FUSION)}, pp. 1--6, 2023.
+  [Online]. Available: \url{https://api.semanticscholar.org/CorpusID:261126559}
 \BIBentrySTDinterwordspacing
-
-\bibitem{DL_ATT_CNN_soda.2020}
-W.-C. H. H. K. T.-Y. L. Y. C.~R. Yu, ``Soda: Multi-object tracking with soft
-  data association,'' \emph{Paper}, 2020.
-
-\bibitem{DL_ATT_CNN_mot_sot_based.2017}
-Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using
-  cnn-based single object tracker with spatial-temporal attention mechanism,''
-  \emph{Paper}, 2017.
 
 \bibitem{DL_RNN_mot.2016}
 {Anton Milan, Seyed Rezatofighi, Anthony Dick, Ian Reid, Konrad Schindler},
@@ -55,13 +49,55 @@ Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using
 H.~L. H. Z.~C. Mertz, ``Deepda: Lstm-based deep data association network for
   multi-targets tracking in clutter,'' \emph{Paper}, 2019.
 
+\bibitem{DL_CNN_ATT_mot.2017}
+Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using
+  cnn-based single object tracker with spatial-temporal attention mechanism,''
+  \emph{ICCV}, 2017.
+
+\bibitem{DL_ATT_Trackformer.2022}
+T.~M. A. K. L. L.-T.~C. Feichtenhofer, ``Trackformer: Multi-object tracking
+  with transformers,'' \emph{Paper}, 2022.
+
+\bibitem{DL_ATT_CNN_soda.2020}
+W.-C. H. H. K. T.-Y. L. Y. C.~R. Yu, ``Soda: Multi-object tracking with soft
+  data association,'' \emph{Paper}, 2020.
+
 \bibitem{DA_hungarian.1955}
 H.~W. Kuhn, ``The hungarian method for the assignment problem,'' \emph{Naval
   Research Logistics Quarterly}, 1955.
 
-\bibitem{DL_LSTM.1997}
-S.~H.~J. Schmidhuber, ``Long short-term memory,'' \emph{Neural Computation},
-  1997.
+\bibitem{KF_framework.2013}
+\BIBentryALTinterwordspacing
+{Ba-Tuong Vo}, ``code set for research use: Multi-sensor multi-target
+  tracking,'' \emph{Code}, 2013. [Online]. Available:
+  \url{https://ba-tuong.vo-au.com/codes.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{KF_Ristic.2004}
+B.~Ristic, S.~Arulampalam, and N.~Gordon, \emph{Particle filters for tracking
+  applications}.\hskip 1em plus 0.5em minus 0.4em\relax Artech House, 2004.
+
+\bibitem{KF_Julier.2004}
+S.~J. Julier and J.~K. Uhlmann, ``The unscented kalman filter for nonlinear
+  estimation,'' \emph{Proceedings of the IEEE}, vol.~92, no.~3, pp. 401--422,
+  2004.
+
+\bibitem{KF_Wan.2000}
+E.~A. Wan and R.~Van Der~Merwe, ``The unscented kalman filter for nonlinear
+  estimation,'' in \emph{Proceedings of the IEEE Adaptive Systems for Signal
+  Processing, Communications, and Control Symposium (AS-SPCC)}.\hskip 1em plus
+  0.5em minus 0.4em\relax IEEE, 2000, pp. 153--158.
+
+\bibitem{DL_ATT_CNN_mot_sot_based.2017}
+Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using
+  cnn-based single object tracker with spatial-temporal attention mechanism,''
+  \emph{Paper}, 2017.
+
+\bibitem{DL_Wojke.2017}
+N.~Wojke, A.~Bewley, and D.~Paulus, ``Deepsort: Simple online and realtime
+  tracking with a deep association metric,'' in \emph{2017 IEEE International
+  Conference on Image Processing (ICIP)}.\hskip 1em plus 0.5em minus
+  0.4em\relax IEEE, 2017, pp. 3645--3649.
 
 \bibitem{offline_mot.2017}
 {Roberto Henschel, Laura Leal-Taixé, Daniel Cremers, Bodo Rosenhahn}, ``Fusion
@@ -76,15 +112,6 @@ S.~H.~J. Schmidhuber, ``Long short-term memory,'' \emph{Neural Computation},
 {Qi Chu, Wanli Ouyang, Hongsheng Li, Xiaogang Wang, Bin Liu, Nenghai Yu},
   ``Online multi-object tracking using cnn-based single object tracker with
   spatial-temporal attention mechanism,'' \emph{Paper}, 2017.
-
-\bibitem{DL_CNN_ATT_mot.2017}
-Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using
-  cnn-based single object tracker with spatial-temporal attention mechanism,''
-  \emph{ICCV}, 2017.
-
-\bibitem{DL_ATT_Trackformer.2022}
-T.~M. A. K. L. L.-T.~C. Feichtenhofer, ``Trackformer: Multi-object tracking
-  with transformers,'' \emph{Paper}, 2022.
 
 \bibitem{ML_Attention.2017}
 A.~Vaswani, N.~Shazeer, N.~Parmar, J.~Uszkoreit, L.~Jones, A.~N. Gomez,
@@ -111,5 +138,9 @@ I.~G. Y. B.~A. Courville, \emph{Deep Learning}.\hskip 1em plus 0.5em minus
 \bibitem{DL_padding.2019}
 D.~M. R. N. V.~S. Reddy, ``Effect of padding on lstms and cnns,'' \emph{Paper},
   2019.
+
+\bibitem{DL_LSTM.1997}
+S.~H.~J. Schmidhuber, ``Long short-term memory,'' \emph{Neural Computation},
+  1997.
 
 \end{thebibliography}
