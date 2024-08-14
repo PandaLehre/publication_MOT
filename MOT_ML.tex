@@ -129,6 +129,8 @@ DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_CNN_ATT_mot.2017,DL_ATT_Trackfor
 DL_ATT_CNN_soda.2020}.
 In complex and dynamic environments, as encountered in urban traffic, it is crucial to
 simultaneously and accurately capture the positions and movements of multiple objects
+% CH: Kommentar von CB eingearbeitet
+in early timesteps of detection with a accurate prediction.
 - a key challenge in computer vision (CV) for automated driving.
 
 In the commonly used Tracking-by-Detection (TbD) paradigm,
@@ -154,8 +156,10 @@ This usually leads to poor performance in certain scenes for a specific system.
 With classical systems that not learn directly from data, these situations are often
 solved by the implementation of heuristics and by tweaking parameters of the tracking system
 for the troublesome scenes.
-But from a software engineering point of view hand-engineered parameters and heuristics
-are extremely hard to maintain and develop further for new scenarios and new system configurations.
+% CH: Kommentar von CB eingearbeitet
+But from a software engineering point of view hand-engineered parameters are only available in
+a limited amount of number and heuristics are extremely hard to maintain
+and develop further for new scenarios and new system configurations.
 Moreover, hand-engineered classical approaches can reach its limits for the overall
 performance and in challenging situations that would require a more automated and
 reproducible development strategy.
@@ -173,17 +177,19 @@ In contrast to the Kalman filter \cite{KF_BoundingBD.2023}, our Prediction Netwo
 of predicting the state of individual objects without the need for a predefined state
 or prediction model at runtime.
 The self-learning, data driven approach enables adaptability to various scenarios and
-the ability to effectively handle non-linearities.
+the ability to effectively handle non-linearities and habits of road users.
 Many conventional tracking systems rely on static methods for data association.
 Commonly used algorithms like the Hungarian algorithm (HA) \cite{DA_hungarian.1955}
 require heuristics and fixed thresholds.
 Our Single Association Network replaces the calculation of a distance metric for
-the corresponding assignment by employing machine learning.
+the corresponding assignment by employing machine learning
+% CH: Kommentar von CB eingearbeitet
+in order to resolve situations unclear for traditional approaches.
 Both, the Prediction Network and SANT can be developed and evaluated as stand-alone models.
 For a throughout evaluation, we proceed by integrating them into an existing tracking system
 and demonstrate their performance through multiple tests and comparisons with established methods.
 
-This work provides new insights and advancement in the development of ADAS,
+This work provides new insights and advancement in the development of ADAS by applying ML,
 contributing to the further evolution of technologies for autonomous driving (AD).
 
 % MD: Wir sollten insgesamt auf 35++ zitierte Arbeiten kommen.
@@ -193,7 +199,7 @@ contributing to the further evolution of technologies for autonomous driving (AD
 %		Zusäzliche Arbeiten gesucht (aktuell ca. 20 Quellen angegeben)
 
 \section{Related work}
-\subsection{Tracked object prediction}
+\subsection{State prediction for tracked objects}
 One fundamental problem in Tracking-by-Detection frameworks is the prediction
 of the states of the already tracked objects.
 In many approaches Kalman filters and their variants have proven to be effective for
@@ -215,10 +221,24 @@ to overcome these challenges.
 We specifically focus on the development and implementation of Neural Networks,
 which can enable more precise and flexible data-driven object tracking.
 
-\subsection{Association}
+\subsection{Association of sensor objects to tracks}
 Another fundamental problem for a TbD tracker is the data association.
-For this, some approaches only consider the current state of the tracks,
-while others integrate temporal information such as the track history.
+% CH: Kommentar von CB eingearbeitet
+One of the most common methods for data association is the Global Nearest Neighbor (GNN) algorithm.
+The GNN algorithm assigns the nearest detected object to the existing tracks based on a distance metric.
+Although GNN is often implemented using the Hungarian Algorithm \cite{DA_hungarian.1955}
+to find the optimal assignment between observations and tracks,
+it only considers the current set of observations and does not explicitly
+take temporal continuity or motion patterns into account.
+This limitation can lead to incorrect assignments in complex scenarios,
+especially when objects cross paths or when sensor measurements are noisy.
+The Hungarian Algorithm considers the assignment problem as a linear sum assignment problem
+considering the current state of the tracks and the sensor objects.
+Other approaches, such as the Joint Probabilistic Data Association (JPDA) \cite{DA_JPDA.1993},
+consider the temporal information of the tracks and the sensor objects.
+However, these methods are computationally expensive and require the calculation of
+a joint probability distribution for all possible assignments.
+Machine Learning-based approaches have been proposed to address these limitations.
 This aggregate of temporal information can be done for example using attention mechanisms
 as used in \cite{DL_ATT_CNN_soda.2020, DL_ATT_CNN_mot_sot_based.2017} or
 recurrent neural networks (RNNs) as developed in \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}.
@@ -265,11 +285,11 @@ propose a Kalman Filter based TbD multi-object tracker.
 \cite{KF_Bewley.2016} presents a simple and efficient multi-object tracking approach
 based on the KF and the Hungarian Algorithm.
 \cite{KF_simple_cues.2022} presents a MOT approach based on simple visual cues.
-The authors contend that many existing multi-object trackers are too complex and require
-a large amount of computational resources.
-Instead, they propose a simpler approach based on basic visual features such as color,
-shape and motion.
-These visual cues are used to track objects at the image level and make associations between frames.
+The authors argue that many existing multi-object trackers are overly complex
+and require significant computational resources.
+Instead, they propose a more straightforward approach that leverages basic visual features
+such as color, shape, and motion.
+These cues are used to track objects at the image level and to make frame-to-frame associations.
 
 \paragraph{Recurrent Neural Network based Tracker}
 % Generierter Text aus geschriebenem Text (II)
@@ -333,19 +353,21 @@ Our primary contribution is the development and evaluation of three NN that we l
 and (iii) the Multi-Association Network (MANTa).
 Figure \ref{pic::MotFramework} provides an overview of our approach
 in which the association network can be implemented using either SANT or MANTa.
-The input for the proposed Prediction Network (i) are the sensor objects in every time step.
-If new objects are detected, these are stored in a fixed-dimensional state vector
-that contains information such as object position, orientation and dimension.
-The Prediction Network predicts all vectors to the next time step where
+The input for the proposed Prediction Network (i) are the sensor objects
+$ Z_{t,1:m}$ in every time step.
+If new objects are detected, these are stored in a $k$-dimensional state vector
+containing information such as object position (x,y), yaw angle and object dimensions
+(lengt and width) (for $k=5$).
+The Prediction Network predicts all vectors $X_{t,1:n}$ to the next time step where
 they are used as input to either the SANT or MANTa association networks.
-These provide the association matrix, that is used to update the tracks using
-the corresponding sensor objects or create new tracked objects.
+These provide the association matrix $A_{t,1:m}$, that is used to update the tracks $Tu_{t,1:n}$
+using the corresponding sensor objects or create new tracked objects.
 The Track Management can then decide to delete tracks, that were not updated
-for a specific amount of time and send out tracks to the next higher
+for a specific amount of time and send out tracks $Tc_{t,1:n}$ to the next higher
 software component that have been confirmed by sensor objects.
 
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=1.0\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
+	\centerline{\includegraphics[width=0.95\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
 	\caption{Schematic representation of the two integrated networks (blue)
 	in a tracking-by-detection framework.
 	The Association Network can either be filled with the our SANT (single)
@@ -355,13 +377,15 @@ software component that have been confirmed by sensor objects.
 
 \section{Tracking with Prediction and Association Networks}
 We apply the tracking-by-detection paradigm, in which a tracker fuses object detections
-(sensor objects) to generate object tracks that are consistent over time.
+to generate object tracks that are consistent over time.
 \cite{KF_framework.2013}, for example, provides a framework for analyzing
 tracking approaches that follow the TbD paradigm. This was used accordingly in this study.
 To enable our models to incorporate temporal information, we use LSTM and
 bidirectional Long Short-Term Memory (BILSTM) networks.
 Both for the prediction and the association (SANT) of the sensor objects to the existing tracks.
 
+
+%%%%%%%%%%%%%%%%%%%%%% Absatztitel: SPENT
 \subsection{Single Prediction Network (SPENT)}
 % Generierter Text aus geschriebenem Text (III)
 In our methodology, we leverage the hidden states of the LSTM layer as a dedicated information
@@ -387,7 +411,7 @@ of object states.
 	% for a given state vector of a sensor object.
 
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=0.90\linewidth]{figs/SPENT_network_arch.png}}
+	\centerline{\includegraphics[width=0.95\linewidth]{figs/SPENT_network_arch.png}}
 	\caption{Schematic representation of the generic prediction network structure.}
 	\label{pic::SpentArch}
 \end{figure}
@@ -417,10 +441,13 @@ the localized insights garnered by preceding layers.
 The dimensionality of the final FC layer is meticulously aligned with
 the number of response variables required by the output layer, as elucidated in \cite{DL_FC.2010}.
 
-Our model's loss function is predicated on the mean-squared-error (MSE) metric,
-calculated for each state value prediction.
+Our model’s loss function is based on the Mean Squared Error (MSE) metric,
+which is calculated for each state value prediction.
 The MSE quantifies the average squared discrepancy between the predicted
-and actual target values, serving as a critical measure of our model's predictive fidelity.
+and actual target values.
+We chose MSE because it provides a clear and direct measure of how closely our predictions
+align with the true states,
+making it an effective metric for optimizing the accuracy of our model's state predictions.
 
 % Geschriebener Text (IV)
 	% The first layer of our Prediction Network is formed by the LSTM layer.
@@ -457,14 +484,17 @@ and actual target values, serving as a critical measure of our model's predictiv
 	% For a single observation, the MSE is given by:
 
 \begin{equation}
-	MSE = \frac{1}{m}\sum_{i=1}^{m}{(y_i-\hat{y}_i)}^2,
+	MSE = \frac{1}{k}\sum_{i=1}^{k}{(y_i-\hat{y}_i)}^2,
 \end{equation}
-where $m$ is the size of the predicted state vector, $y_i$ is the ground truth value
+where $k$ is the size of the predicted state vector, $y_i$ is the ground truth value
 (KITTI car tracks) and $\hat{y}_i$ is the prediction of the network for training set sample $i$.
 The loss is evaluated for several sequences, each with numerous time stamps.
 For our Prediction Network the loss function is half the mean-square-error
 of the predictions added up for each time step in the training set,
-normalized by the total number of all time stamps in the used sequences $T$:
+normalized by the total number of all time stamps in the used sequences $T$.
+The Factor 1/2 simplifies the calculation of the gradient during backpropagation,
+making the derivative of the loss function with
+respect to the network’s predictions easier to compute:
 \begin{equation}
 	loss = \frac{1}{2T} \sum_{j=1}^{T}\sum_{i=1}^{m}{({y_{ij}}-{\hat{y}_{ij}})}^2.
 \end{equation}
@@ -479,18 +509,6 @@ so $T$ equals the mini-batch length.
 % CH: Stimmt, hatte ich für meine Präesentation schon verwendet.
 %		Ergänze ich hier auch: (... Bezogen auf die Vorhersage der Y Koordinate
 %		eines Objektes ergibt sich somit folgende durchschnittliche Abweichung SPENT 0.21m)
-
-Within the context of the KITTI dataset, encompassing both cars and vans,
-our model attained a Root Mean Square Error of 0.029 for the positional prediction of all objects
-within the validation dataset.
-This performance metric translates to an average deviation of 0.38 meters for predictions
-pertaining to the X coordinate and 0.21 meters for those related to the Y coordinate.
-% MD: Das muss erklärt werden. Was heißt "standard Kalman Filter",
-%		sonst hilft der Vergleich nicht viel.
-%		Hier muss eigentlich nochmal der ganze Kalman Filter vorgestellt werden, mit dem du vergleichst.
-% CH: wie besprochen ...inhouse implemented ...
-Using an inhouse implemented Kalman Filter carried by Daimler Truck Research Group
-following \cite{KF_BoundingBD.2023,KF_Bewley.2016}, an RMSE of 0.066 was achieved on the same data set.
 
 \paragraph{Data preprocessing}
 In the development of our model, ground truth data comprising
@@ -519,7 +537,18 @@ were computed across all tracks, employing the subsequent equations:
 where $S_i$ the total number of all time stamps of all tracks
 and $m$ is the number of states per track.
 
-In our approche, we incorporate pre-padding as delineated by Reddy et al. in \cite{DL_padding.2019},
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=0.95\linewidth]{figs/padding.png}}
+	\caption{Analysis of Sequence Padding: Unsorted vs. Sorted Data.
+			Delineates the differential impact of padding on LSTM network training,
+			contingent upon whether the input data sequences are sorted by length.
+			In the upper panel, unsorted data necessitates extensive padding to equalize
+			the sequence lengths within a batch, thereby augmenting the computational overhead.
+			Conversely, the lower panel illustrates that sorting data by sequence length prior
+			to batching significantly curtails the requisite padding.}
+	\label{pic::Padding}
+\end{figure}
+In our approach, we incorporate pre-padding as delineated by Reddy et al. in \cite{DL_padding.2019},
 where the authors elucidate the effect of padding strategies on the performance of neural networks
 in sequence-oriented tasks.
 Their investigation reveals that while both pre-padding and post-padding are viable options,
@@ -540,7 +569,6 @@ within a batch have the same length.
 We used zeros as padding tokens, which were appended to the end of a sequence as needed.
 This allows for efficient batch processing and ensures consistent training of the network
 without the model performance being affected by the varying sequence lengths.
-
 As highlighted by \cite{DL_padding.2019}, while padding introduces noise into the network,
 it is essential for aligning sequences within each mini-batch
 to facilitate the training of LSTM networks.
@@ -549,21 +577,23 @@ prior to applying mini-batch padding.
 As demonstrated in Figure \ref{pic::Padding}, this approach significantly reduces
 the padding (depicted in turquoise) required for each mini-batch by utilizing a pre-sorted dataset.
 This adjustment was critical for achieving convergence during the training process.
-
-\begin{figure}[htbp]
-	\centerline{\includegraphics[width=0.82\linewidth]{figs/padding.png}}
-	\caption{Analysis of Sequence Padding: Unsorted vs. Sorted Data.
-			Delineates the differential impact of padding on LSTM network training,
-			contingent upon whether the input data sequences are sorted by length.
-			In the upper panel, unsorted data necessitates extensive padding to equalize
-			the sequence lengths within a batch, thereby augmenting the computational overhead.
-			Conversely, the lower panel illustrates that sorting data by sequence length prior
-			to batching significantly curtails the requisite padding.}
-	\label{pic::Padding}
-\end{figure}
 % MD: Die Unterschrift würde ich auch ausführlicher schreiben.
-% CH: angepasst.
-%		Größe der Abbildung an Text / Seite angepasst.
+% CH: angepasst. Größe der Abbildung an Text / Seite angepasst.
+
+% CH: Kommentar von CB eingearbeitet (Ergebnis ans Ende des Abschnitts verschoben)
+Within the context of the KITTI dataset, encompassing both cars and vans,
+our model attained a Root Mean Square Error of 0.029 for the positional prediction of all objects
+within the validation dataset.
+This performance metric translates to an average deviation of 0.38 meters for predictions
+pertaining to the X coordinate and 0.21 meters for those related to the Y coordinate.
+% MD: Das muss erklärt werden. Was heißt "standard Kalman Filter",
+%		sonst hilft der Vergleich nicht viel.
+%		Hier muss eigentlich nochmal der ganze Kalman Filter vorgestellt werden, mit dem du vergleichst.
+% CH: wie besprochen ...inhouse implemented ...
+Using an inhouse implemented Kalman Filter carried by Daimler Truck Research Group
+following \cite{KF_BoundingBD.2023,KF_Bewley.2016}, an RMSE of 0.066 was achieved
+on the same data set.
+
 
 %%%%%%%%%%%%%%%%%%%%%% Absatztitel: SANT
 \subsection{Single Association Network (SANT)}
@@ -574,6 +604,7 @@ Unlike traditional association methods referenced in
 \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}, our SANT model innovates
 by not relying on a predefined distance matrix as input.
 Instead, it processes the extant tracks alongside each newly measured sensor object directly.
+SANT is designed to match a singular sensor object to one of multiple track objects.
 
 This approach obviates the necessity for a predefined distance metric,
 thereby endowing the network with the autonomy to devise its own association logic,
@@ -581,13 +612,13 @@ which it learns from the training data.
 Consequently, the association network supplants the traditional computation of a distance metric
 and the implementation of an association algorithm, such as the
 Hungarian Algorithm, with a data-driven, learning-based methodology.
-
 % MD: Mit den Abkürzungen: SANT wird bestimmt eine Hand voll mal eingeführt.
 % 		Eigentlich sollte man Abkürzungen genau einmal einführen und dann weiter verwenden.
 %		Auch andere Abkürzungen werden mehrfach eingeführt.
 %		Vlt würde ich es hier noch einmal im Titel einführen, aber im Text nicht mehr.
 % CH: Abkürzungen zu Beginn eingeführt, im Text entfernt.
 % 		Entweder Abkürzung oder ausgeschrieben, nicht beides.
+
 \paragraph{Data preprocessing}
 In the formulation of SANT, we conceptualized data association as a temporally structured challenge,
 adopting a sequence-to-vector paradigm.
@@ -647,10 +678,11 @@ in relation to the KITTI data set and the selected objects (cars and vans).
 The network as depicted in fig. \ref{pic::SantArch} is designed as a
 sequence-to-classification network.
 At each time step, a matrix is passed as input holding both,
-the information of to-be-assigned sensor object and the currently tracked objects.
+the information of the one to-be-assigned sensor object
+and the currently multiple tracked objects.
 
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=1.0\linewidth]{figs/SANT_network_arch.png}}
+	\centerline{\includegraphics[width=0.95\linewidth]{figs/SANT_network_arch.png}}
 	\caption{Schematic representation of the generic network structure of the Single Association Network.}
 	\label{pic::SantArch}
 \end{figure}
@@ -672,6 +704,7 @@ the information of to-be-assigned sensor object and the currently tracked object
 %		Und zwar lange vor diesem Kapitel. Oder habe ich es selbst überlesen?
 %		Ist aber total wichtig.
 % TODO: Datensplit einfügen
+
 Architectures with RNN, GNU, LSTM and Bidirectional
 Long Short-Term Memory Network (BILSTM) layers were tested.
 As part of these investigations, the best association performance was achieved with the BILSTM layer.
@@ -719,11 +752,14 @@ as derived from the softmax function output.
 
 %%%%%%%%%%%%%%%%%%%%%% Absatztitel: MANTa
 \subsection{Association network for multiple sensor objects (MANTa)}
-The developed single association network shows that a data-based association logic can be learnt from a deep learning model.
-The aim was also to develop a network to recognise a number of m
-sensor objects SO to an existing number of n tracks in one operation step.
-in one operation step.
-A multi-association network was developed, which is able to solve the following association problems:
+The developed single association network shows that a data-based association logic
+can be learnt from a deep learning model.
+The aim was also to develop a network to recognise a number of $m$ sensor objects
+to an existing number of $n$ tracks in one operation step.
+In contrast to the Single Association Network, MANTa is designed to associate
+multiple sensor objects to multiple tracks in one operation step.
+Therefore the multi-association network was developed, to solve the following association problems:
+
 \begin{itemize}
 	\item \textbf{1 to n} - one SO to $n$ tracks
 	\item \textbf{m to 1} - $m$ SO to one track
@@ -732,25 +768,28 @@ A multi-association network was developed, which is able to solve the following 
 	\item \textbf{0 to n} - no SO to $n$ tracks
 	\item \textbf{0 to 0} - no SO to no tracks
 \end{itemize}
-With the integration of MANTa into a Multi-Object Tracking framework, the question can be asked whether a 0 to n and 0 to 0 assignment is a task to be solved.
-If no new SO is detected, the prediction of the last operation step can be continued until the track is deleted on the basis of the decreasing probability of existence within the track management module.
-The association algorithm or the MANTa does not need to be called if no tracks and sensor objects are detected.
-Although these assignment options can therefore be resolved via the programme structure in the MOT framework, these options are also taken into account.
-This is intended to ensure that the network also learns to deal with SOs and tracks that are no longer available.
+
+With the integration of MANTa into a Multi-Object Tracking framework,
+the question can be asked whether a 0 to n and 0 to 0 assignment is a task to be solved.
+If no new SO is detected, the prediction of the last operation step can be continued until
+the track is deleted on the basis of the decreasing probability of existence
+within the track management module.
+The association algorithm or the MANTa does not need to be called if no tracks
+and sensor objects are detected.
+Although these assignment options can therefore be resolved via the programme structure
+in the MOT framework, these options are also taken into account.
+This is intended to ensure that the network also learns to deal with SOs and tracks
+that are no longer available and capture information over time when no data is available.
 
 \paragraph{Data preprocessing}
-The data set for the training and validation of MANTa was created according to the described objective.
-Figure \ref{pic::MantaData} shows the input data structure with corresponding association tasks in the displayed time step (85) of sequence 20 of the KITTI data set.
+The data set for the training and validation of MANTa was created according to
+the described objective.
+Figure \ref{pic::MantaData} shows the input data structure with corresponding
+association tasks in the displayed time step (85) of sequence 20 of the KITTI data set.
 The respective tracks per time step were extracted across all sequences.
 The extracted tracks were each modified with noise as in the SANT development and then normalised.
-
-\begin{strip} % <--- defined in "cuted"
-		\includegraphics[width=\linewidth]{figs/MANTa_data.png}
-		\captionof{figure}{MANTa, data structure, shows the non-noisy sensor objects to enable a visual assignment and increase understanding of the association procedure.}
-		\label{pic::MantaData}
-\end{strip}
-
-Figure \ref{pic::MantaData} shows the non-noisy sensor objects to enable a visual assignment and increase understanding of the association procedure.
+Figure \ref{pic::MantaData} shows the non-noisy sensor objects to enable
+a visual assignment and increase understanding of the association procedure.
 The values obtained in this way were assigned as shown in Fig. \ref{pic::MantaData} as measurements in pseudo-random order per time step assigned to an $F * T_{max}$ matrix.
 Where $F$ represents the number of features.
 The number of features results from the status values per track and SO set.
@@ -758,14 +797,21 @@ The number of features results from the status values per track and SO set.
 $T_{max}$ stands for the maximum number of existing tracks per time step.
 For the defined test case with cars and vans, the KITTI data set results in $T_{max} = 16$.
 There are 7 tracks in the time step of the sequence shown.
-Each track receives a new measurement in this time step, and an additional object was detected (new sensor object).
+Each track receives a new measurement in this time step,
+and an additional object was detected (new sensor object).
+
+\begin{strip} % <--- defined in "cuted"
+	\includegraphics[width=\linewidth]{figs/MANTa_data.png}
+	\captionof{figure}{MANTa, data structure, shows the non-noisy sensor objects to enable a visual assignment and increase understanding of the association procedure.}
+	\label{pic::MantaData}
+\end{strip}
 
 The GT assignment is displayed at the bottom of the section.
-The size of $OH_max = 288$ results from the maximum number of tracks $T_max = 16$ and the number of possible assignment $classes = 18$.
+The size of $OH_{max}=288$ results from the maximum number of tracks $T_{max}=16$ and the number of possible assignment $classes = 18$.
 The assignment classes result from the described index class 1 to 16 and additional degrees of freedom. One degree of freedom of the assignment represents the case that no measurement exists, another that the measurement should not be assigned.
 The section of the one-hot vector shown (1:18) thus shows the GT assignment of the first sensor object to the track at position two.
 
-\paragraph{Network development}
+\paragraph{Network architecture}
 The schematic representation \ref{pic::MantaArch} shows the developed network architectures for the simultaneous association of a large number of sensor objects to a large number of tracks.
 This is what we call a Multi-Association Network.
 
