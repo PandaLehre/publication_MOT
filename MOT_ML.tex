@@ -119,6 +119,9 @@ and soft track-association}
 	Article submission, IEEE, IEEEtran, journal, \LaTeX, paper, template, typesetting.
 \end{IEEEkeywords}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% chapter 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%% Allgemeine Einführung MOT
 \IEEEPARstart{T}{he}
@@ -198,6 +201,9 @@ contributing to the further evolution of technologies for autonomous driving (AD
 % CH: Paper aus der Thesis ergänzt.
 %		Zusäzliche Arbeiten gesucht (aktuell ca. 20 Quellen angegeben)
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% chapter 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related work}
 \subsection{State prediction for tracked objects}
 One fundamental problem in Tracking-by-Detection frameworks is the prediction
@@ -347,6 +353,9 @@ to aggregate information from all detections in a given temporal window.
 This allows the model to learn long-term and highly interactive relationships between
 detections and tracks from large datasets without using complex heuristics and hyperparameters.
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% chapter 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Overview of our proposed models}
 Our primary contribution is the development and evaluation of three NN that we label:
 (i) the Single Prediction Network (SPENT), (ii) the Single Association Network (SANT),
@@ -375,6 +384,9 @@ software component that have been confirmed by sensor objects.
 	\label{pic::MotFramework}
 \end{figure}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% chapter 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Tracking with Prediction and Association Networks}
 We apply the tracking-by-detection paradigm, in which a tracker fuses object detections
 to generate object tracks that are consistent over time.
@@ -751,23 +763,46 @@ as derived from the softmax function output.
 
 
 %%%%%%%%%%%%%%%%%%%%%% Absatztitel: MANTa
-\subsection{Association network for multiple sensor objects (MANTa)}
-The developed single association network shows that a data-based association logic
-can be learnt from a deep learning model.
-The aim was also to develop a network to recognise a number of $m$ sensor objects
-to an existing number of $n$ tracks in one operation step.
-In contrast to the Single Association Network, MANTa is designed to associate
-multiple sensor objects to multiple tracks in one operation step.
-Therefore the multi-association network was developed, to solve the following association problems:
+% Generierter Text aus geschriebenem Text (V)
+\subsection{Multi-Association Network for Multiple Sensor Objects (MANTa)}
+The development of the single association network demonstrated that data-driven association logic
+can be effectively learned by a deep learning model.
+Building upon this foundation, the objective was to create a network capable of associating
+multiple sensor objects ($m$ SOs) with multiple tracks ($n$ tracks) in a single operational step.
+Unlike the Single Association Network, MANTa is specifically designed to handle the simultaneous
+association of multiple sensor objects to multiple tracks.
+To address this complex task, the Multi-Association Network (MANTa) was developed
+to solve the following association scenarios:
 
 \begin{itemize}
-	\item \textbf{1 to n} - one SO to $n$ tracks
-	\item \textbf{m to 1} - $m$ SO to one track
-	\item \textbf{m to n} - $m$ SO to $n$ tracks
-	\item \textbf{m to 0} - $m$ SO to no tracks
-	\item \textbf{0 to n} - no SO to $n$ tracks
-	\item \textbf{0 to 0} - no SO to no tracks
+    \item \textbf{1 to n} - one sensor object (SO) with $n$ tracks
+    \item \textbf{m to 1} - $m$ sensor objects (SOs) with one track
+    \item \textbf{m to n} - $m$ sensor objects (SOs) with $n$ tracks
+    \item \textbf{m to 0} - $m$ sensor objects (SOs) with no tracks
+    \item \textbf{0 to n} - no sensor objects (SOs) with $n$ tracks
+    \item \textbf{0 to 0} - no sensor objects (SOs) with no tracks
 \end{itemize}
+
+This comprehensive framework enables MANTa to adeptly manage the complexities inherent in
+multiple object tracking (MOT), providing a robust and scalable solution for real-world applications.
+% Geschriebener Text (V)
+	% \subsection{Association network for multiple sensor objects (MANTa)}
+	% The developed single association network shows that a data-based association logic
+	% can be learnt from a deep learning model.
+	% The aim was also to develop a network to recognise a number of $m$ sensor objects
+	% to an existing number of $n$ tracks in one operation step.
+	% In contrast to the Single Association Network, MANTa is designed to associate
+	% multiple sensor objects to multiple tracks in one operation step.
+	% Therefore the multi-association network was developed, to solve the following association problems:
+
+	% \begin{itemize}
+	% 	\item \textbf{1 to n} - one SO to $n$ tracks
+	% 	\item \textbf{m to 1} - $m$ SO to one track
+	% 	\item \textbf{m to n} - $m$ SO to $n$ tracks
+	% 	\item \textbf{m to 0} - $m$ SO to no tracks
+	% 	\item \textbf{0 to n} - no SO to $n$ tracks
+	% 	\item \textbf{0 to 0} - no SO to no tracks
+	% \end{itemize}
 
 With the integration of MANTa into a Multi-Object Tracking framework,
 the question can be asked whether a 0 to n and 0 to 0 assignment is a task to be solved.
@@ -793,9 +828,9 @@ a visual assignment and increase understanding of the association procedure.
 The values obtained in this way were assigned as shown in Fig. \ref{pic::MantaData} as measurements in pseudo-random order per time step assigned to an $F * T_{max}$ matrix.
 Where $F$ represents the number of features.
 The number of features results from the status values per track and SO set.
-(here, $F = 2 * m$, with $m = 5$ (number of state values in this investigation)).
+(here, $F = 2 * m$, with $m=5$ (number of state values in this investigation)).
 $T_{max}$ stands for the maximum number of existing tracks per time step.
-For the defined test case with cars and vans, the KITTI data set results in $T_{max} = 16$.
+For the defined test case with cars and vans, the KITTI data set results in $T_{max}=16$.
 There are 7 tracks in the time step of the sequence shown.
 Each track receives a new measurement in this time step,
 and an additional object was detected (new sensor object).
@@ -807,12 +842,17 @@ and an additional object was detected (new sensor object).
 \end{strip}
 
 The GT assignment is displayed at the bottom of the section.
-The size of $OH_{max}=288$ results from the maximum number of tracks $T_{max}=16$ and the number of possible assignment $classes = 18$.
-The assignment classes result from the described index class 1 to 16 and additional degrees of freedom. One degree of freedom of the assignment represents the case that no measurement exists, another that the measurement should not be assigned.
-The section of the one-hot vector shown (1:18) thus shows the GT assignment of the first sensor object to the track at position two.
+The size of $OH_{max}=288$ results from the maximum number of tracks $T_{max}=16$
+and the number of possible assignment classes $C=18$.
+The assignment classes result from the described index class 1 to 16 and additional degrees of freedom.
+One degree of freedom of the assignment represents the case that no measurement exists,
+another that the measurement should not be assigned.
+The section of the one-hot vector shown (1:18) thus shows the GT assignment
+of the first sensor object to the track at position two.
 
 \paragraph{Network architecture}
-The schematic representation \ref{pic::MantaArch} shows the developed network architectures for the simultaneous association of a large number of sensor objects to a large number of tracks.
+The schematic representation \ref{pic::MantaArch} shows the developed network architectures
+for the simultaneous association of a large number of sensor objects to a large number of tracks.
 This is what we call a Multi-Association Network.
 
 \begin{figure}[htbp]
@@ -822,33 +862,51 @@ This is what we call a Multi-Association Network.
 \end{figure}
 
 The BILSTM layer processes the input data as already explained for SANT.
-The task of associating a sensor object list with a track list requires a separate network part for each track. This extension is labelled accordingly in the graphic \ref{pic::MantaArch}.
-For each track (from 1 to $T_{max}$), the MANTa has been developed with the familiar Fully Connected, Softmax stack.
-Each softmax output consists of a vector with $classes = 18$ elements, which represents the most probable assignment.
+The task of associating a sensor object list with a track list requires a
+separate network part for each track.
+This extension is labelled accordingly in the graphic \ref{pic::MantaArch}.
+For each track (from 1 to $T_{max}$), the MANTa has been developed with
+the familiar Fully Connected, Softmax stack.
+Each softmax output consists of a vector with $C=18$ elements,
+which represents the most probable assignment.
 This means that a single assignment can be realised for each track.
 The vectors 1 to $T_{max}$ are linked together in the Concatenation Layer.
-This creates a vector with 288 elements, whereby 18 elements each represent the most probable assignment of a measurement to a track.
+This creates a vector with 288 elements, whereby 18 elements each represent
+the most probable assignment of a measurement to a track.
 
 The cost function was implemented according to the format of the GT and output data of the network.
-The cross-entropy loss function already introduced was used and a clear assignment was realised by means of additional iteration per time step through the respective track blocks.
-The following formula is used to calculate the cross-entropy loss values for each input value $Y_{i}$ and associated target value $T_{i}$ element by element.
-To obtain a scalar per time step $loss_k$, all loss values are summed up and divided by the number of $classes$.
+The cross-entropy loss function already introduced was used and a clear assignment was realised
+by means of additional iteration per time step through the respective track blocks.
+The following formula is used to calculate the cross-entropy loss values for each
+input value $Y_{i}$ and associated target value $T_{i}$ element by element.
+To obtain a scalar per time step $loss_k$, all loss values are summed up and
+divided by the number of classes $C$.
 This results in the average loss per time step for all tracks.
 \begin{equation}
-	loss_k = \frac{1}{classes} \sum_{i=1}^{classes} -(T_i ln Y_i + (1 - T_i) ln(1 - Y_i))
+	loss_k = \frac{1}{C} \sum_{i=1}^{C} -(T_i ln Y_i + (1 - T_i) ln(1 - Y_i))
 \end{equation}
 Then, all scalars obtained per time step are summarised and divided by the number of samples $N$ of a minibatch:
 \begin{equation}
 	loss = \frac{1}{N} \sum{} loss_k
 \end{equation}
 
-With the described procedure, the Multi-Association Network could be trained, for assigning a list of sensor objects SO to a list of tracks in one operation step.
+Using the described procedure, the Multi-Association Network (MANTa) was trained
+to assign a list of sensor objects (SOs) to a list of tracks in a single operational step.
+MANTa was trained on the same dataset as the Single Association Network (SANT)
+and achieved an assignment accuracy of 95\% for the six most frequently
+occurring association sets.
+A detailed analysis of the data is presented in the following section.
 
-\section{Experimental Evaluation}
-In relation to the entire KITTI data set (Cars and Vans objects), MANTa achieves an average allocation accuracy of 70\%.
-The main reason for this limitation was identified by analysing the extracted data.
-Figure \ref{pic::MantaTracks} shows a distribution of the number of existing tracks per time step.
-For example, it can be seen that time steps containing a track account for almost a third of the entire available data set with 29.9\% and an absolute number of 2315 samples.
+% CH: Kommentar von CB eingearbeitet (Experimental Evaluation für alle oder keine Networks)
+% \section{Experimental Evaluation}
+In the context of the entire KITTI dataset, which includes both Cars and Vans objects,
+MANTa achieves an average allocation accuracy of 70\%.
+This limitation was primarily attributed to the characteristics of the extracted data.
+As illustrated in Figure \ref{pic::MantaTracks}, the distribution of the number
+of existing tracks per time step reveals significant insights.
+Notably, time steps containing at least one track constitute nearly one-third
+of the entire dataset, accounting for 29.9\% of the data,
+which corresponds to an absolute count of 2315 samples.
 
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=1.0\linewidth]{figs/MANTa_tracks.png}}
@@ -856,57 +914,112 @@ For example, it can be seen that time steps containing a track account for almos
 	\label{pic::MantaTracks}
 \end{figure}
 
-Time steps containing one to six tracks together make up 81.5\% of the samples.
-Accordingly, tests were carried out with a reduced data set in order to demonstrate the multi-association capability of the network.
-MANTa correctly assigns 95\% of the data set with time steps containing one to six tracks.
-This confirms MANTa's ability to assign data with the appropriate data set,
-because SANT also achieves a validation accuracy of approx. 95\% in relation to the entire KITTI data set (cars and vans).
+% CH: Kommentar von CB eingearbeitet (MANTa advantage)
+Time steps containing one to six tracks constitute 81.5\% of the samples.
+Consequently, tests were conducted using a reduced dataset to demonstrate
+the multi-association capability of the network.
+MANTa correctly assigns 95\% of the dataset for time steps containing one to six tracks.
+This result confirms MANTa's proficiency in handling data with the appropriate dataset,
+as SANT also achieves a validation accuracy of approximately 95\%
+across the entire KITTI dataset (including cars and vans).
+The primary advantage of MANTa over SANT is its ability to assign
+multiple sensor objects to multiple tracks in a single operational step.
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Conclusion %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
-The developed networks can be modularly integrated into the TbD framework and thus replace classic heuristic algorithms within the MOT process.
+% Generierter Text aus geschriebenem Text (VI)
+The developed networks can be modularly integrated into the Tracking-by-Detection (TbD)
+framework, effectively replacing classical heuristic algorithms within the
+Multi-Object Tracking (MOT) process.
 
-SPENT replaces the state predictions of the KF.
-The trained network estimates the predictions per time step without the need for a dynamics model.
-The implementation allows the recurrent network to update the internal hidden states per time step, thus achieving an accurate state prediction without an external correction.
+SPENT substitutes the state predictions of the Kalman Filter (KF).
+The trained network estimates predictions per time step without the necessity
+of a dynamics model.
+This implementation allows the recurrent network to update its internal
+hidden states at each time step,
+thereby achieving accurate state predictions without external correction.
 
-The model is suitable for use in real time applications and represents an alternative approach to classical prediction methods.
-The network verification shows an RMSE of 0.026 averaged over the training, validation and test data set.
-In relation to the predictions of the positions of an object in the X coordinate, this corresponds to an average deviation of 0.42m. In relation to the position in the Y direction relative to the ego vehicle, the average deviation of the verification performed is 0.23m.
+The model is suitable for real-time applications and represents a viable alternative
+to classical prediction methods.
+Network verification demonstrates a Root Mean Square Error (RMSE) of 0.026,
+averaged over the training, validation, and test datasets.
+Specifically, for the X coordinate position predictions of an object,
+this corresponds to an average deviation of 0.42 meters.
+For the Y coordinate position relative to the ego vehicle,
+the average deviation is 0.23 meters.
 
-For another main task of the TbD MOT method, data association, SANT was developed as a replacement for the classic GNN method.
-This means that SANT can replace the algorithms for calculating a distance metric and assignment procedures such as HA with the learned, training data-based assignment logic.
-Based on a defined validation data set with approx. 2700 samples, SANT achieves an accuracy of 95\%.
+For another primary task of the TbD MOT method, data association,
+SANT was developed as a replacement for the
+classical Global Nearest Neighbor (GNN) method.
+SANT can replace algorithms for calculating a distance metric and
+assignment procedures such as the Hungarian Algorithm (HA) with a learned,
+data-driven assignment logic.
+Based on a defined validation dataset with approximately 2700 samples,
+SANT achieves an accuracy of 95\%.
+MANTa is an advancement of SANT and addresses the limitation of individual assignment.
+This network extension is capable of assigning a set of sensor objects ($m$)
+to a set of tracks ($n$).
+Detailed data analysis identified limitations affecting network performance.
+Verification results indicate that MANTa achieves an assignment accuracy of 95\%
+for the six most frequently occurring association sets.
 
-MANTa is a further development of SANT and addresses the limitation of individual assignment.
-A network extension could be implemented that assigns a set of sensor objects $m$ to a set of tracks $n$.
-The data situation was analysed in more detail and identified as a limitation for the network performance.
-The verification carried out shows that MANTa achieves an assignment accuracy of 95\% in relation to the six most frequently occurring association sets.
+% Geschriebener Text (VI)
+	% The developed networks can be modularly integrated into the TbD framework and thus replace classic heuristic algorithms within the MOT process.
+
+	% SPENT replaces the state predictions of the KF.
+	% The trained network estimates the predictions per time step without the need for a dynamics model.
+	% The implementation allows the recurrent network to update the internal hidden states per time step, thus achieving an accurate state prediction without an external correction.
+
+	% The model is suitable for use in real time applications and represents an alternative approach to classical prediction methods.
+	% The network verification shows an RMSE of 0.026 averaged over the training, validation and test data set.
+	% In relation to the predictions of the positions of an object in the X coordinate, this corresponds to an average deviation of 0.42m. In relation to the position in the Y direction relative to the ego vehicle, the average deviation of the verification performed is 0.23m.
+
+	% For another main task of the TbD MOT method, data association, SANT was developed as a replacement for the classic GNN method.
+	% This means that SANT can replace the algorithms for calculating a distance metric and assignment procedures such as HA with the learned, training data-based assignment logic.
+	% Based on a defined validation data set with approx. 2700 samples, SANT achieves an accuracy of 95\%.
+
+	% MANTa is a further development of SANT and addresses the limitation of individual assignment.
+	% A network extension could be implemented that assigns a set of sensor objects $m$ to a set of tracks $n$.
+	% The data situation was analysed in more detail and identified as a limitation for the network performance.
+	% The verification carried out shows that MANTa achieves an assignment accuracy of 95\% in relation to the six most frequently occurring association sets.
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% acknowledgments %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Acknowledgments}
-We would like to express our sincere thanks to the organisations that provided financial support for this research project.
+We would like to express our sincere thanks to the organisations that provided
+financial support for this research project.
 In particular, we would like to thank Daimler Truck AG and the DHBW Stuttgart.
 Without this support, our work would not have been possible.
 
 Our special thanks also go to our academic supervisors and mentors.
-I would like to thank Prof Dr Matthias Drüppel for his tireless support, valuable advice and continuous guidance throughout the duration of this project.
-His expertise and commitment have contributed significantly to the success of our research.
+I would like to thank Prof Dr Matthias Drüppel for his tireless support,
+valuable advice and continuous guidance throughout the duration of this project.
+His expertise and commitment have contributed significantly to the success
+of our research.
 
 Further thanks go to my colleague.
-I would like to thank Christian Bader for his essential help in conducting the experiments and providing technical resources.
+I would like to thank Christian Bader for his essential help in conducting
+the experiments and providing technical resources.
 His support and fruitful discussions have greatly enriched this work.
 
-Finally, we would like to thank our families and friends for their unconditional support and encouragement. Their patience, understanding and motivation have seen us through the challenges of this project and have been an invaluable help.
+Finally, we would like to thank our families and friends for their unconditional
+support and encouragement.
+Their patience, understanding and motivation have seen us through the challenges
+of this project and have been an invaluable help.
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% appendix %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {\appendix[Proof of the Zonklar Equations]
 \section*{Proof of the First Zonklar Equation}
 Appendix goes here.
 \section*{Proof of the Second Zonklar Equation}
 And here.
 }
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BIB %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
