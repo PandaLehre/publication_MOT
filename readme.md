@@ -1,4 +1,4 @@
-# Multi-object tracking (MOT) without dynamic models and hard association metrics
+# Multi-Object Tracking with Machine Learning based trajectories prediction and soft track-association
 Authors: Christian Alexander Holz, Christian Bader, Matthias Drüppel
 
 ## Description 
