@@ -135,13 +135,11 @@ simultaneously and accurately capture the positions and movements of multiple ob
 % CH: Kommentar von CB eingearbeitet
 in early timesteps of detection with a accurate prediction.
 - a key challenge in computer vision (CV) for automated driving.
-
 In the commonly used Tracking-by-Detection (TbD) paradigm,
 a tracker fuses detected sensor objects (SO) to create consistent object tracks over time.
 A crucial step within this paradigm is the association of the incoming measured SO
 with their corresponding existing object tracks to update their properties.
 If no association can be made, new object tracks must be initialized.
-
 %MD: Hier müssen noch einige Zitate rein.
 Tracking frameworks form the heart of ADAS systems that are used in millions of vehicles
 around the globe. The vast majority of these frameworks rely on classical approaches
@@ -191,7 +189,6 @@ in order to resolve situations unclear for traditional approaches.
 Both, the Prediction Network and SANT can be developed and evaluated as stand-alone models.
 For a throughout evaluation, we proceed by integrating them into an existing tracking system
 and demonstrate their performance through multiple tests and comparisons with established methods.
-
 This work provides new insights and advancement in the development of ADAS by applying ML,
 contributing to the further evolution of technologies for autonomous driving (AD).
 
@@ -221,7 +218,6 @@ standard Kalman Filter to handle non-linear motion models more effectively.
 in a cluttered environment.
 %MD: finden wir hier auch ein Paper? Grenzen von Kalman filtern?
 %CH: drei Quellen ergänzt
-
 In this work, we introduce a novel MOT approach that leverages Machine Learning
 to overcome these challenges.
 We specifically focus on the development and implementation of Neural Networks,
@@ -253,9 +249,9 @@ Similar to the problem statement in Mertz et al \cite{DL_RNN_data_association.20
 the aim of our work is to develop a data-based approach that can learn to
 completely solve the combinatorial non deterministic polynomial time (NP)
 hard optimization problem of data association.
-Mertz et al \cite{DL_RNN_data_association.2019} use a distance matrix based on the
-Euclidean distance measure as input for the developed association network,
-thus replacing an association algorithm such as the Hungarian Algorithm.
+% Mertz et al \cite{DL_RNN_data_association.2019} use a distance matrix based on the
+% Euclidean distance measure as input for the developed association network,
+% thus replacing an association algorithm such as the Hungarian Algorithm.
 In the context of this work, we put forward the hypothesis that a Gated Recurrent Unit (GRU)-based
 association network can be designed and trained using an undefined distance measure.
 %MD: Das Kapitel hier is related work,
@@ -383,8 +379,6 @@ software component that have been confirmed by sensor objects.
 	or MANTa (multi) association model.}
 	\label{pic::MotFramework}
 \end{figure}
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% chapter 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Tracking with Prediction and Association Networks}
@@ -524,9 +518,22 @@ so $T$ equals the mini-batch length.
 
 \paragraph{Data preprocessing}
 In the development of our model, ground truth data comprising
-vehicle tracks from the KITTI dataset was utilized.
+vehicle tracks (cars and vans) from the KITTI dataset was utilized.
 A GT track encapsulates the temporal evolution of an object,
 delineating its trajectory from the moment it enters until it exits the sensor's detection range.
+% MD: Wir haben nie über Datensplit gesprochen.
+%		Das muss unbedingt rein.
+%		Wie groß ist das Val set und wie wurde es erstellt?
+%		Oder wird das direkt von Kitti geliefert, aber das dann auch schreiben.
+%		Und zwar lange vor diesem Kapitel. Oder habe ich es selbst überlesen?
+%		Ist aber total wichtig.
+% CH: Hier eingefügt.
+For preprocessing, a program was developed to extract all tracks of the selected object classes
+(Cars and Vans) per sequence and store them in a unified dataset.
+Through this iterative process, 635 tracks (Cars and Vans) were extracted from the entire KITTI dataset.
+Tracks with a short temporal length were filtered using a threshold of 3 frames,
+resulting in a final dataset comprising 624 tracks.
+The track lengths vary from a minimum of 4 frames to a maximum of 643 frames (Sequence 20, ID 12).
 To enhance model generalization and foster convergence during training,
 we normalized the state values of tracks at time $t$ (predictors) and
 at time $t+1$ (targets) in accordance with the methodology outlined in \cite{DL_book.2019}.
@@ -549,8 +556,19 @@ were computed across all tracks, employing the subsequent equations:
 where $S_i$ the total number of all time stamps of all tracks
 and $m$ is the number of states per track.
 
+In our approach, we incorporate pre-padding as delineated by Reddy et al. in \cite{DL_padding.2019},
+where the authors elucidate the effect of padding strategies on the performance of neural networks
+in sequence-oriented tasks.
+Their investigation reveals that while both pre-padding and post-padding are viable options,
+the selection of padding technique plays a pivotal role in the model's efficiency.
+This is particularly salient for LSTM networks, where the contextual integrity of the sequence
+is paramount for optimal performance.
+To handle sequences of varying lengths in our LSTM network, we utilized the padding technique.
+In this process, shorter sequences are padded with special padding tokens so that all sequences
+within a batch have the same length.
+
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=0.95\linewidth]{figs/padding.png}}
+	\centerline{\includegraphics[width=0.95\linewidth]{figs/padding2.png}}
 	\caption{Analysis of Sequence Padding: Unsorted vs. Sorted Data.
 			Delineates the differential impact of padding on LSTM network training,
 			contingent upon whether the input data sequences are sorted by length.
@@ -560,13 +578,7 @@ and $m$ is the number of states per track.
 			to batching significantly curtails the requisite padding.}
 	\label{pic::Padding}
 \end{figure}
-In our approach, we incorporate pre-padding as delineated by Reddy et al. in \cite{DL_padding.2019},
-where the authors elucidate the effect of padding strategies on the performance of neural networks
-in sequence-oriented tasks.
-Their investigation reveals that while both pre-padding and post-padding are viable options,
-the selection of padding technique plays a pivotal role in the model's efficiency.
-This is particularly salient for LSTM networks, where the contextual integrity of the sequence
-is paramount for optimal performance.
+
 % MD: And what does this mean for us? You say it is crucial and then it is not described any further.
 %		How did you apply padding?
 % CH: added text and figure
@@ -575,9 +587,7 @@ is paramount for optimal performance.
 % MD: Bitte erkläre hier einmal was überhaupt padding in diesem Kontext heißt.
 %		Du ergänzt Nullen am Anfang der Sequenz oder wie?
 % CH: done
-To handle sequences of varying lengths in our LSTM network, we utilized the padding technique.
-In this process, shorter sequences are padded with special padding tokens so that all sequences
-within a batch have the same length.
+
 We used zeros as padding tokens, which were appended to the end of a sequence as needed.
 This allows for efficient batch processing and ensures consistent training of the network
 without the model performance being affected by the varying sequence lengths.
@@ -617,7 +627,6 @@ Unlike traditional association methods referenced in
 by not relying on a predefined distance matrix as input.
 Instead, it processes the extant tracks alongside each newly measured sensor object directly.
 SANT is designed to match a singular sensor object to one of multiple track objects.
-
 This approach obviates the necessity for a predefined distance metric,
 thereby endowing the network with the autonomy to devise its own association logic,
 which it learns from the training data.
@@ -648,7 +657,6 @@ the pre-existing track set of that timestep.
 Furthermore, to simulate realistic sensor data from the GT data, artificial noise was introduced.
 This process was meticulously designed to reflect the inherent inaccuracies
 and uncertainties present in real-world sensor measurements.
-
 To achieve this, a maximum of 3\% of the value of the current state vector was randomly
 subtracted or added to each value.
 % MD: Das verstehe ich nicht. Warum mehrere Iterationen?
@@ -656,7 +664,6 @@ subtracted or added to each value.
 %		und die Datenmenge entsprechend erhöhen mit unterschiedlich verrauschten Tracks.
 The data set was created in 7 iterations, so that the noise intensity was increased
 by 0.5\% per iteration.
-
 % CH: Anzahl an Positionen im State Vector m
 As shown in figure \ref{pic::SantArch} the data format was created accordingly
 to enable index-based track assignment for SANT.
@@ -669,14 +676,12 @@ as the maximum number of tracks per time step.
 %		Warum sollen wir denn überhaupt ein n einführen für die Anzahl an nicht-null Tracks?
 %		Das ist dem Netz doch egal. FÜr die Architektur ist nur die Max Anzahl wichtig.
 % CH: Guter Punkt. Aus Netzwerksicht ist nur die Max Anzahl wichtig.
-
 % MD: Ich habe den nächsten Absatz mal raus genommen.
 % 		Was meinst du mit "in relation to"? Machen die das genau so? Dann schreib das konkret so.
 % 		Das weiß ja keiner auswendig
 % CH: Der KITTI Datensatz gibt die maximale Anzahl an Tracks pro Zeitstempel vor.
 The actual number of tracks can vary between 0 and a maximum of 16 objects
 in relation to the KITTI data set and the selected objects (cars and vans).
-
 % MD: Normalization -> Batch Normalization
 % CH: done
 % MD: Oben steht concatenation of the "Prediction Network Output"
@@ -709,13 +714,6 @@ and the currently multiple tracked objects.
 % CH: Hier geht es um die Assoziation, nicht um die Vorhersage.
 %		Es werden also alle Tracks pro Zeitschritt über das BILSTM betrachtet.
 %		Es wird also als Sequenz betrachtet, welches SO welcehem Track zugeordnet wird.
-% MD: Wir haben nie über Datensplit gesprochen.
-%		Das muss unbedingt rein.
-%		Wie groß ist das Val set und wie wurde es erstellt?
-%		Oder wird das direkt von Kitti geliefert, aber das dann auch schreiben.
-%		Und zwar lange vor diesem Kapitel. Oder habe ich es selbst überlesen?
-%		Ist aber total wichtig.
-% TODO: Datensplit einfügen
 
 Architectures with RNN, GNU, LSTM and Bidirectional
 Long Short-Term Memory Network (BILSTM) layers were tested.
@@ -764,7 +762,7 @@ as derived from the softmax function output.
 
 %%%%%%%%%%%%%%%%%%%%%% Absatztitel: MANTa
 % Generierter Text aus geschriebenem Text (V)
-\subsection{Multi-Association Network for Multiple Sensor Objects (MANTa)}
+\subsection{Multi-Association Network (MANTa)}
 The development of the single association network demonstrated that data-driven association logic
 can be effectively learned by a deep learning model.
 Building upon this foundation, the objective was to create a network capable of associating
@@ -834,6 +832,9 @@ For the defined test case with cars and vans, the KITTI data set results in $T_{
 There are 7 tracks in the time step of the sequence shown.
 Each track receives a new measurement in this time step,
 and an additional object was detected (new sensor object).
+The GT assignment is displayed at the bottom of the section.
+The size of $OH_{max}=288$ results from the maximum number of tracks $T_{max}=16$
+and the number of possible assignment classes $C=18$.
 
 \begin{strip} % <--- defined in "cuted"
 	\includegraphics[width=\linewidth]{figs/MANTa_data.png}
@@ -841,9 +842,6 @@ and an additional object was detected (new sensor object).
 	\label{pic::MantaData}
 \end{strip}
 
-The GT assignment is displayed at the bottom of the section.
-The size of $OH_{max}=288$ results from the maximum number of tracks $T_{max}=16$
-and the number of possible assignment classes $C=18$.
 The assignment classes result from the described index class 1 to 16 and additional degrees of freedom.
 One degree of freedom of the assignment represents the case that no measurement exists,
 another that the measurement should not be assigned.
@@ -856,7 +854,7 @@ for the simultaneous association of a large number of sensor objects to a large 
 This is what we call a Multi-Association Network.
 
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=1.0\linewidth]{figs/MANTa_network_arch.png}}
+	\centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_network_arch.png}}
 	\caption{Schematic representation of the generic network structure of MANTa.}
 	\label{pic::MantaArch}
 \end{figure}
@@ -873,7 +871,6 @@ This means that a single assignment can be realised for each track.
 The vectors 1 to $T_{max}$ are linked together in the Concatenation Layer.
 This creates a vector with 288 elements, whereby 18 elements each represent
 the most probable assignment of a measurement to a track.
-
 The cost function was implemented according to the format of the GT and output data of the network.
 The cross-entropy loss function already introduced was used and a clear assignment was realised
 by means of additional iteration per time step through the respective track blocks.
@@ -896,7 +893,6 @@ MANTa was trained on the same dataset as the Single Association Network (SANT)
 and achieved an assignment accuracy of 95\% for the six most frequently
 occurring association sets.
 A detailed analysis of the data is presented in the following section.
-
 % CH: Kommentar von CB eingearbeitet (Experimental Evaluation für alle oder keine Networks)
 % \section{Experimental Evaluation}
 In the context of the entire KITTI dataset, which includes both Cars and Vans objects,
@@ -909,7 +905,7 @@ of the entire dataset, accounting for 29.9\% of the data,
 which corresponds to an absolute count of 2315 samples.
 
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=1.0\linewidth]{figs/MANTa_tracks.png}}
+	\centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_tracks.png}}
 	\caption{KITTI Cars and Vans diagramm, distribution of available data, number of tracks per sample}
 	\label{pic::MantaTracks}
 \end{figure}
@@ -940,7 +936,6 @@ of a dynamics model.
 This implementation allows the recurrent network to update its internal
 hidden states at each time step,
 thereby achieving accurate state predictions without external correction.
-
 The model is suitable for real-time applications and represents a viable alternative
 to classical prediction methods.
 Network verification demonstrates a Root Mean Square Error (RMSE) of 0.026,
@@ -993,18 +988,15 @@ We would like to express our sincere thanks to the organisations that provided
 financial support for this research project.
 In particular, we would like to thank Daimler Truck AG and the DHBW Stuttgart.
 Without this support, our work would not have been possible.
-
 Our special thanks also go to our academic supervisors and mentors.
 I would like to thank Prof Dr Matthias Drüppel for his tireless support,
 valuable advice and continuous guidance throughout the duration of this project.
 His expertise and commitment have contributed significantly to the success
 of our research.
-
 Further thanks go to my colleague.
 I would like to thank Christian Bader for his essential help in conducting
 the experiments and providing technical resources.
 His support and fruitful discussions have greatly enriched this work.
-
 Finally, we would like to thank our families and friends for their unconditional
 support and encouragement.
 Their patience, understanding and motivation have seen us through the challenges

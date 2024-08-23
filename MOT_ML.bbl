@@ -63,6 +63,9 @@ S.~J. Julier and J.~K. Uhlmann, ``The unscented kalman filter for nonlinear esti
 \bibitem{KF_Wan.2000}
 E.~A. Wan and R.~Van Der~Merwe, ``The unscented kalman filter for nonlinear estimation,'' in \emph{Proceedings of the IEEE Adaptive Systems for Signal Processing, Communications, and Control Symposium (AS-SPCC)}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2000, pp. 153--158.
 
+\bibitem{DA_JPDA.1993}
+J.~Dezert and Y.~Bar-Shalom, ``Joint probabilistic data association for autonomous navigation,'' \emph{IEEE Transactions on Aerospace and Electronic Systems}, vol.~29, no.~4, pp. 1275--1286, 1993.
+
 \bibitem{DL_ATT_CNN_mot_sot_based.2017}
 Q.~C. W. O. H. L. X. W. B. L.~N. Yu, ``Online multi-object tracking using cnn-based single object tracker with spatial-temporal attention mechanism,'' \emph{Paper}, 2017.
 

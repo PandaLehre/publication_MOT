@@ -9,51 +9,49 @@ Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: IEEEabrv.bib
 Database file #2: lit.bib
-Warning--I didn't find a database entry for "DA_JPDA.1993"
 -- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 
 Done.
-You've used 25 entries,
+You've used 26 entries,
             4087 wiz_defined-function locations,
-            1480 strings with 21771 characters,
-and the built_in function-call counts, 12145 in all, are:
-= -- 953
-> -- 251
-< -- 44
-+ -- 132
-- -- 51
-* -- 515
-:= -- 2080
-add.period$ -- 53
-call.type$ -- 25
-change.case$ -- 23
-chr.to.int$ -- 111
-cite$ -- 25
-duplicate$ -- 993
-empty$ -- 1127
-format.name$ -- 61
-if$ -- 2769
+            1486 strings with 21930 characters,
+and the built_in function-call counts, 13102 in all, are:
+= -- 1037
+> -- 269
+< -- 56
++ -- 144
+- -- 53
+* -- 561
+:= -- 2218
+add.period$ -- 55
+call.type$ -- 26
+change.case$ -- 24
+chr.to.int$ -- 138
+cite$ -- 26
+duplicate$ -- 1058
+empty$ -- 1193
+format.name$ -- 64
+if$ -- 2996
 int.to.chr$ -- 0
-int.to.str$ -- 25
-missing$ -- 164
-newline$ -- 102
-num.names$ -- 25
-pop$ -- 433
+int.to.str$ -- 26
+missing$ -- 173
+newline$ -- 105
+num.names$ -- 26
+pop$ -- 448
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 946
+skip$ -- 1023
 stack$ -- 0
-substring$ -- 282
-swap$ -- 613
-text.length$ -- 7
+substring$ -- 346
+swap$ -- 675
+text.length$ -- 10
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 25
+type$ -- 26
 warning$ -- 0
-while$ -- 42
-width$ -- 27
-write$ -- 233
-(There was 1 warning)
+while$ -- 46
+width$ -- 28
+write$ -- 244
