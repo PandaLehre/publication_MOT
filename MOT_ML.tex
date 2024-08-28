@@ -14,7 +14,7 @@
 \usepackage{capt-of}  % <---
 \usepackage{cuted}    % <===
 
-\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+% \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 % 6 pages at all
 
 % MD: Der größte Angriffspunkt für dieses Paper ist doch: Wir nutzen KITTI Tracks,
@@ -68,8 +68,8 @@ and soft track-association}
 	SPENT reduces the Root Mean Square Error (RMSE) by 50\% on the KITTI tracking dataset
 	compared to a standard Kalman Filter; SANT and MANTa achieve a 95\% validation accuracy
 	in sensor object assignment to tracks.
-	These results highlight the efficacy of ML integration in enhancing the robustness,
-	modularity, and maintainability of ADAS tracking systems.
+	These results highlight the opportunities of ML integration into tracking systems in enhancing performance and robustness while at the same time maintaining
+	modularity and maintainability of ADAS tracking systems.
 
 % CH: Gesschriebener Abstract (I)
 	% In this paper, we develop Machine Learning (ML)-based methods for Multi-Object Tracking (MOT)
@@ -115,9 +115,9 @@ and soft track-association}
 
 \end{abstract}
 
-\begin{IEEEkeywords}
-	Article submission, IEEE, IEEEtran, journal, \LaTeX, paper, template, typesetting.
-\end{IEEEkeywords}
+% \begin{IEEEkeywords}
+% 	Article submission, IEEE, IEEEtran, journal, \LaTeX, paper, template, typesetting.
+% \end{IEEEkeywords}
 
 
 
@@ -133,8 +133,7 @@ DL_ATT_CNN_soda.2020}.
 In complex and dynamic environments, as encountered in urban traffic, it is crucial to
 simultaneously and accurately capture the positions and movements of multiple objects
 % CH: Kommentar von CB eingearbeitet
-in early timesteps of detection with a accurate prediction.
-- a key challenge in computer vision (CV) for automated driving.
+already in the early timesteps of detection with a accurate prediction - a key challenge in Computer Vision (CV) for automated driving.
 In the commonly used Tracking-by-Detection (TbD) paradigm,
 a tracker fuses detected sensor objects (SO) to create consistent object tracks over time.
 A crucial step within this paradigm is the association of the incoming measured SO
@@ -148,18 +147,19 @@ such as the Kalman filter (KF) or its variants
 These classical tracking theories have the great benefit of being modular and interpretable.
 The task is split into clearly separated subtasks such as the prediction of currently
 tracked objects and the association with newly measured ones.
-Furthermore, the math and the theory itself is often clean and comprehensible.
-However, in the automotive industry tracking systems are not developed for a single model,
-but are usually used as a platform and are deployed to a variety of different car models
+Furthermore, the math and the theory itself is clean and comprehensible.
+%MD: I added AD_Overview.2017, but I am not happy with the citation, there should be something better to be found. And it should best talk about the complexity that is introduced by applying the same software to different models. Maybe you can find something? Then I would cite it further down the paragraph
+However, development for automated driving is highly complex \cite{AD_Overview.2017} and in the automotive industry tracking systems are not developed for a single model,
+but rather as a platform software and are deployed to a variety of different vehicle models
 with different sensor sets, different installation heights of the sensors,
 used in different countries and must always perform for a wide range of driving scenarios.
-This usually leads to poor performance in certain scenes for a specific system.
+This regularly leads to poor performance in certain scenes for a specific configuration.
 With classical systems that not learn directly from data, these situations are often
 solved by the implementation of heuristics and by tweaking parameters of the tracking system
 for the troublesome scenes.
 % CH: Kommentar von CB eingearbeitet
-But from a software engineering point of view hand-engineered parameters are only available in
-a limited amount of number and heuristics are extremely hard to maintain
+% MD: Finden wir für den nächsten Abschnitt noch ein Zitat? Wahrscheinlich nicht direkt ein Paper, aber vlt einen Bericht darüber, wie Automated Driving Entwicklung mit komplexen und vielseitigen Szenen umgehen muss.
+But from a software engineering point of view hand-engineering parameters and relying on heuristics leads to a software that is extremely hard to maintain
 and develop further for new scenarios and new system configurations.
 Moreover, hand-engineered classical approaches can reach its limits for the overall
 performance and in challenging situations that would require a more automated and
@@ -171,10 +171,7 @@ thus increasing maintainability and adaptability.
 We do this preserving one of the biggest strengths of classical approaches: its modularity,
 by replacing only single tracking components with ML models.
 
-% MD: Hier auch Zitate. Alles was wir behaupten und
-%		nicht zitieren können ist weniger stark bzw.
-%		sogar kein guter Stil.
-In contrast to the Kalman filter \cite{KF_BoundingBD.2023}, our Prediction Network is capable
+(i) In contrast to the Kalman filter \cite{KF_BoundingBD.2023}, our Prediction Network is capable
 of predicting the state of individual objects without the need for a predefined state
 or prediction model at runtime.
 The self-learning, data driven approach enables adaptability to various scenarios and
@@ -182,7 +179,8 @@ the ability to effectively handle non-linearities and habits of road users.
 Many conventional tracking systems rely on static methods for data association.
 Commonly used algorithms like the Hungarian algorithm (HA) \cite{DA_hungarian.1955}
 require heuristics and fixed thresholds.
-Our Single Association Network replaces the calculation of a distance metric for
+
+(ii) Our Single Association Network replaces the calculation of a distance metric for
 the corresponding assignment by employing machine learning
 % CH: Kommentar von CB eingearbeitet
 in order to resolve situations unclear for traditional approaches.
@@ -192,11 +190,7 @@ and demonstrate their performance through multiple tests and comparisons with es
 This work provides new insights and advancement in the development of ADAS by applying ML,
 contributing to the further evolution of technologies for autonomous driving (AD).
 
-% MD: Wir sollten insgesamt auf 35++ zitierte Arbeiten kommen.
-%		Oft ist das Einfachste sich eine gute andere Arbeit
-%		aus möglichst dem Gleichen Themengebiet zu nehmen und zu schauen wen die gerade zitieren.
-% CH: Paper aus der Thesis ergänzt.
-%		Zusäzliche Arbeiten gesucht (aktuell ca. 20 Quellen angegeben)
+%MD: Wenn wir schon zu (i) und (ii) was sagen, würde ich hier noch was zu (iii) also MANTa sagen, auch wenn es nur ein Satz ist.
 
 
 
@@ -209,15 +203,12 @@ In many approaches Kalman filters and their variants have proven to be effective
 state prediction \cite{KF_simple_cues.2022, KF_Bewley.2016, KF_framework.2013}.
 However, they reach their limits in more complex scenarios, particularly in the presence
 of non-linear motion patterns and interactions among multiple objects
-\cite{KF_Ristic.2004,KF_Julier.2004,KF_Wan.2000}.
-\cite{KF_Ristic.2004} discusses the limitations of Kalman Filters in nonlinear and non-Gaussian
+\cite{KF_Ristic.2004,KF_Julier.2004,KF_Wan.2000}. Ristic et al. \cite{KF_Ristic.2004} discuss the limitations of Kalman Filters in nonlinear and non-Gaussian
 scenarios and introduces Particle Filters as an alternative solution.
-\cite{KF_Julier.2004} proposes the Unscented Kalman Filter (UKF) as an extension to the
+Julier et al. \cite{KF_Julier.2004} propose the Unscented Kalman Filter (UKF) as an extension to the
 standard Kalman Filter to handle non-linear motion models more effectively.
-\cite{KF_Wan.2000} introduces the Gaussian Mixture Model (GMM) for tracking multiple objects
+Wan et al. \cite{KF_Wan.2000} introduce the Gaussian Mixture Model for tracking multiple objects
 in a cluttered environment.
-%MD: finden wir hier auch ein Paper? Grenzen von Kalman filtern?
-%CH: drei Quellen ergänzt
 In this work, we introduce a novel MOT approach that leverages Machine Learning
 to overcome these challenges.
 We specifically focus on the development and implementation of Neural Networks,
@@ -235,7 +226,7 @@ take temporal continuity or motion patterns into account.
 This limitation can lead to incorrect assignments in complex scenarios,
 especially when objects cross paths or when sensor measurements are noisy.
 The Hungarian Algorithm considers the assignment problem as a linear sum assignment problem
-considering the current state of the tracks and the sensor objects.
+taking into account the current state of the tracks and the sensor objects.
 Other approaches, such as the Joint Probabilistic Data Association (JPDA) \cite{DA_JPDA.1993},
 consider the temporal information of the tracks and the sensor objects.
 However, these methods are computationally expensive and require the calculation of
@@ -245,7 +236,7 @@ This aggregate of temporal information can be done for example using attention m
 as used in \cite{DL_ATT_CNN_soda.2020, DL_ATT_CNN_mot_sot_based.2017} or
 recurrent neural networks (RNNs) as developed in \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}.
 The latter is what we are also pursuing in this work.
-Similar to the problem statement in Mertz et al \cite{DL_RNN_data_association.2019},
+Similar to the problem statement by Mertz et al. \cite{DL_RNN_data_association.2019},
 the aim of our work is to develop a data-based approach that can learn to
 completely solve the combinatorial non deterministic polynomial time (NP)
 hard optimization problem of data association.
@@ -253,18 +244,7 @@ hard optimization problem of data association.
 % Euclidean distance measure as input for the developed association network,
 % thus replacing an association algorithm such as the Hungarian Algorithm.
 In the context of this work, we put forward the hypothesis that a Gated Recurrent Unit (GRU)-based
-association network can be designed and trained using an undefined distance measure.
-%MD: Das Kapitel hier is related work,
-%		aber du stellst du nochmal ziemlich ausfühlich den Ansatz vor,
-%		das würde ich in verschieben oder kürzen
-% CH: Aufstellung der Hypothese als Abschluss des Abschnitts i.O.?
-%		Rest dann später.
-
-%This can increase the assignment of the time-based memory units, i.e. the history, and thus boost performance.
-%For this purpose, the Long Short-Term Memory network (LSTM) layer is implemented, which enables the model to make predictions based on the history of its inputs using hidden units \cite{DL_LSTM.1997}.
-%The goal of this work was therefore to develop an association network that is intended to solve
-%the assignment of one or more sensor objects (SO) to an existing number of object tracks
-%without a defined distance measure.
+association network can be designed and trained using an undefined distance measure as is elaborated in the next chapter.
 
 \subsection{Real time applications}
 ADAS are embedded real-time applications where it is crucial to predict the state of objects
@@ -277,16 +257,12 @@ Online methods use various features to estimate the similarity between the recog
 and the existing tracks.
 This can be done on the basis of their predicted positions or even similarities in appearance.
 
-% MD: Finden wir einen Anknüfungspunkt an unsere Arbeit?
-%		Wenn ja wäre das schön, wenn nein, würde ich es trotzdem nicht löschen.
-% CH: Anknüpfung auch ein tracker KF Framework (TbD)?
 \paragraph{Kalman Filter based tracker}
-\cite{KF_Wan.2000,KF_Ristic.2004,KF_Julier.2004,KF_framework.2013,KF_Bewley.2016,
-KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023}
-propose a Kalman Filter based TbD multi-object tracker.
-\cite{KF_Bewley.2016} presents a simple and efficient multi-object tracking approach
+Our ML models are integrated into a Kalman Filter tracking system.
+The Kalman Filter is a popular choice for a multi-object tracker due to its interpretability and performance \cite{KF_Wan.2000,KF_Ristic.2004,KF_Julier.2004,KF_framework.2013,KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023}
+Bewley el al. \cite{KF_Bewley.2016} present a simple and efficient multi-object tracking approach
 based on the KF and the Hungarian Algorithm.
-\cite{KF_simple_cues.2022} presents a MOT approach based on simple visual cues.
+Seidenschwarz el al. \cite{KF_simple_cues.2022} present a MOT approach based on simple visual cues.
 The authors argue that many existing multi-object trackers are overly complex
 and require significant computational resources.
 Instead, they propose a more straightforward approach that leverages basic visual features
@@ -313,9 +289,9 @@ but also for the subsequent evaluation process.
 % MD: hast du hier nachgefragt?
 %		Der Satz klingt so nach "wir raten das jetzt mal"
 % CH: Anfrage ist raus, Satz schon einmal etwas angepasst.
+% MD: Ich habe es noch etwas angepasst, bitte nochmal drüber gucken. Passt aber sonst für mich.
 However, this is not explicitly stated.
-It can therefore be argued that this preprocessing step deprives the
-network opportunity to follow a different association logic or to learn it data based.
+In our work, we want to enable the network to follow a completely data-driven association logic without forcing a concrete distance metric.
 
 % CH: Geschriebener Text (II)
 	% Similar to our methods \cite{DL_RNN_mot.2016,DL_RNN_data_association.2019,
@@ -332,7 +308,7 @@ network opportunity to follow a different association logic or to learn it data 
 	% It can be assumed that the Euclidean distance measure was also used as the basis for
 	% generating the ground truth (GT) training data (distance matrices) and for the evaluation.
 
-%MD: Verbindung zu uns? Beide nutzen zeitliche Information, das wäre ein Punkt.
+%MD: Hier muss noch eine Verbindung zu unserem Paper rein!!
 \paragraph{Attention Mechanism based Tracker}
 Each of the papers \cite{DL_ATT_mot_sot_based.2017,
 	DL_ATT_CNN_mot_sot_based.2017,
@@ -344,7 +320,7 @@ for example to compute soft data association \cite{DL_ATT_CNN_soda.2020}.
 The main research focus of the paper \cite{DL_ATT_CNN_soda.2020} is on soft data association,
 which enables the tracker to make probabilistic associations between objects
 and account for uncertainties in the associations.
-Soft data association in the SoDA model works by using attention mechanisms
+Soft data association (SoDA) in the SoDA model works by using attention mechanisms
 to aggregate information from all detections in a given temporal window.
 This allows the model to learn long-term and highly interactive relationships between
 detections and tracks from large datasets without using complex heuristics and hyperparameters.
@@ -352,6 +328,8 @@ detections and tracks from large datasets without using complex heuristics and h
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% chapter 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%MD: Oben hast du es Prediction Network genannt, jetzt wieder SPENT. Wir sollten uns auf jeden Fall entscheiden.
 \section{Overview of our proposed models}
 Our primary contribution is the development and evaluation of three NN that we label:
 (i) the Single Prediction Network (SPENT), (ii) the Single Association Network (SANT),
@@ -362,7 +340,7 @@ The input for the proposed Prediction Network (i) are the sensor objects
 $ Z_{t,1:m}$ in every time step.
 If new objects are detected, these are stored in a $k$-dimensional state vector
 containing information such as object position (x,y), yaw angle and object dimensions
-(lengt and width) (for $k=5$).
+(length and width) (for $k=5$).
 The Prediction Network predicts all vectors $X_{t,1:n}$ to the next time step where
 they are used as input to either the SANT or MANTa association networks.
 These provide the association matrix $A_{t,1:m}$, that is used to update the tracks $Tu_{t,1:n}$
@@ -375,13 +353,20 @@ software component that have been confirmed by sensor objects.
 	\centerline{\includegraphics[width=0.95\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
 	\caption{Schematic representation of the two integrated networks (blue)
 	in a tracking-by-detection framework.
-	The Association Network can either be filled with the our SANT (single)
-	or MANTa (multi) association model.}
+	The Association Network can either be filled with our SANT (single)
+	or MANTa (multi) association models.}
 	\label{pic::MotFramework}
 \end{figure}
 
+
+
+
+%%%%%%%%%% MD bis hier hin habe ich gelesen und bearbeitet %%%%%%%%%%%%
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% chapter 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Tracking with Prediction and Association Networks}
+\section{Tracking with ML based prediction and association networks}
 We apply the tracking-by-detection paradigm, in which a tracker fuses object detections
 to generate object tracks that are consistent over time.
 \cite{KF_framework.2013}, for example, provides a framework for analyzing
@@ -987,30 +972,26 @@ for the six most frequently occurring association sets.
 We would like to express our sincere thanks to the organisations that provided
 financial support for this research project.
 In particular, we would like to thank Daimler Truck AG and the DHBW Stuttgart.
-Without this support, our work would not have been possible.
-Our special thanks also go to our academic supervisors and mentors.
-I would like to thank Prof Dr Matthias Drüppel for his tireless support,
-valuable advice and continuous guidance throughout the duration of this project.
-His expertise and commitment have contributed significantly to the success
-of our research.
-Further thanks go to my colleague.
-I would like to thank Christian Bader for his essential help in conducting
-the experiments and providing technical resources.
-His support and fruitful discussions have greatly enriched this work.
-Finally, we would like to thank our families and friends for their unconditional
-support and encouragement.
-Their patience, understanding and motivation have seen us through the challenges
-of this project and have been an invaluable help.
 
 
+%MD: Ich würde das hier nicht mit ins Paper aufnehmen. Für Abschlussarbeiten ist das durchaus üblich, aber bei Papern eher nicht.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% appendix %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-{\appendix[Proof of the Zonklar Equations]
-\section*{Proof of the First Zonklar Equation}
-Appendix goes here.
-\section*{Proof of the Second Zonklar Equation}
-And here.
-}
+
+% Without this support, our work would not have been possible.
+% Our special thanks also go to our academic supervisors and mentors.
+% I would like to thank Prof Dr Matthias Drüppel for his tireless support,
+% valuable advice and continuous guidance throughout the duration of this project.
+% His expertise and commitment have contributed significantly to the success
+% of our research.
+% Further thanks go to my colleague.
+% I would like to thank Christian Bader for his essential help in conducting
+% the experiments and providing technical resources.
+% His support and fruitful discussions have greatly enriched this work.
+% Finally, we would like to thank our families and friends for their unconditional
+% support and encouragement.
+% Their patience, understanding and motivation have seen us through the challenges
+% of this project and have been an invaluable help.
+
 
 
 
