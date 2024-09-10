@@ -636,8 +636,6 @@ in comparison with a Training Accuracy of 95\% and Validation Accuracy of 95\%.
 By combining the outputs of two LSTM layers that pass the information in opposite directions,
 \cite{DL_LSTM.1997} demonstrates the ability to capture the context from both ends of the sequence.
 The resulting architecture is called BILSTM.
-% MD: Was heißt "last". Bitte erklären oder anders umschreiben.
-% CH: angepasst
 The output mode has been configured in the BILSTM layer, so that the layer
 is able to receive a sequence as input and output value vector.
 This form of dimension reduction is necessary in order to carry out a corresponding classification.
@@ -646,16 +644,6 @@ The last FC layer specifies the number of classes via the number of output value
 The classes are calculated in the softmax layer by applying the softmax function resulting
 in a probability distribution.
 The softmax function converts a number of values $z_i$ into a probability vector with $i$ values.
-% MD: was ist die cross-entropy operation?
-%		Du meinst du berechnest den Loss über die cross-entropy loss functions.
-%		So würde ich das schreiben. Und das macht nicht der Output Layer,
-%		sondern dafür nimmt man die Predictions des Models.
-% CH: angepasst
-%MD: Die Formel ist die binary Cross Entropy. Die gilt nur für genau zwei Klassen.
-%		Das kann also hier nicht benutzt worden sein. Bitte nochmal nach schauen.
-% 		Auch weiß ich nicht genau, warum manchmal große und manchmal kleine Buchstaben genutzt werden.
-% 		Das sollte einer klaren Regel entsprechen.
-% CH: done, plus Text umgeschrieben
 The cross-entropy cost function is utilized to quantify the discrepancy between the network's
 probabilistic predictions and the ground truth values,
 a method particularly suited for tasks involving categorically exclusive classes.
