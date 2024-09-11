@@ -121,15 +121,15 @@ N.~Wojke, A.~Bewley, and D.~Paulus, ``Deepsort: Simple online and realtime
 {Johannes Fitz}, ``Datenassoziation f{\"u}r multi-objekt-verfolgung mittels
   deep learning,'' \emph{Paper}, 2020.
 
-\bibitem{DL_ATT_mot_sot_based.2017}
-{Qi Chu, Wanli Ouyang, Hongsheng Li, Xiaogang Wang, Bin Liu, Nenghai Yu},
-  ``Online multi-object tracking using cnn-based single object tracker with
-  spatial-temporal attention mechanism,'' \emph{Paper}, 2017.
-
 \bibitem{ML_Attention.2017}
 A.~Vaswani, N.~Shazeer, N.~Parmar, J.~Uszkoreit, L.~Jones, A.~N. Gomez,
   L.~Kaiser, and I.~Polosukhin, ``Attention is all you need,'' \emph{NIPS},
   2017.
+
+\bibitem{DL_ATT_mot_sot_based.2017}
+{Qi Chu, Wanli Ouyang, Hongsheng Li, Xiaogang Wang, Bin Liu, Nenghai Yu},
+  ``Online multi-object tracking using cnn-based single object tracker with
+  spatial-temporal attention mechanism,'' \emph{Paper}, 2017.
 
 \bibitem{DL_batch_norm.2015}
 S.~Ioffe and C.~Szegedy, ``Batch normalization: Accelerating deep network

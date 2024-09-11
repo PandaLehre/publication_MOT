@@ -112,7 +112,7 @@ This regularly leads to poor performance in certain scenes for a specific config
 With classical systems that not learn directly from data, these situations are often
 solved by the implementation of heuristics and by tweaking parameters of the tracking system
 for the troublesome scenes.
-% MD: Finden wir für den nächsten Abschnitt noch ein Zitat? Wahrscheinlich nicht direkt ein Paper, aber vlt einen Bericht darüber, wie Automated Driving Entwicklung mit komplexen und vielseitigen Szenen umgehen muss.
+% MD: Finden wir für den nächsten Abschnitt noch ein Zitat? Wahrscheinlich nicht direkt ein Paper, aber vlt einen Bericht darüber, wie Automated Driving Entwicklung mit komplexen und vielseitigen Szenen und Modellvielfalt umgehen muss.
 But from a software engineering point of view hand-engineering parameters and relying on heuristics leads to a software that is extremely hard to maintain
 and develop further for new scenarios and new system configurations.
 Moreover, hand-engineered classical approaches can reach its limits for the overall
@@ -125,7 +125,7 @@ thus increasing maintainability and adaptability.
 We do this preserving one of the biggest strengths of classical approaches: its modularity,
 by replacing only single tracking components with ML models.
 
-(i) In contrast to the Kalman filter \cite{KF_BoundingBD.2023}, our Prediction Network is capable
+(i) In contrast to the Kalman filter \cite{KF_BoundingBD.2023}, our prediction network is capable
 of predicting the state of individual objects without the need for a predefined state
 or prediction model at runtime.
 The self-learning, data driven approach enables adaptability to various scenarios and
@@ -133,18 +133,13 @@ the ability to effectively handle non-linearities and habits of road users.
 Many conventional tracking systems rely on static methods for data association.
 Commonly used algorithms like the Hungarian algorithm (HA) \cite{DA_hungarian.1955}
 require heuristics and fixed thresholds.
-% MD: Wenn wir schon zu (i) und (ii) was sagen, würde ich hier noch was zu (iii) also MANTa sagen, auch wenn es nur ein Satz ist.
-% CH: eingefügt
 (ii) Our Single and (iii) Multi Association Network replaces the calculation of a distance metric for
 the corresponding assignment by employing machine learning
 in order to resolve situations unclear for traditional approaches.
-Both, the Prediction Network and the Association Networks can be developed and evaluated as stand-alone models.
+Both, the our Single Prediction Network (SPENT) and our association networks can be developed and evaluated as stand-alone models.
 For a throughout evaluation, we proceed by integrating them into an existing tracking system
 and demonstrate their performance through multiple tests and comparisons with established methods.
-% CH: Den letzten Satz habe ich auskommentiert.
-% This work provides new insights and advancement in the development of ADAS by applying ML,
-% contributing to the further evolution of technologies for autonomous driving (AD).
-
+This work provides new insights and advancement in the development of ADAS tracking systems by applying ML.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% chapter 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -238,29 +233,23 @@ However, this is not explicitly stated.
 In our work, we want to enable the network to follow a completely data-driven association logic
 without forcing a concrete distance metric.
 
-% MD: Hier muss noch eine Verbindung zu unserem Paper rein!!
 \paragraph{Attention Mechanism based Tracker}
-Each of the papers \cite{DL_ATT_mot_sot_based.2017,
+In our work we analyze tracks using LSTM based models. An alternative approach would be the use of the attention mechanism \cite{ML_Attention.2017} as e.g. applied by the authors of \cite{DL_ATT_mot_sot_based.2017,
 	DL_ATT_CNN_mot_sot_based.2017,
 	DL_ATT_CNN_soda.2020,
 	DL_CNN_ATT_mot.2017,
-	DL_ATT_Trackformer.2022}
-present approaches for a tracker that utilize the attention mechanism \cite{ML_Attention.2017},
-for example to compute soft data association \cite{DL_ATT_CNN_soda.2020}.
-The main research focus of the paper \cite{DL_ATT_CNN_soda.2020} is on soft data association,
+	DL_ATT_Trackformer.2022}.
+The main research focus of Hung et al. \cite{DL_ATT_CNN_soda.2020} is on soft data association (SoDA),
 which enables the tracker to make probabilistic associations between objects
 and account for uncertainties in the associations.
-Soft data association (SoDA) in the SoDA model works by using attention mechanisms
+Their approach to SoDA works by using the attention mechanisms
 to aggregate information from all detections in a given temporal window.
-This allows the model to learn long-term and highly interactive relationships between
-detections and tracks from large datasets without using complex heuristics and hyperparameters.
+This allows the model to learn long-term and highly interactive relationships between detections and tracks from large datasets without using complex heuristics and hyperparameters.
 
 
-
+% MD: Prüfung wo genau SPENT etc eingeführt werden. Abstract + Introduction, danach nie wieder.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% chapter 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% MD: Oben hast du es Prediction Network genannt, jetzt wieder SPENT. Wir sollten uns auf jeden Fall entscheiden.
-% CH: Der Punkt ist mir nicht ganz klar. Prediction Network ist der Oberbegriff, SPENT die Abkürzung für single prediction network.
 \section{Overview of our proposed models}
 Our primary contribution is the development and evaluation of three NN that we label:
 (i) the Single Prediction Network (SPENT), (ii) the Single Association Network (SANT),
@@ -737,7 +726,7 @@ There are 7 tracks in the time step of the sequence shown.
 Each track receives a new measurement in this time step,
 and an additional object was detected (new sensor object).
 The GT assignment is displayed at the bottom of the section. The assignment output can be thought of a matrix with dimensions maximum number of tracks $T_{max}=16$
-and the number of possible assignment classes $C=18$. Where each field can either be zero (no assignment) or one (assignment). For numerical reasons, we unfold this matrix to a one-hot vector of dimension $OH_{max}=288=16\dot 18$.
+and the number of possible assignment classes $C=18$. Where each field can either be zero (no assignment) or one (assignment). For numerical reasons, we unfold this matrix to a one-hot vector of dimension $OH_{max}=288=16 \cdot 18$.
 
 \begin{strip} % <--- defined in "cuted"
 	\includegraphics[width=\linewidth]{figs/MANTa_data.png}
@@ -752,11 +741,9 @@ another that the measurement should not be assigned.
 The section of the one-hot vector shown (1:18) thus shows the GT assignment
 of the first sensor object to the track at position two.
 
-% MD: ================ Bis hier habe ich gelesen MD ===============
 
 \paragraph{Network architecture}
-%MD: Warum architectureS? gibt es mehrere?
-The schematic representation \ref{pic::MantaArch} shows the developed network architectures
+The schematic representation \ref{pic::MantaArch} shows the developed network architecture
 for the simultaneous association of a large number of sensor objects to a large number of tracks.
 This is what we call a Multi-Association Network.
 
