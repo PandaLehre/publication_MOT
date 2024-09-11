@@ -290,7 +290,6 @@ software component that have been confirmed by sensor objects.
 \end{figure}
 
 
-%%%%%%%%%% MD bis hier hin habe ich gelesen und bearbeitet %%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% chapter 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -729,10 +728,10 @@ The extracted tracks were each modified with noise as in the SANT development an
 %MD: Warum visual assignment? Du hast doch nichts visually assigned.
 Figure \ref{pic::MantaData} shows the non-noisy sensor objects to enable
 a visual assignment and increase understanding of the association procedure.
-The values obtained in this way were assigned as shown in Fig. \ref{pic::MantaData} as measurements in pseudo-random order per time step assigned to an $F * T_{max}$ matrix. %MD: Die fig 5 zeigt aber gar kein assignment.
+The values obtained in this way were assigned as shown in Fig. \ref{pic::MantaData} as measurements in pseudo-random order per time step assigned to an $F \cdot T_{max}$ matrix. %MD: Die fig 5 zeigt aber gar kein assignment.
 Where $F$ represents the total number of features and $T_{max}$ stands for the maximum number of existing tracks per time step. %MD: Ich würde total aufpassen zwischen number of features (was immer 5 ist) und dem F = 10 hier, was ja nur die Dimension der MAtrix ist. Das verwirrt sonst. F würde ich vlt "total features" nennen.
 The total number of features results from the status values per track and SO set.
-(here, $F = 2 * m$, with $m=5$ being the number of state values in this investigation).
+(here, $F = 2 \cdot m$, with $m=5$ being the number of state values in this investigation).
 For the defined test case with cars and vans, the KITTI data set results in $T_{max}=16$.
 There are 7 tracks in the time step of the sequence shown.
 Each track receives a new measurement in this time step,
@@ -756,53 +755,60 @@ of the first sensor object to the track at position two.
 % MD: ================ Bis hier habe ich gelesen MD ===============
 
 \paragraph{Network architecture}
+%MD: Warum architectureS? gibt es mehrere?
 The schematic representation \ref{pic::MantaArch} shows the developed network architectures
 for the simultaneous association of a large number of sensor objects to a large number of tracks.
 This is what we call a Multi-Association Network.
 
+%MD: Auch hier gerne mehr Erklärung in die Unterschrift.
+% Außerdem steht in der Abbildung X_ und Z_ und die Grammatik ist falsch ("a mutiple ...")... Auch würde ich X nochmal benennen.
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_network_arch.png}}
 	\caption{Schematic representation of the generic network structure of MANTa.}
 	\label{pic::MantaArch}
 \end{figure}
 
+%MD: Die Bezeichnungen in der Abbildung und die im Text müssen exakt gleich sein. Hier schreibst du BILSTM layer in der Abbildung steht "biLSTM_last". Ich würde die Bezeichnung in der Abbildung ändern.
 The BILSTM layer processes the input data as already explained for SANT.
 The task of associating a sensor object list with a track list requires a
 separate network part for each track.
-This extension is labelled accordingly in the graphic \ref{pic::MantaArch}.
-For each track (from 1 to $T_{max}$), the MANTa has been developed with
-the familiar Fully Connected, Softmax stack.
+This extension is labelled accordingly in figure \ref{pic::MantaArch}. %MD: Check if next sentence is correctly rewritten by me. "familiar" war zu vage.
+For each track (from 1 to $T_{max}=16$), the MANTa has been developed with
+the fully connected, softmax stack that was introduced for SANT.
 Each softmax output consists of a vector with $C=18$ elements,
 which represents the most probable assignment.
-This means that a single assignment can be realised for each track.
+This means that a single assignment can be realized for each track. %MD Auch hier: Namen MÜSSEN exakt übereinstimmen "Concatenation Layer" gibt es nicht in der Zeichnung.
 The vectors 1 to $T_{max}$ are linked together in the Concatenation Layer.
 This creates a vector with 288 elements, whereby 18 elements each represent
-the most probable assignment of a measurement to a track.
-The cost function was implemented according to the format of the GT and output data of the network.
-The cross-entropy loss function already introduced was used and a clear assignment was realised
+the most probable assignment of a measurement to a track. %MD: Was heißt according to the format? das würde ich umformulieren. Ich mache ja keine Kosten wegen einem Format.
+The cost function was implemented according to the format of the GT and output data of the network. %MD: Den nächsten Satz verstehe ich nicht. "clear assignment", "additional iteration", "respective track blocks". Bitte alles klarer machen.
+The cross-entropy loss function already introduced was used and a clear assignment was realized
 by means of additional iteration per time step through the respective track blocks.
 The following formula is used to calculate the cross-entropy loss values for each
-input value $Y_{i}$ and associated target value $T_{i}$ element by element.
-To obtain a scalar per time step $loss_k$, all loss values are summed up and
-divided by the number of classes $C$.
+input value $Y_{i}$ and associated target value $T_{i}$ element by element at time step $i$. %MD: i ist der Time step, richtig?
+%MD: Warum k? Wofür steht das. Das muss in den Text.
+To obtain a scalar $loss_k$ per time step, all loss values are summed up and
+divided by the number of classes $C=18$.
 This results in the average loss per time step for all tracks.
 \begin{equation}
-	loss_k = \frac{1}{C} \sum_{i=1}^{C} -(T_i ln Y_i + (1 - T_i) ln(1 - Y_i))
+	loss_k = \frac{1}{C} \sum_{i=1}^{C} -(T_i ln(Y_i) + (1 - T_i) ln(1 - Y_i))
 \end{equation}
-Then, all scalars obtained per time step are summarised and divided by the number of samples $N$ of a minibatch:
+Then, all scalars obtained per time step are summarized and divided by the number of samples $N$ of a minibatch: %MD: Diese Summe hat keinen Index, der muss dazu. Ich gehe mal davon aus, dass es k ist und k die ANzahl an Samples in einer Minibatch ist.
 \begin{equation}
-	loss = \frac{1}{N} \sum{} loss_k
+	loss = \frac{1}{N} \sum{} loss_k.
 \end{equation}
 
 Using the described procedure, the Multi-Association Network (MANTa) was trained
 to assign a list of sensor objects (SOs) to a list of tracks in a single operational step.
 MANTa was trained on the same dataset as the Single Association Network (SANT)
 and achieved an assignment accuracy of 95\% for the six most frequently
-occurring association sets.
+occurring association sets. %MD: Was sind die "most frequently occuring association sets? --> Klarer
+%MD: Wenn wir schon schreiben following section, dann kann die ruhig einen Titel kriegen
 A detailed analysis of the data is presented in the following section.
 % CH: Kommentar von CB eingearbeitet (Experimental Evaluation für alle oder keine Networks)
 % \section{Experimental Evaluation}
-In the context of the entire KITTI dataset, which includes both Cars and Vans objects,
+%MD: Warum allocation? Warum nicht association?
+In the context of the entire KITTI dataset, which includes both car and van objects,
 MANTa achieves an average allocation accuracy of 70\%.
 This limitation was primarily attributed to the characteristics of the extracted data.
 As illustrated in Figure \ref{pic::MantaTracks}, the distribution of the number
@@ -811,14 +817,15 @@ Notably, time steps containing at least one track constitute nearly one-third
 of the entire dataset, accounting for 29.9\% of the data,
 which corresponds to an absolute count of 2315 samples.
 
-\begin{figure}[htbp]
+\begin{figure}[htbp] %MD: Die rechte Seite der Grafik ist zu klein. Alle Zahlen müssen größer. Bitte nicht einfach die Grafik größer machen, wir haben sonst zu wenig Platz.
 	\centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_tracks.png}}
-	\caption{KITTI Cars and Vans diagramm, distribution of available data, number of tracks per sample}
+	\caption{KITTI cars and vans diagramm, distribution of available data, number of tracks per sample}
 	\label{pic::MantaTracks}
 \end{figure}
 
 % CH: Kommentar von CB eingearbeitet (MANTa advantage)
 Time steps containing one to six tracks constitute 81.5\% of the samples.
+%MD: Du schreibst using a reduced dataset, aber wie denn reduced? Das muss direkt in diesen Satz.
 Consequently, tests were conducted using a reduced dataset to demonstrate
 the multi-association capability of the network.
 MANTa correctly assigns 95\% of the dataset for time steps containing one to six tracks.
@@ -827,31 +834,31 @@ as SANT also achieves a validation accuracy of approximately 95\%
 across the entire KITTI dataset (including cars and vans).
 The primary advantage of MANTa over SANT is its ability to assign
 multiple sensor objects to multiple tracks in a single operational step.
-
+%MD: Über den Absatz hier drüber lohnt es nochmal zu sprechen.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Conclusion %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 % Generierter Text aus geschriebenem Text (VI)
+%MD: Was ist der Unterschied zwischen Tracking-by-Detection Framework und Multi-Object Tracking process? Wahrscheinlich wenig. Daher würde ich mindestens ein von den beiden hier aus dem Satz raus schmeißen.
 The developed networks can be modularly integrated into the Tracking-by-Detection (TbD)
 framework, effectively replacing classical heuristic algorithms within the
 Multi-Object Tracking (MOT) process.
 
+%MD: ALles wird hier nochmal ausgeschrieben, SPENT aber nicht.
 SPENT substitutes the state predictions of the Kalman Filter (KF).
 The trained network estimates predictions per time step without the necessity
 of a dynamics model.
-This implementation allows the recurrent network to update its internal
+Our implementation uses a recurrent network to update its internal
 hidden states at each time step,
 thereby achieving accurate state predictions without external correction.
 The model is suitable for real-time applications and represents a viable alternative
 to classical prediction methods.
-Network verification demonstrates a Root Mean Square Error (RMSE) of 0.026,
-averaged over the training, validation, and test datasets.
-Specifically, for the X coordinate position predictions of an object,
-this corresponds to an average deviation of 0.42 meters.
-For the Y coordinate position relative to the ego vehicle,
-the average deviation is 0.23 meters.
+Network verification demonstrates a Root Mean Square Error (RMSE) of 0.026, %MD: Das hat keine Einheit oder doch?
+averaged over the training, validation, and test datasets. %MD: Wirklich über alle? Das können wir nicht machen. Das darf nur auf dem test set angegeben werden. Sollten wir nochmal drüber reden.
+Translated in meters this error corresponds to an average deviation of 0.42 meters for the X coordinate position and 0.23 meters for the Y coordinate position predictions, both relative to the ego vehicle.
 
+%MD: Den nächsten Absatz würde ich nochmal überarbeiten. Der wirkt noch holprig und wenig schlüsslig. Was wird denn ersetzt, GNN oder HA oder beides? Und ich würde immer schreiben "such as", es gibt ja genug KF mit anderen Ass. Methoden, die können aber auch SANT oder MANTa nutzen.
 For another primary task of the TbD MOT method, data association,
 SANT was developed as a replacement for the
 classical Global Nearest Neighbor (GNN) method.
@@ -891,9 +898,8 @@ for the six most frequently occurring association sets.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% acknowledgments %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Acknowledgments}
-We would like to express our sincere thanks to the organisations that provided
-financial support for this research project.
-In particular, we would like to thank Daimler Truck AG and the DHBW Stuttgart.
+We would like to express our sincere thanks to the organizations that provided
+financial support for this research project, namely the Daimler Truck AG and the Baden-Württemberg Cooperative State University (DHBW) Stuttgart.
 
 
 %MD: Ich würde das hier nicht mit ins Paper aufnehmen. Für Abschlussarbeiten ist das durchaus üblich, aber bei Papern eher nicht.
