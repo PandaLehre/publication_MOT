@@ -62,6 +62,17 @@ T.~M. A. K. L. L.-T.~C. Feichtenhofer, ``Trackformer: Multi-object tracking
 W.-C. H. H. K. T.-Y. L. Y. C.~R. Yu, ``Soda: Multi-object tracking with soft
   data association,'' \emph{Paper}, 2020.
 
+\bibitem{OD_kampker.2018}
+A.~Kampker, M.~Sefati, A.~S.~A. Rachman, K.~Kreisk{\"o}ther, and P.~Campoy,
+  ``Towards multi-object detection and tracking in urban scenario under
+  uncertainties.'' in \emph{VEHITS}, 2018, pp. 156--167.
+
+\bibitem{OD_wu.2022}
+H.~Wu, W.~Han, C.~Wen, X.~Li, and C.~Wang, ``3d multi-object tracking in point
+  clouds based on prediction confidence-guided data association,'' \emph{IEEE
+  Transactions on Intelligent Transportation Systems}, vol.~23, no.~6, pp.
+  5668--5677, 2022.
+
 \bibitem{AD_Overview.2017}
 \BIBentryALTinterwordspacing
 S.~D. Pendleton, H.~Andersen, X.~Du, X.~Shen, M.~Meghjani, Y.~H. Eng, D.~Rus,
@@ -131,6 +142,14 @@ A.~Vaswani, N.~Shazeer, N.~Parmar, J.~Uszkoreit, L.~Jones, A.~N. Gomez,
   ``Online multi-object tracking using cnn-based single object tracker with
   spatial-temporal attention mechanism,'' \emph{Paper}, 2017.
 
+\bibitem{DL_book.2019}
+I.~G. Y. B.~A. Courville, \emph{Deep Learning}.\hskip 1em plus 0.5em minus
+  0.4em\relax MIT Press, 2019.
+
+\bibitem{DL_padding.2019}
+D.~M. R. N. V.~S. Reddy, ``Effect of padding on lstms and cnns,'' \emph{Paper},
+  2019.
+
 \bibitem{DL_batch_norm.2015}
 S.~Ioffe and C.~Szegedy, ``Batch normalization: Accelerating deep network
   training by reducing internal covariate shift,'' \emph{ICML}, 2015.
@@ -143,14 +162,6 @@ N.~Srivastava, G.~Hinton, A.~Krizhevsky, I.~Sutskever, and R.~Salakhutdinov,
 \bibitem{DL_FC.2010}
 X.~Glorot and Y.~Bengio, ``Understanding the difficulty of training deep
   feedforward neural networks,'' \emph{AISTATS}, 2010.
-
-\bibitem{DL_book.2019}
-I.~G. Y. B.~A. Courville, \emph{Deep Learning}.\hskip 1em plus 0.5em minus
-  0.4em\relax MIT Press, 2019.
-
-\bibitem{DL_padding.2019}
-D.~M. R. N. V.~S. Reddy, ``Effect of padding on lstms and cnns,'' \emph{Paper},
-  2019.
 
 \bibitem{DL_LSTM.1997}
 S.~H.~J. Schmidhuber, ``Long short-term memory,'' \emph{Neural Computation},
