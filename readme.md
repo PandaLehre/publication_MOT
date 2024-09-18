@@ -3,6 +3,7 @@ Authors: Christian Alexander Holz, Christian Bader, Matthias Drüppel
 
 ## Description 
 Creating and managing the paper.
+![PDF Preview](preview.png)
 
 ## Figures
 ### Schematic representation of the two integrated networks in a tracking-by-detection (TbD) framework.

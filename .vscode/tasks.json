@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build LaTeX and Convert to Image",
+            "type": "shell",
+            "command": "pdflatex",
+            "args": [
+                "-interaction=nonstopmode",
+                "MOT_ML.tex"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Builds the LaTeX document.",
+            "dependsOn": "Convert PDF to Image"
+        },
+        {
+            "label": "Convert PDF to Image",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "pdf_to_image.py"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

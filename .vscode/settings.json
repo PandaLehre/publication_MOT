@@ -1,0 +1,10 @@
+{
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": "\\.tex$",
+                "cmd": "pdflatex -interaction=nonstopmode MOT_ML.tex && python C:\\PandaLehre\\publication_MOT\\pdf_to_image.py"
+            }
+        ]
+    }
+}
