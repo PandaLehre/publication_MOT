@@ -12,10 +12,11 @@
 \usepackage{graphicx}
 \usepackage{cite}
 
-\usepackage{capt-of}  
-\usepackage{cuted}    
+\usepackage{capt-of}
+\usepackage{cuted}
 
-% MD: Der größte Angriffspunkt für dieses Paper ist doch: Wir nutzen KITTI Tracks, damit können wir nie besser werden als die KITTI Tracks. 
+
+% MD: Der größte Angriffspunkt für dieses Paper ist doch: Wir nutzen KITTI Tracks, damit können wir nie besser werden als die KITTI Tracks.
 %	  Die Tracks selbst sind aber mit einem Kalman Filter erstellt.
 %	  Damit kann das Prediction Network auch nie besser werden als ein Kalman filter.
 %     Oder sehe ich das falsch?
@@ -28,7 +29,11 @@
 % - Enhancing and Simplifying Multi-Object Tracking with Data-Driven Prediction and Association Techniques
 % - Data-Driven Prediction and Association Methods for Simplified Multi-Object Tracking Development
 % - A Streamlined Approach to Multi-Object Tracking: Data-Based Prediction and Association Techniques
-\title{Enhancing and Simplifying Multi-Object Tracking with Data-Driven Prediction and Association Techniques}
+% MD: Mein Vorschlag unten
+% - Data-Driven Multi-Object Tracking: Integrating Modular Neural Networks into a Kalman Filter
+% Am besten würde ich hier anstatt "Filter" "Framework" stehen haben, aber dann passt es nicht mehr in zwei Zeilen.
+
+\title{Data-Driven Multi-Object Tracking: Integrating Modular Neural Networks into a Kalman Filter}
 
 % CH: Autorenliste angepassen: Markus Enzweiler hinzufügen nach Absprache mit MD
 \author{Christian Alexander Holz, Christian Bader, Markus Enzweiler, Matthias Drüppel
@@ -36,7 +41,7 @@
 	\thanks{C. Bader is with Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany}
 	\thanks{M. Enzweiler is with the Institute for Intelligent Systems, University of Applied Sciences, Esslingen, Germany}
 	\thanks{M. Drüppel is with the Center for Artificial Intelligence,
-		Duale Hochschule Baden-Württemberg (DHBW), Stuttgart, Germany}
+    Baden-Württemberg Cooperative State University (DHBW), Stuttgart, Germany}
 }
 
 \markboth{Journal of \LaTeX\ Class Files,~Vol.~tbd, No.~tbd, tbd~2024}%
@@ -72,8 +77,8 @@ These classical tracking theories have the great benefit of being modular and in
 The task is split into clearly separated subtasks such as the prediction of currently tracked objects and the association with newly measured ones.
 Furthermore, the math and the theory itself is clean and comprehensible.
 
-%MD: I added AD_Overview.2017, but I am not happy with the citation, there should be something better to be found. 
-%    And it should best talk about the complexity that is introduced by applying the same software to different models. 
+%MD: I added AD_Overview.2017, but I am not happy with the citation, there should be something better to be found.
+%    And it should best talk about the complexity that is introduced by applying the same software to different models.
 %    Maybe you can find something? Then I would cite it further down the paragraph
 However, development for automated driving is highly complex {\cite{AD_Overview.2017}} and in the automotive industry tracking systems are not developed for a single model,
 but rather as a platform software and are deployed to a variety of different vehicle models
@@ -85,6 +90,7 @@ solved by the implementation of heuristics and by tweaking parameters of the tra
 for the troublesome scenes.
 % MD: Finden wir für den nächsten Abschnitt noch ein Zitat? Wahrscheinlich nicht direkt ein Paper, aber vlt einen Bericht darüber, wie Automated Driving Entwicklung mit komplexen und vielseitigen Szenen und Modellvielfalt umgehen muss.
 % CH: Vielleicht aus einem Fachbuch wie „Automotive Software Engineering“ von F. Hönig und W. H. Schneider?
+% MD: Ja, bring das gerne mit rein.
 But from a software engineering point of view hand-engineering parameters and relying on heuristics leads to a software that is extremely hard to maintain and develop further for new scenarios and new system configurations.
 Moreover, hand-engineered classical approaches can reach its limits for the overall performance and in challenging situations that would require a more automated and reproducible development strategy.
 
@@ -107,7 +113,6 @@ However, they reach their limits in more complex scenarios, particularly in the 
 Julier et al. {\cite{KF_Julier.2004}} propose the Unscented Kalman Filter (UKF) as an extension to the standard Kalman Filter to handle non-linear motion models more effectively.
 Wan et al. {\cite{KF_Wan.2000}} introduce the Gaussian Mixture Model for tracking multiple objects in a cluttered environment.
 In this work, we introduce a novel MOT approach that leverages Machine Learning to overcome these challenges.
-%CH: changed "tracking" to "state predictions", because of the subsection.
 We specifically focus on the development and implementation of Neural Networks, which can enable more precise and flexible data-driven object state predictions.
 
 \subsection{Association of sensor objects to tracks}
@@ -127,9 +132,7 @@ In the context of this work, we put forward the hypothesis that a Gated Recurren
 
 \subsection{Real time applications}
 ADAS are embedded real-time applications where it is crucial to predict the state of objects immediately after their detection as described in {\cite{KF_Bewley.2016,DL_Wojke.2017}}.
-%CH: changed "video material" to "data sequence".
 This rules out offline tracking methods as presented in {\cite{offline_mot.2017}} that process the entire data sequence at once in a batch process.
-%CH: changed "image" to "sensor".
 Therefore, most recent approaches for tracking multiple objects rely on online methods that do not depend on future sensor information.
 Online methods use various features to estimate the similarity between the recognized objects and the existing tracks.
 This can be done on the basis of their predicted positions or even similarities in appearance.
@@ -140,9 +143,7 @@ The Kalman Filter is a popular choice for a multi-object tracker due to its inte
 Bewley el al. {\cite{KF_Bewley.2016}} present a simple and efficient multi-object tracking approach based on the KF and the Hungarian Algorithm.
 Seidenschwarz el al. {\cite{KF_simple_cues.2022}} present a MOT approach based on simple visual cues.
 The authors argue that many existing multi-object trackers are overly complex and require significant computational resources.
-%CH: added "image-based"
 Instead, they propose a image-based and more straightforward approach that leverages basic visual features such as color, shape, and motion.
-%CH: changed the sentence to be more precise.
 These cues are used to performe image-level object tracking and to make frame-to-frame associations.
 
 \paragraph{Recurrent Neural Network based Tracker}
@@ -274,7 +275,6 @@ The Factor 1/2 simplifies the calculation of the gradient during backpropagation
 \end{equation}
 During training, the average loss is calculated using the observations in the mini-batch, so $T$ equals the mini-batch length.
 
-% CH: Verweis auf die Ergebnisstable in der Conclusion eingefügt.
 Within the context of the KITTI dataset, encompassing both cars and vans, our model attained a Root Mean Square Error of 0.029 for the positional prediction of all objects within the test dataset, representing 31 Tracks (see Table \ref{tab::SpentRmseComparison}).
 This performance metric translates to an average deviation of 0.42 meters for predictions pertaining to the X coordinate and 0.23 meters for those related to the Y coordinate.
 Using an inhouse implemented Kalman Filter carried by Daimler Truck Research Group following \cite{KF_BoundingBD.2023,KF_Bewley.2016}, an RMSE of 0.066 was achieved on the same data set.
@@ -301,7 +301,6 @@ As shown in figure \ref{pic::SantArch} the data format was created accordingly t
 The size of the input matrix therefore corresponds to $m \times n + 1$.
 With $m = 5$ as the number of state values for our work and $n=16$ as the maximum number of tracks per time step.
 The actual number of tracks can vary between 0 and a maximum of 16 objects in relation to the KITTI data set and the selected objects (cars and vans).
-%CH: added sentence to clarify the data analysis is done in the next section.
 A comprehensive analysis of the data is presented in the MANTa section.
 
 \paragraph{Network architecture}
@@ -314,13 +313,7 @@ At each time step, a matrix is passed as input holding both, the information of 
 	\label{pic::SantArch}
 \end{figure}
 
-% MD: Darüber sollten wir nochmal sprechen: Bidirectional geht doch gar nicht für Tracking?
-%		Du kannst doch nur von links nach rechts gehen oder wie sollte das laufen "online"?
-% CH: Hier geht es um die Assoziation, nicht um die Vorhersage.
-%		Es werden alle Tracks pro Zeitschritt über das BILSTM betrachtet.
-%		Allerdings: kann auch eine definierte Anzahl an Schritten betrachtet werden.
-%       (Beispiel: Input immer 10 Zeitschritte (Sensorzyklen), wird meines Wissens nach in vielen Perception Stacks so gemacht)
-%       Über SPENT haben wir ein "zeitliches Tracking" und über SANT / MANTa ein "räumliches Tracking".
+
 Architectures with RNN, GNU, LSTM and BILSTM layers were tested.
 As part of these investigations, the best association performance was achieved with the BILSTM layer.
 The network shown in Figure {\ref{pic::SantArch}} achieved the best performance in comparison with a Training Accuracy of 95\% and Validation Accuracy of 95\%.
@@ -355,9 +348,9 @@ To address this complex task, MANTa was developed to solve the following associa
 \end{itemize}
 
 Being able to cover these scenarios enables MANTa to adeptly manage the complexities inherent in multiple object tracking (MOT), providing a robust and scalable solution for real-world applications.
-%MD: Ich bin noch nicht überzeugt, dass man diese Fälle braucht, aber wenn das Netz das jetzt kann okay. 
+%MD: Ich bin noch nicht überzeugt, dass man diese Fälle braucht, aber wenn das Netz das jetzt kann okay.
 %    Vielleicht nochmal drauf hinweisen, dass wir dadurch das Netz so allgemein und umfassend einsetzbar wie möglich trainieren wollen OBWOHL das natürlich auch über das Framework drum herum gelöst werden kann.
-%CH: Gibt der folgende Text das so nicht wieder? 
+%CH: Gibt der folgende Text das so nicht wieder?
 With the integration of MANTa into a Multi-Object Tracking framework, the question can be asked whether a 0 to n and 0 to 0 assignment is a task to be solved.
 If no new SO is detected, the prediction of the last operation step can be continued until the track is deleted on the basis of the decreasing probability of existence within the track management module.
 The association algorithm or the MANTa does not need to be called if no tracks and sensor objects are detected.
@@ -366,19 +359,15 @@ This is intended to ensure that the network also learns to deal with SOs and tra
 
 \paragraph{Data preprocessing}
 %MD Die infors hier würde ich unbedingt auch unter die Figure schreiben. Die Figure sollte so gut es geht selbsterklärend sein und nicht den Text hier brauchen.
-%CH: Das bekomme ich so in der Formatierung nicht hin. Falls es garnicht geht, lasse ich mir noch etwas einfallen. 
+%CH: Das bekomme ich so in der Formatierung nicht hin. Falls es garnicht geht, lasse ich mir noch etwas einfallen.
 The training, validation and test data set of MANTa was created according to the described objective.
-Figure {\ref{pic::MantaData}} shows the input data structure with corresponding association tasks for time step 85 of sequence 20 of the KITTI data set. 
+Figure {\ref{pic::MantaData}} shows the input data structure with corresponding association tasks for time step 85 of sequence 20 of the KITTI data set.
 The respective tracks per time step were extracted across all sequences.
 All extracted tracks were each modified with noise as in the SANT development and then normalized.
-%MD: Warum visual assignment? Du hast doch nichts visually assigned.
-%CH: Showcase für den Leser, wie die Datenstruktur aussieht. --> example assignment?
-Figure {\ref{pic::MantaData}} shows the non-noisy sensor objects to enable a example assignment and increase understanding of the association procedure.
-%MD: Die fig 5 zeigt aber gar kein assignment.
-%CH: Stimmt, aber der one-hot Vektor in fig 5 zeigt das Assignment :) 
+Figure {\ref{pic::MantaData}} shows the non-noisy sensor objects to enable a example assignment (given by the one-hot vector at the bottom) and increase understanding of the association procedure.
 The values obtained in this way were arranged as measurements (sensor objects) in a pseudo-random order per time step in an $F_{total} \cdot T_{max}$ matrix.
 The one-hot vector shown in figure \ref{pic::MantaData} shows the GT assignment of the first sensor object to the track at position two.
-Where $F_{total}$ represents the total number of features and $T_{max}$ stands for the maximum number of existing tracks per time step. 
+Where $F_{total}$ represents the total number of features and $T_{max}$ stands for the maximum number of existing tracks per time step.
 The total number of features results from the status values per track and SO set.
 (here, $F_{total} = 2 \cdot m$, with $m=5$ being the number of state values in this investigation).
 For the defined test case with cars and vans, the KITTI data set results in $T_{max}=16$.
@@ -391,13 +380,11 @@ Each track receives a new measurement in this time step, and an additional objec
 	Seven tracks are extracted from the KITTI data set for the time step of sequence 20.
 	Eight sensor objects are generated and pseudo-random ordered.
 	The one-hot vector shows the GT assignment of the first sensor object to the track at position two.}
-    %MD Hier bitte noch mehr Erklärung: Was genau zeigt der one-hot vektor? Und auch schreiben, dass oben 7 tracks sind und unten 8 SOs. Und die Infos aus dem Text hier aufnehmen.
-	%CH: Habe ich so eingefügt.
 	\label{pic::MantaData}
 \end{strip}
 
-The GT assignment is displayed at the bottom of the section. 
-The assignment output can be thought of a matrix with dimensions maximum number of tracks $T_{max}=16$ and the number of possible assignment classes $C=18$. 
+The GT assignment is displayed at the bottom of the section.
+The assignment output can be thought of a matrix with dimensions maximum number of tracks $T_{max}=16$ and the number of possible assignment classes $C=18$.
 Where each field can either be zero (no assignment) or one (assignment).
 For numerical reasons, we unfold this matrix to a one-hot vector of dimension $OH_{max}=288=16 \cdot 18$.
 The assignment classes result from the described index class 1 to 16 and additional degrees of freedom.
@@ -405,7 +392,7 @@ One degree of freedom of the assignment represents the case that no measurement 
 The section of the one-hot vector shown (1:18) thus shows the GT assignment of the first sensor object to the track at position two.
 
 % CH: Ich habe die Erklärung noch einmal umgeschrieben.
-As for SANT the cross-entropy cost function calculates the cross-entropy loss between network predictions $Y_{k,i}$ and target values $T_{k,i}$ for the unique assignment task for mutually exclusive classes. 
+As for SANT the cross-entropy cost function calculates the cross-entropy loss between network predictions $Y_{k,i}$ and target values $T_{k,i}$ for the unique assignment task for mutually exclusive classes.
 The already introduced one-hot vector is used to represent the class in binary form in a vector and thus generate a 1-to-$OH_{max}$ code.
 The following formula is used to calculate the cross-entropy loss values for each time step $t$:
 \begin{equation}
@@ -419,15 +406,14 @@ Then, all scalars obtained per time step are summarized and divided by the numbe
 %MD: Was sind die "most frequently occuring association sets? --> Klarer
 %CH: Habe ich angepasst.
 MANTa is trained to assign a list of sensor objects (SOs) to a list of tracks in a single operational step on the same dataset as SANT and achieved an assignment accuracy of 95\% for the six most frequently occurring association sets.
-Thus are sets with one to six tracks per time step. 
-%MD: Die rechte Seite der Grafik ist zu klein. Alle Zahlen müssen größer. 
-%CH: Ich habe die Grafik und caption noch einmal angepasst.
+Thus are sets with one to six tracks per time step.
+
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_tracks.png}}
 	\caption{The diagram shows the distribution of the number of existing tracks per time step.
 		For the KITTI dataset, which includes both car and van objects. It reveals that time steps containing one to six tracks constitute 81.5\% of the samples (6374 of 7827).
 		The ledgend shows the absolute number of samples which contain the respective number of tracks.
-		In 29.9\% of the samples, the data contains one track, in 14,7\% two tracks. Only 18.5\% of the samples contain more than six tracks, which leads to an unbalanced dataset (1448 of 7827 samples).}	
+		In 29.9\% of the samples, the data contains one track, in 14,7\% two tracks. Only 18.5\% of the samples contain more than six tracks, which leads to an unbalanced dataset (1448 of 7827 samples).}
 	\label{pic::MantaTracks}
 \end{figure}
 In the context of the entire KITTI dataset, which includes both cars and vans objects,
@@ -454,18 +440,19 @@ This is what we call a Multi-Association Network.
 	\label{pic::MantaArch}
 \end{figure}
 
-%MD: Die Bezeichnungen in der Abbildung und die im Text müssen exakt gleich sein.
-%CH: Habe ich angepasst.
 The BILSTM layer processes the input data as already explained for SANT\@.
 The task of associating a sensor object list with a track list requires a separate network part for each track.
-This extension is labelled accordingly in figure {\ref{pic::MantaArch}}. 
+This extension is labelled accordingly in figure {\ref{pic::MantaArch}}.
 For each track (from 1 to $T_{max}=16$), the MANTa has been developed with the fully connected, softmax stack that was introduced for SANT.
 Each softmax output consists of a vector with $C=18$ elements,n which represents the most probable assignment.
-This means that a single assignment can be realized for each track. 
+This means that a single assignment can be realized for each track.
 The vectors 1 to $T_{max}$ are linked together in the Concatenation Layer.
-This creates a vector with 288 elements, whereby 18 elements each represent the most probable assignment of a measurement to a track. 
+This creates a vector with 288 elements, whereby 18 elements each represent the most probable assignment of a measurement to a track.
+
+
 
 %CH: Ergebnistabelle für SPENT erstellt. Design caption sieht nicht so gut aus.
+%MD: Kannst du hier nochmal den Text anpassen? Ich habe gerade 2,3 Sachen ausprobiert es aber nicht auf Anhieb geschafft den Font zu ändern.
 \section{Conclusion}
 The developed networks can be modularly integrated into the Tracking-by-Detection framework, effectively replacing classical heuristic algorithms.
 SPENT substitutes the state predictions of the Kalman Filter.
@@ -473,13 +460,14 @@ The trained network estimates predictions per time step without the necessity of
 Our implementation uses a recurrent network to update its internal hidden states at each time step,
 thereby achieving accurate state predictions without external correction.
 The model is suitable for real-time applications and represents a viable alternative to classical prediction methods.
-Network verification demonstrates a Root Mean Square Error (RMSE) of 0.027, 
+Network verification demonstrates a Root Mean Square Error (RMSE) of 0.027,
 averaged over the training, validation, and test datasets as shown in Table {\ref{tab::SpentRmseComparison}}.
 Translated in meters this error corresponds to an average deviation of 0.42 meters for the X coordinate position and 0.23 meters for the Y coordinate position predictions, both relative to the ego vehicle.
 \begin{table}[htbp]
+    \sffamily
     \centering
     \caption{Comparison of RMSE values for the SPENT and Kalman Filter implemented by Daimler Truck Research Group.
-	The KITTI dataset filtered for cars and vans objects was used and split into training, validation, and test datasets. 
+	The KITTI dataset filtered for cars and vans objects was used and split into training, validation, and test datasets.
 	90\% of the data with 624 Tracks was used for training, 5\% for validation, and 5\% for testing.}
     \resizebox{0.48\textwidth}{!}{%
     \begin{tabular}{|l|c|c|c|}
@@ -499,10 +487,7 @@ Translated in meters this error corresponds to an average deviation of 0.42 mete
     \label{tab::SpentRmseComparison}
 \end{table}
 
-%MD: Den nächsten Absatz würde ich nochmal überarbeiten. 
-%    Der wirkt noch holprig und wenig schlüsslig.
-%    Was wird denn ersetzt, GNN oder HA oder beides? Und ich würde immer schreiben "such as",
-%    es gibt ja genug KF mit anderen Ass. Methoden, die können aber auch SANT oder MANTa nutzen.
+%MD: Diesen Abschnitt sollten wir uns nochmal genauer anschauen.
 For another primary task of the TbD MOT method, data association, SANT was developed as a replacement for the classical Global Nearest Neighbor (GNN) method.
 SANT can replace algorithms for calculating a distance metric and assignment procedures such as the Hungarian Algorithm (HA) with a learned, data-driven assignment logic.
 Based on a defined validation dataset with approximately 2700 samples, SANT achieves an accuracy of 95\%.
