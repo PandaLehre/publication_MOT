@@ -129,7 +129,7 @@ This work provides new insights and advancement in the development of ADAS track
 
 \section{Related work}
 \subsection{State prediction for tracked objects}
-One fundamental problem in Tracking-by-Detection frameworks is the prediction of the states of the already tracked objects.
+One fundamental problem in Tracking-by-Detection (TbD) frameworks is the prediction of the states of the already tracked objects.
 In many approaches Kalman filters and their variants have proven to be effective for state prediction {\cite{KF_simple_cues.2022, KF_Bewley.2016, KF_framework.2013}}.
 However, they reach their limits in more complex scenarios, particularly in the presence of non-linear motion patterns and interactions among multiple objects {\cite{KF_Ristic.2004,KF_Julier.2004,KF_Wan.2000}}. Ristic et al. {\cite{KF_Ristic.2004}} discuss the limitations of Kalman Filters in nonlinear and non-Gaussian scenarios and introduces Particle Filters as an alternative solution.
 Julier et al. {\cite{KF_Julier.2004}} propose the Unscented Kalman Filter (UKF) as an extension to the standard Kalman Filter to handle non-linear motion models more effectively.
@@ -150,7 +150,7 @@ ML-based approaches have been proposed to address these limitations.
 This aggregate of temporal information can be done for example using attention mechanisms as used in {\cite{DL_ATT_CNN_soda.2020, DL_ATT_CNN_mot_sot_based.2017}} or recurrent neural networks (RNNs) as developed in {\cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}}.
 The latter is what we are also pursuing in this work.
 Similar to the problem statement by Mertz et al. {\cite{DL_RNN_data_association.2019}}, the aim of our work is to develop a data-based approach that can learn to completely solve the combinatorial non deterministic polynomial time (NP) hard optimization problem of data association.
-In the context of this work, we put forward the hypothesis that a Gated Recurrent Unit (GRU)-based association network can be designed and trained using an undefined distance measure as is elaborated in the next chapter.
+In the context of this work, we put forward the hypothesis that a Gated Recurrent Unit (GRU)-based association network can be designed and trained using an undefined distance measure, as discussed in the next chapter.
 
 \subsection{Real time applications}
 ADAS are embedded real-time applications where it is crucial to predict the state of objects immediately after their detection as described in {\cite{KF_Bewley.2016,DL_Wojke.2017}}.
@@ -169,9 +169,9 @@ Instead, they propose a image-based and more straightforward approach that lever
 These cues are used to performe image-level object tracking and to make frame-to-frame associations.
 
 \paragraph{Recurrent Neural Network based Tracker}
-Similar to our methodologies, studies by {\cite{DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_RNN_data_association.2020}} introduce RNN-based approaches for online multi-target tracking.
+Similar to our methodologies, RNN-based approaches for online multi-target tracking have been introduced in~{\cite{DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_RNN_data_association.2020}}.
 Specifically, the work by Mertz et al. {\cite{DL_RNN_data_association.2019}} focuses on data association within a TbD framework.
-Their proposed DeepDA model, an Long Short-Term Memory (LSTM)-based Deep Data Association Network, is designed to learn and execute the task of associating objects across frames.
+Their proposed DeepDA model, a Long Short-Term Memory (LSTM)-based Deep Data Association Network, is designed to learn and execute the task of associating objects across frames.
 This model's ability to discern association patterns directly from data enables the achievement of robust and reliable tracking outcomes, even in environments with significant disturbances.
 Mertz et al. employ a distance matrix, derived from the Euclidean distance measure, as the input for the DeepDA network.
 This innovative approach effectively supersedes traditional association algorithms, such as the Hungarian Algorithm.
@@ -181,7 +181,7 @@ In our work, we want to enable the network to follow a completely data-driven as
 
 \paragraph{Attention Mechanism based Tracker}
 In our work we analyze tracks using LSTM based models.
-An alternative approach would be the use of the attention mechanism {\cite{ML_Attention.2017}} as e.g. applied by the authors of {\cite{DL_ATT_mot_sot_based.2017,DL_ATT_CNN_mot_sot_based.2017,DL_ATT_CNN_soda.2020,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022}}.
+An alternative approach would be the use of the attention mechanism {\cite{ML_Attention.2017}}, e.g. as applied in {\cite{DL_ATT_mot_sot_based.2017,DL_ATT_CNN_mot_sot_based.2017,DL_ATT_CNN_soda.2020,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022}}.
 The main research focus of Hung et al. {\cite{DL_ATT_CNN_soda.2020}} is on soft data association (SoDA), which enables the tracker to make probabilistic associations between objects and account for uncertainties in the associations.
 Their approach to SoDA works by using the attention mechanisms to aggregate information from all detections in a given temporal window.
 This allows the model to learn long-term and highly interactive relationships between detections and tracks from large datasets without using complex heuristics and hyperparameters.
