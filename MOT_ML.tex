@@ -18,15 +18,9 @@
 %------ for comments
 \usepackage{color}
 \newcommand{\menz}[1]{ \noindent {\color{red} [{\bf Markus:} {#1}]} }
+\newcommand{\ch}[1]{ \noindent {\color{blue} [{\bf Christian:} {#1}]} }
 %------
 
-
-% MD: Der größte Angriffspunkt für dieses Paper ist doch: Wir nutzen KITTI Tracks, damit können wir nie besser werden als die KITTI Tracks.
-%	  Die Tracks selbst sind aber mit einem Kalman Filter erstellt.
-%	  Damit kann das Prediction Network auch nie besser werden als ein Kalman filter.
-%     Oder sehe ich das falsch?
-% CH: Die KITTI Tracks wurden für das Training aus den GT Daten mit entsprechendem Rauschen erzeugt.
-%	  Daher ist kein direkter Einfluss von KF / KF Performance für die einzelnen Prädiktionen gegeben.
 \begin{document}
 
 % CH: Titelvorschläge:
@@ -37,10 +31,8 @@
 % - Enhancing Tracking: Integrating Modular Neural Networks into a Kalman Framework
 % MD: Mein Vorschlag unten
 % - Data-Driven Multi-Object Tracking: Integrating Modular Neural Networks in a Kalman Framework
-
 \title{Data-Driven Multi-Object Tracking: Integrating Modular Neural Networks into a Kalman Framework}
 
-% CH: Autorenliste angepassen: Markus Enzweiler hinzufügen nach Absprache mit MD
 \author{Christian Alexander Holz, Christian Bader, Markus Enzweiler, Matthias Drüppel
 	\thanks{C. Holz is with Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany}
 	\thanks{C. Bader is with Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany}
@@ -62,44 +54,26 @@
 	
 	In our evaluation, we compare the proposed methods against a traditional Kalman filter on the public KITTI tracking dataset: SPENT reduces the Root Mean Square Error (RMSE) by 50\% on the KITTI tracking dataset compared to a standard KF; SANT and MANTa achieve a 95\% validation accuracy in sensor object assignment to tracks.
 	These results underscore the potential of integrating machine learning into tracking systems to enhance performance and robustness, while ensuring the modularity and maintainability of Advanced Driver Assistance Systems (ADAS) tracking systems, at the same time.
-	%Our evaluation demonstrates significant improvements:
-	%SPENT reduces the Root Mean Square Error (RMSE) by 50\% on the KITTI tracking dataset compared to a standard KF; SANT and MANTa achieve a 95\% validation accuracy in sensor object assignment to tracks.
-	%These results highlight the opportunities of ML integration into tracking systems in enhancing performance and robustness while at the same time maintaining modularity and maintainability of ADAS tracking systems.
+
 \end{abstract} 
 
-% \begin{IEEEkeywords}
-% 	Article submission, IEEE, IEEEtran, journal, \LaTeX, paper, template, typesetting.
-% \end{IEEEkeywords}
 \section{Introduction}
 \IEEEPARstart{T}{he}
 ongoing evolution of Advanced Driver Assistance Systems has brought the need for precise and reliable Multi Object Tracking into the spotlight {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023, DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022, DL_ATT_CNN_soda.2020}}.
 In complex and dynamic environments, as encountered in urban traffic, it is crucial to simultaneously and accurately capture the positions and movements of multiple objects already in the early timesteps of detection with a accurate prediction - a key challenge in Computer Vision for automated driving.
 In the commonly used Tracking-by-Detection (TbD) paradigm, a tracker fuses detected sensor objects (SO) to create consistent object tracks over time.
 A crucial step within this paradigm is the association of the incoming measured SO with their corresponding existing object tracks to update their properties.
-%MD: Hier müssen noch einige Zitate rein.
-%CH: Zitate eingefügt, zwei neue ergänzt, nach Abstimmung mit CB.
 If no association can be made, new object tracks must be initialized {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023,OD_kampker.2018,OD_wu.2022}}.
 Tracking frameworks form the heart of ADAS that are used in millions of vehicles around the globe.
 The vast majority of these frameworks rely on classical approaches such as the KF or its variants {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023}}.
 These classical tracking theories have the great benefit of being modular and interpretable.
-The task is split into clearly separated subtasks such as the prediction of currently tracked objects and the association with newly measured ones.
-Furthermore, the math and the theory itself is clean and comprehensible. \menz{I'd remove the previous sentence. This should be true for all approaches, I guess.}
+The task is split into clearly separated subtasks such as the prediction of currently tracked objects and the association with newly measured ones. 
 
-%MD: I added AD_Overview.2017, but I am not happy with the citation, there should be something better to be found.
-%    And it should best talk about the complexity that is introduced by applying the same software to different models.
-%    Maybe you can find something? Then I would cite it further down the paragraph
-
-%ME: That's a long sentence ... I've split it up. 
-%However, development for automated driving is highly complex {\cite{AD_Overview.2017}} and in the automotive industry tracking systems are not developed for a single model,
-%but rather as a platform software and are deployed to a variety of different vehicle models
-%with different sensor sets, different installation heights of the sensors,
-%used in different countries and must always perform for a wide range of driving scenarios.
-However, development for automated driving is highly complex~{\cite{AD_Overview.2017}} . In the automotive industry, 
-tracking systems are not developed for a single model; instead, they are usually created as platform software. 
-This software is deployed across a variety of different vehicle models, each with distinct sensor sets and 
-installation heights. Additionally, these systems must operate in various countries and consistently perform 
+However, development for automated driving is highly complex~{\cite{AD_Overview.2017}}.
+In the automotive industry, tracking systems are not developed for a single model; instead, they are usually created as platform software.
+This software is deployed across a variety of different vehicle models, each with distinct sensor sets and installation heights.
+Additionally, these systems must operate in various countries and consistently perform 
 well across a wide range of driving scenarios.
-
 This development model often results in poor performance in specific scenes for particular configurations. 
 In classical systems that do not learn directly from data, these issues are typically addressed through 
 the implementation of heuristics. Additionally, parameters of the tracking system may be 
