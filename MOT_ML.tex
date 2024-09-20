@@ -15,6 +15,11 @@
 \usepackage{capt-of}
 \usepackage{cuted}
 
+%------ for comments
+\usepackage{color}
+\newcommand{\menz}[1]{ \noindent {\color{red} [{\bf Markus:} {#1}]} }
+%------
+
 
 % MD: Der größte Angriffspunkt für dieses Paper ist doch: Wir nutzen KITTI Tracks, damit können wir nie besser werden als die KITTI Tracks.
 %	  Die Tracks selbst sind aber mit einem Kalman Filter erstellt.
@@ -33,7 +38,7 @@
 % MD: Mein Vorschlag unten
 % - Data-Driven Multi-Object Tracking: Integrating Modular Neural Networks in a Kalman Framework
 
-\title{Data-Driven Multi-Object Tracking: Integrating Modular Neural Networks in a Kalman Framework}
+\title{Data-Driven Multi-Object Tracking: Integrating Modular Neural Networks into a Kalman Framework}
 
 % CH: Autorenliste angepassen: Markus Enzweiler hinzufügen nach Absprache mit MD
 \author{Christian Alexander Holz, Christian Bader, Markus Enzweiler, Matthias Drüppel
@@ -46,18 +51,21 @@
 
 \markboth{Journal of \LaTeX\ Class Files,~Vol.~tbd, No.~tbd, tbd~2024}%
 {Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
-
+ 
 \maketitle
 
-\begin{abstract}
-	This study introduces Machine Learning (ML)-based methodologies for Multi-Object Tracking (MOT) tailored to Advanced Driver Assistance Systems (ADAS), addressing the growing complexity and precision requirements in the automotive sector.
+\begin{abstract} 
+	This paper introduces Machine Learning (ML)-based methodologies for Multi-Object Tracking (MOT) tailored to Advanced Driver Assistance Systems (ADAS). Our approach particularly addresses the growing complexity and precision requirements in automotive applications.
 	We propose and evaluate three novel neural networks (NN) designed for MOT:
 	(i) the Single Prediction Network (SPENT) for trajectory forecasting, (ii) the Single Association Network (SANT) for mapping single sensor inputs to existing tracks, and (iii) the Multi-Association Network (MANTa) for associating multiple sensor inputs to multiple tracks.
 	These ML models are integrated with a traditional Kalman filter (KF) framework to enhance MOT performance while preserving the system's modularity and interpretability.
-	Our evaluation demonstrates significant improvements:
-	SPENT reduces the Root Mean Square Error (RMSE) by 50\% on the KITTI tracking dataset compared to a standard KF; SANT and MANTa achieve a 95\% validation accuracy in sensor object assignment to tracks.
-	These results highlight the opportunities of ML integration into tracking systems in enhancing performance and robustness while at the same time maintaining modularity and maintainability of ADAS tracking systems.
-\end{abstract}
+	
+	In our evaluation, we compare the proposed methods against a traditional Kalman filter on the public KITTI tracking dataset: SPENT reduces the Root Mean Square Error (RMSE) by 50\% on the KITTI tracking dataset compared to a standard KF; SANT and MANTa achieve a 95\% validation accuracy in sensor object assignment to tracks.
+	These results underscore the potential of integrating machine learning into tracking systems to enhance performance and robustness, while ensuring the modularity and maintainability of Advanced Driver Assistance Systems (ADAS) tracking systems, at the same time.
+	%Our evaluation demonstrates significant improvements:
+	%SPENT reduces the Root Mean Square Error (RMSE) by 50\% on the KITTI tracking dataset compared to a standard KF; SANT and MANTa achieve a 95\% validation accuracy in sensor object assignment to tracks.
+	%These results highlight the opportunities of ML integration into tracking systems in enhancing performance and robustness while at the same time maintaining modularity and maintainability of ADAS tracking systems.
+\end{abstract} 
 
 % \begin{IEEEkeywords}
 % 	Article submission, IEEE, IEEEtran, journal, \LaTeX, paper, template, typesetting.
@@ -499,6 +507,8 @@ Verification results indicate that MANTa achieves an assignment accuracy of 95\%
 \section*{Acknowledgments}
 We would like to express our sincere thanks to the organizations that provided financial support for this research project, namely the Daimler Truck AG and the Baden-Württemberg Cooperative State University (DHBW) Stuttgart.
 
+
+\menz{In some references, the author names are wrongly abbreviated.}
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv, lit.bib}
 
