@@ -83,32 +83,46 @@ Tracking frameworks form the heart of ADAS that are used in millions of vehicles
 The vast majority of these frameworks rely on classical approaches such as the KF or its variants {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023}}.
 These classical tracking theories have the great benefit of being modular and interpretable.
 The task is split into clearly separated subtasks such as the prediction of currently tracked objects and the association with newly measured ones.
-Furthermore, the math and the theory itself is clean and comprehensible.
+Furthermore, the math and the theory itself is clean and comprehensible. \menz{I'd remove the previous sentence. This should be true for all approaches, I guess.}
 
 %MD: I added AD_Overview.2017, but I am not happy with the citation, there should be something better to be found.
 %    And it should best talk about the complexity that is introduced by applying the same software to different models.
 %    Maybe you can find something? Then I would cite it further down the paragraph
-However, development for automated driving is highly complex {\cite{AD_Overview.2017}} and in the automotive industry tracking systems are not developed for a single model,
-but rather as a platform software and are deployed to a variety of different vehicle models
-with different sensor sets, different installation heights of the sensors,
-used in different countries and must always perform for a wide range of driving scenarios.
-This regularly leads to poor performance in certain scenes for a specific configuration.
-With classical systems that not learn directly from data, these situations are often
-solved by the implementation of heuristics and by tweaking parameters of the tracking system
-for the troublesome scenes.
+
+%ME: That's a long sentence ... I've split it up. 
+%However, development for automated driving is highly complex {\cite{AD_Overview.2017}} and in the automotive industry tracking systems are not developed for a single model,
+%but rather as a platform software and are deployed to a variety of different vehicle models
+%with different sensor sets, different installation heights of the sensors,
+%used in different countries and must always perform for a wide range of driving scenarios.
+However, development for automated driving is highly complex~{\cite{AD_Overview.2017}} . In the automotive industry, 
+tracking systems are not developed for a single model; instead, they are usually created as platform software. 
+This software is deployed across a variety of different vehicle models, each with distinct sensor sets and 
+installation heights. Additionally, these systems must operate in various countries and consistently perform 
+well across a wide range of driving scenarios.
+
+This development model often results in poor performance in specific scenes for particular configurations. 
+In classical systems that do not learn directly from data, these issues are typically addressed through 
+the implementation of heuristics. Additionally, parameters of the tracking system may be 
+adjusted to accommodate the problematic scenes.
 % MD: Finden wir für den nächsten Abschnitt noch ein Zitat? Wahrscheinlich nicht direkt ein Paper, aber vlt einen Bericht darüber, wie Automated Driving Entwicklung mit komplexen und vielseitigen Szenen und Modellvielfalt umgehen muss.
 % CH: Vielleicht aus einem Fachbuch wie „Automotive Software Engineering“ von F. Hönig und W. H. Schneider?
 % MD: Ja, bring das gerne mit rein.
 But from a software engineering point of view hand-engineering parameters and relying on heuristics leads to a software that is extremely hard to maintain and develop further for new scenarios and new system configurations.
 Moreover, hand-engineered classical approaches can reach its limits for the overall performance and in challenging situations that would require a more automated and reproducible development strategy.
 
-In this work, we propose a data driven approach to tracking frameworks, which would allow the same system to be fine tuned for specific configurations relying only on data, thus increasing maintainability and adaptability.
-We do this preserving one of the biggest strengths of classical approaches: its modularity, by replacing only single tracking components with ML models.
-(i) In contrast to the Kalman filter {\cite{KF_BoundingBD.2023}}, our prediction network is capable of predicting the state of individual objects without the need for a predefined state or prediction model at runtime.
+In this work, we propose a data driven approach to tracking frameworks. This approach enables the same system to be fine-tuned for specific configurations by relying solely on data.
+As a result, it increases maintainability and adaptability.
+
+% ME: We do this preserving one of the biggest strengths of classical approaches: its modularity, by replacing only single tracking components with ML models.
+We aim to preserve one of the biggest strengths of classical approaches, i.e. their modularity, and replace only individual tracking components with ML-based models:
+\menz{We should streamline the following and explicitly state the contributions so that the reviewers understand this. 
+We should also mention the method abbreviations from the abstract, e.g.: Our contributions are: (i) We propose SPENT, a prediction network that is ..... (ii) SANT and MANTa .... 
+(iii) We present a thorough evaluation by integrating our models into an existing tracking system ..... }
+(i) In contrast to the Kalman filter {\cite{KF_BoundingBD.2023}}, our proposed prediction network is capable of predicting the state of individual objects without the need for a predefined state or prediction model at runtime.
 The self-learning, data driven approach enables adaptability to various scenarios and the ability to effectively handle non-linearities and habits of road users.
 Many conventional tracking systems rely on static methods for data association.
 Commonly used algorithms like the Hungarian algorithm (HA) {\cite{DA_hungarian.1955}} require heuristics and fixed thresholds.
-(ii) Our Single and (iii) Multi Association Network replaces the calculation of a distance metric for the corresponding assignment by employing machine learning in order to resolve situations unclear for traditional approaches.
+(ii) Our proposed Single and (iii) Multi Association Network replaces the calculation of a distance metric for the corresponding assignment by employing machine learning in order to resolve situations unclear for traditional approaches.
 Both, our Single Prediction Network and our association networks can be developed and evaluated as stand-alone models.
 For a throughout evaluation, we proceed by integrating them into an existing tracking system and demonstrate their performance through multiple tests and comparisons with established methods.
 This work provides new insights and advancement in the development of ADAS tracking systems by applying ML\@.
