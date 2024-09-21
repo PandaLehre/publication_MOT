@@ -163,6 +163,10 @@ This allows the model to learn long-term and highly interactive relationships be
 %MD: Prüfung wo genau SPENT etc eingeführt werden. Abstract + Introduction, danach nie wieder.
 %CH: SPENT, SANT und MANTa + im Abstract + im folgenden Overview + Überschriften der Kapitel eingeführt.
 \section{Overview of our proposed models}
+\menz{Do you think we could integrate this section into the contributions section in the intro? This would also help to get a figure on the first page.
+There has been an interesting CVPR paper some years ago that classified papers into accepted / non-accepted. Having a figure on the first page, was the
+major factor to have a paper accepted :)}
+\menz{If we do not want to remove this section, then I would still argue for Fig. 1 (or another figure) on the first page }
 Our primary contribution is the development and evaluation of three NN that we label:
 (i) the Single Prediction Network (SPENT), (ii) the Single Association Network (SANT), and (iii) the Multi-Association Network (MANTa).
 Figure {\ref{pic::MotFramework}} provides an overview of our approach in which the association network can be implemented using either SANT or MANTa.
@@ -176,29 +180,42 @@ The Track Management can then decide to delete tracks, that were not updated for
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=0.95\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
 	\caption{Schematic representation of the two integrated networks (blue) in a tracking-by-detection framework.
-	The Association Network can either be filled with our SANT (single) or MANTa (multi) association models.}
+	The Association Network can either be filled with our SANT (single) or MANTa (multi) association models.
+	\menz{Sensorobjects should be sensor objects in the legend; same for hiddenstate; and the fonts look weird on my machine. If we decided to put this figure,
+	on the first page, we would need a more elaborate caption. One should be able to fully understand the approach by looking at the figure and 
+	reading the caption. }}
 	\label{pic::MotFramework}
 \end{figure}
 
 \section{Tracking with ML-based prediction and association networks}
+
+\menz{This section is a bit unconventional because it integrates both the technical approach and the experimental results in a single section vs.
+having a dedicated section on experimental evaluation. What's the reason for that? Wouldn't it make more sense, to keep that separate?
+Particularly the last paragraph in IV-A would fit much better into an experimental evaluation section. There is no way to put the reported numbers there 
+in context at this point in the paper.}
+\menz{I'd suggest to move all the dataset (preprocessing) and experimental results into a dedicated section. It should be possible to explain the model 
+archictures without knowing much of the details of the particular dataset used. }
 We apply the tracking-by-detection paradigm, in which a tracker fuses object detections to generate object tracks that are consistent over time.
 Vo et al. {\cite{KF_framework.2013}}, for example, provides a framework for analyzing tracking approaches that follow the TbD paradigm.
-This was used accordingly in this study.
-To enable our models to incorporate temporal information, we use LSTM and bidirectional Long Short-Term Memory (BILSTM) networks.
-Both for the prediction and the association of the sensor objects to the existing tracks.
+This was used accordingly in this study. \menz{How?}
+To enable our models to incorporate temporal information, we use LSTM and bidirectional Long Short-Term Memory (BILSTM) networks \menz{references ?}, both for the 
+prediction and the association of the sensor objects to the existing tracks.
 
 \subsection{Single Prediction Network (SPENT)}
 In our methodology, we leverage the hidden states of the LSTM layer as a dedicated information repository for each object.
 The Prediction Network is architected for open-loop operation, signifying that it forecasts future state values based on data previously received.
 Within the context of an online MOT process, this enables the network to prognosticate the most probable subsequent state values by utilizing the state values received for a specific sensor object's state vector.
+\menz{There are some different capitalizations of association network / Association Network and prediction / Prediction Network throughout the text. Need to check for consistency. 
+A good way is to introduce a LaTeX \textbackslash newcommand\{prednet\}\{Prediction Network\} and use this instead of typing it out.}
 
 \paragraph{Data preprocessing}
 In the development of our model, ground truth data comprising vehicle tracks (cars and vans) from the KITTI dataset was utilized.
 A GT track encapsulates the temporal evolution of an object, delineating its trajectory from the moment it enters until it exits the sensor's detection range.
-For preprocessing, a program was developed to extract all tracks of the selected object classes (cars and vans) per sequence and store them in a unified dataset.
+For preprocessing, we extracted all tracks of the selected object classes (cars and vans) per sequence and stored them in a unified dataset.
 Through this iterative process, 635 tracks (cars and vans) were extracted from the entire KITTI dataset.
 Tracks with a short temporal length were filtered using a threshold of 3 frames, resulting in a final dataset comprising 624 tracks.
-The track lengths vary from a minimum of 4 frames to a maximum of 643 frames (Sequence 20, ID 12).
+The track lengths vary from a minimum of 4 frames to a maximum of 643 frames (Sequence 20, ID 12). \menz{What's the motivation for that preprocessing? Why can't the data be 
+used as is? I think we need to explain this in one sentence. Otherwise it sounds a bit like if the ground truth was specifically tuned to make our approach look better.}
 To enhance model generalization and foster convergence during training, we normalized the state values of tracks at time $t$ (predictors) and at time $t+1$ (targets) in accordance with the methodology outlined in {\cite{DL_book.2019}}.
 This normalization process aimed to standardize the distribution of both predictors and targets to have a mean of zero and a unit variance.
 The mean value $\mu$ and standard deviation $\sigma$ for each state variable were computed across all tracks, employing the subsequent equations:
@@ -223,7 +240,7 @@ In this process, shorter sequences are padded with special padding tokens so tha
 			In the upper panel, unsorted data necessitates extensive padding to equalize
 			the sequence lengths within a batch, thereby augmenting the computational overhead.
 			Conversely, the lower panel illustrates that sorting data by sequence length prior
-			to batching significantly curtails the requisite padding.}
+			to batching significantly curtails the requisite padding. \menz{Nice figure and caption!!}}
 	\label{pic::Padding}
 \end{figure}
 
@@ -248,9 +265,9 @@ The foundational layer of our Prediction Network is constituted by an LSTM layer
 This iterative updating mechanism facilitates a continuous correction throughout the sequence of each track, thereby enhancing the predictive accuracy of the network.
 The quantity of hidden units within this layer directly correlates to the volume of information retained across timesteps, as illustrated in Figure \ref{pic::SpentArch}.
 These hidden states are capable of encapsulating information from all preceding timesteps, independent of the sequence's length, ensuring a comprehensive temporal understanding.
-Subsequent to the LSTM layer, our architecture incorporates a batch normalization layer, which standardizes the LSTM output prior to its transition to the following Relu layer.
+Subsequent to the LSTM layer, our architecture incorporates a batch normalization layer, which standardizes the LSTM output prior to its transition to the following ReLU layer.
 This normalization significantly expedites the training process and fosters better convergence by mitigating internal covariate shift, as supported by \cite{DL_batch_norm.2015}.
-Following this, a Relu layer is employed to apply a non-linear threshold operation, setting any input value below zero to zero.
+Following this, a ReLU layer is employed to apply a non-linear threshold operation, setting any input value below zero to zero.
 During training, a dropout layer is introduced to randomly nullify input elements with a specified probability, thereby imposing a regularization effect and preventing overfitting, as detailed in \cite{DL_dropout.2014}.
 The architecture culminates in a Fully Connected (FC) Layer, which amalgamates the localized insights garnered by preceding layers.
 The dimensionality of the final FC layer is meticulously aligned with the number of response variables required by the output layer, as elucidated in \cite{DL_FC.2010}.
@@ -265,7 +282,7 @@ We chose MSE because it provides a clear and direct measure of how closely our p
 where $k$ is the size of the predicted state vector, $y_i$ is the ground truth value (KITTI cars and vans tracks) and $\hat{y}_i$ is the prediction of the network for training set sample $i$.
 The loss is evaluated for several sequences, each with numerous time stamps.
 For our Prediction Network the loss function is half the mean-square-error of the predictions added up for each time step in the training set, normalized by the total number of all time stamps in the used sequences $T$.
-The Factor 1/2 simplifies the calculation of the gradient during backpropagation, making the derivative of the loss function with respect to the network’s predictions easier to compute:
+The factor of $\frac{1}{2}$ simplifies the calculation of the gradient during backpropagation, making the derivative of the loss function with respect to the network’s predictions easier to compute:
 \begin{equation}
 	loss = \frac{1}{2T} \sum_{j=1}^{T}\sum_{i=1}^{m}{({y_{ij}}-{\hat{y}_{ij}})}^2.
 \end{equation}
@@ -276,7 +293,7 @@ This performance metric translates to an average deviation of 0.42 meters for pr
 Using an inhouse implemented Kalman Filter carried by Daimler Truck Research Group following \cite{KF_BoundingBD.2023,KF_Bewley.2016}, an RMSE of 0.066 was achieved on the same data set.
 
 \subsection{Single Association Network (SANT)}
-The association network facilitates a data-driven methodology to address the combinatorial optimization challenge of data association, which is known to be NP-hard.
+The association network facilitates a data-driven methodology to address the combinatorial optimization challenge of data association, which is known to be NP-hard \menz{is it? needs a reference}.
 Unlike traditional association methods referenced in \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}, our SANT model innovates by not relying on a predefined distance matrix as input.
 Instead, it processes the extant tracks alongside each newly measured sensor object directly.
 SANT is designed to match a singular sensor object to one of multiple track objects.
@@ -293,7 +310,7 @@ Furthermore, to simulate realistic sensor data from the GT data, artificial nois
 This process was meticulously designed to reflect the inherent inaccuracies and uncertainties present in real-world sensor measurements.
 To achieve this, a maximum of 3\% of the value of the current state vector was randomly subtracted or added to each value.
 The data set was created in 7 iterations, so that the noise intensity was increased by 0.5\% per iteration.
-As shown in figure \ref{pic::SantArch} the data format was created accordingly to enable index-based track assignment for SANT.
+As shown in Figure \ref{pic::SantArch} the data format was created accordingly to enable index-based track assignment for SANT.
 The size of the input matrix therefore corresponds to $m \times n + 1$.
 With $m = 5$ as the number of state values for our work and $n=16$ as the maximum number of tracks per time step.
 The actual number of tracks can vary between 0 and a maximum of 16 objects in relation to the KITTI data set and the selected objects (cars and vans).
@@ -446,10 +463,23 @@ The vectors 1 to $T_{max}$ are linked together in the Concatenation Layer.
 This creates a vector with 288 elements, whereby 18 elements each represent the most probable assignment of a measurement to a track.
 
 
+% ME: Added some ideas for an experimental evalation section
+\section{Experimental evaluation}
+\begin{itemize}
+	\item introduce the dataset
+	\item not sure if the specific data preprocessing should be here or in the previous section \dots
+	\item explain the metrics and evaluation methodology
+	\item experimental results: why is only SPENT included in the results table and not the others? I (Markus) do not understand the RMSE on "Training"!? 
+	\item I think the main point where reviewers might/will complain is the lack of state-of-the-art baselines. A plain KF seems like an easy baseline, 
+	      particularly given the nice discussion on related work earlier on. As a reviewer, I would like to see a more competitive baseline. Not sure though,
+		  if this can be done quickly. We can also ignore, submit as is and see what the feedback is. 
+\end{itemize}
 
 %CH: Ergebnistabelle für SPENT erstellt. Design caption sieht nicht so gut aus.
 %MD: Kannst du hier nochmal den Text anpassen? Ich habe gerade 2,3 Sachen ausprobiert es aber nicht auf Anhieb geschafft den Font zu ändern.
 \section{Conclusion}
+
+\menz{What about a discussion section, where the experimental results are critically analyzed and future ideas for improvement are outlined? }
 The developed networks can be modularly integrated into the Tracking-by-Detection framework, effectively replacing classical heuristic algorithms.
 SPENT substitutes the state predictions of the Kalman Filter.
 The trained network estimates predictions per time step without the necessity of a dynamics model.
@@ -460,7 +490,7 @@ Network verification demonstrates a Root Mean Square Error (RMSE) of 0.027,
 averaged over the training, validation, and test datasets as shown in Table {\ref{tab::SpentRmseComparison}}.
 Translated in meters this error corresponds to an average deviation of 0.42 meters for the X coordinate position and 0.23 meters for the Y coordinate position predictions, both relative to the ego vehicle.
 \begin{table}[htbp]
-    \sffamily
+    %\sffamily %ME: I'd keep that in the regular LaTeX font ...
     \centering
     \caption{Comparison of RMSE values for the SPENT and Kalman Filter implemented by Daimler Truck Research Group.
 	The KITTI dataset filtered for cars and vans objects was used and split into training, validation, and test datasets.
