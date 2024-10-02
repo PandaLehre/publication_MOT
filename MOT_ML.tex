@@ -21,6 +21,7 @@
 \usepackage{color}
 \newcommand{\menz}[1]{ \noindent {\color{red} [{\bf Markus:} {#1}]} }
 \newcommand{\ch}[1]{ \noindent {\color{blue} [{\bf Christian:} {#1}]} }
+\newcommand{\md}[1]{ \noindent {\color{green} [{\bf Matthias:} {#1}]} }
 %------
 
 % \input{acronyms}
@@ -123,7 +124,7 @@
 % - Enhancing Tracking: Integrating Modular Neural Networks into a Kalman Framework
 % MD: Mein Vorschlag unten
 % - Data-Driven Multi-Object Tracking: Integrating Modular Neural Networks in a Kalman Framework
-% CH: 
+% CH:
 \title{Data-Driven Object Tracking: Integrating Modular Neural Networks into a Kalman Framework}
 
 \author{Christian Alexander Holz, Christian Bader, Markus Enzweiler, Matthias Drüppel
@@ -136,20 +137,20 @@
 
 \markboth{Journal of \LaTeX\ Class Files,~Vol.~tbd, No.~tbd, tbd~2024}%
 {Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
- 
+
 \maketitle
 
-\begin{abstract} 
+\begin{abstract}
 	This paper introduces \ac{ML}-based methodologies for \ac{MOT}
 	tailored to \ac{ADAS}. Our approach particularly addresses the growing complexity and precision requirements in automotive applications.
 	We propose and evaluate three novel neural networks \ac{NN} designed for \ac{MOT}:
 	(i) the \ac{SPENT} for trajectory forecasting, (ii) the \ac{SANT} for mapping single sensor inputs to existing tracks, and (iii) the \ac{MANTa} for associating multiple sensor inputs to multiple tracks.
 	These \ac{ML} models are integrated with a traditional \ac{KF} framework to enhance \ac{MOT} performance while preserving the system's modularity and interpretability.
-	
+
 	In our evaluation, we compare the proposed methods against a traditional \ac{KF} on the public KITTI tracking dataset: \ac{SPENT} reduces the Root Mean Square Error (RMSE) by 50\% on the KITTI tracking dataset compared to a standard KF; SANT and MANTa achieve a 95\% validation accuracy in sensor object assignment to tracks.
 	These results underscore the potential of integrating \ac{ML} into tracking systems to enhance performance and robustness, while ensuring the modularity and maintainability of \ac{ADAS} tracking systems, at the same time.
 
-\end{abstract} 
+\end{abstract}
 
 \section{Introduction}
 \IEEEPARstart{T}{he}
@@ -161,16 +162,16 @@ If no association can be made, new object tracks must be initialized {\cite{KF_B
 Tracking frameworks form the heart of ADAS that are used in millions of vehicles around the globe.
 The vast majority of these frameworks rely on classical approaches such as the \ac{KF} or its variants {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023}}.
 These classical tracking theories have the great benefit of being modular and interpretable.
-The task is split into clearly separated subtasks such as the prediction of currently tracked objects and the association with newly measured ones. 
+The task is split into clearly separated subtasks such as the prediction of currently tracked objects and the association with newly measured ones.
 However, development for automated driving is highly complex~{\cite{AD_Overview.2017}}.
 In the automotive industry, tracking systems are not developed for a single model; instead, they are usually created as platform software.
 This software is deployed across a variety of different vehicle models, each with distinct sensor sets and installation heights.
-Additionally, these systems must operate in various countries and consistently perform 
+Additionally, these systems must operate in various countries and consistently perform
 well across a wide range of driving scenarios.
 %%%%%%%%%%%%%%%%%%% CH: currently commented out due to lack of space
-% This development model often results in poor performance in specific scenes for particular configurations. 
-% In classical systems that do not learn directly from data, these issues are typically addressed through 
-% the implementation of heuristics. Additionally, parameters of the tracking system may be 
+% This development model often results in poor performance in specific scenes for particular configurations.
+% In classical systems that do not learn directly from data, these issues are typically addressed through
+% the implementation of heuristics. Additionally, parameters of the tracking system may be
 % adjusted to accommodate the problematic scenes.
 % % MD: Finden wir für den nächsten Abschnitt noch ein Zitat? Wahrscheinlich nicht direkt ein Paper, aber vlt einen Bericht darüber, wie Automated Driving Entwicklung mit komplexen und vielseitigen Szenen und Modellvielfalt umgehen muss.
 % % CH: Vielleicht aus einem Fachbuch wie „Automotive Software Engineering“ von F. Hönig und W. H. Schneider?
@@ -203,7 +204,7 @@ Commonly used algorithms like the \ac{HA} {\cite{DA_hungarian.1955}} require heu
 Both, our prediction network and our association networks can be developed and evaluated as stand-alone models.
 For a throughout evaluation, we proceed by integrating them into an existing tracking system and demonstrate their performance through multiple tests and comparisons with established methods.
 This work provides new insights and advancement in the development of \ac{ADAS} tracking systems by applying \ac{ML}\@.
-\ch{UNTIL HERE: I added the acronyms. I will go through the text and add the acronyms where necessary.}
+% \ch{UNTIL HERE: I added the acronyms. I will go through the text and add the acronyms where necessary.}
 
 \section{Related work}
 \subsection{State prediction for tracked objects}
@@ -265,12 +266,9 @@ Their approach to SoDA works by using the attention mechanisms to aggregate info
 This allows the model to learn long-term and highly interactive relationships between detections and tracks from large datasets without using complex heuristics and hyperparameters.
 
 \section{Tracking with ML-based prediction and Association Networks}
-We apply the tracking-by-detection paradigm, in which a tracker fuses object detections to generate object tracks that are consistent over time.
-Vo et al. {\cite{KF_framework.2013}}, for example, provides a framework for analyzing tracking approaches that follow the TbD paradigm.
-This was used accordingly in this study. \menz{How?}
-\ch{How KF works or how it is implemented in our work?}
+We apply the tracking-by-detection paradigm, in which a tracker fuses object detections to generate object tracks that are consistent over time. In our study a Kalman Filter framework was implemented following the computational ideas of Vo et al. {\cite{KF_framework.2013}}.
 To enable our models to incorporate temporal information, we use LSTM {\cite{DL_LSTM.1997}} and bidirectional Long Short-Term Memory (BILSTM) network layers {\cite{DL_BILSTM.1997}}, both for the prediction and the association of the sensor objects to the existing tracks.
-\ch{Added references to LSTM and BILSTM.}
+
 
 \subsection{Single Prediction Network (SPENT)}
 In our methodology, we leverage the hidden states of the LSTM layer as a dedicated information repository for each object.
@@ -283,10 +281,8 @@ A GT track encapsulates the temporal evolution of an object, delineating its tra
 For preprocessing, we extracted all tracks of the selected object classes (cars and vans) per sequence and stored them in a unified dataset.
 Through this iterative process, 635 tracks (cars and vans) were extracted from the entire KITTI dataset.
 Tracks with a short temporal length were filtered using a threshold of 3 frames, resulting in a final dataset comprising 624 tracks.
-This was done to ensure that the network was trained on tracks with a sufficient number of time stamps. In software development of tracking systems, it is common to use a threshold value to filter tracks that are too short to allow a meaningful prediction. 
-The track lengths vary from a minimum of 4 frames to a maximum of 643 frames (Sequence 20, ID 12). \menz{What's the motivation for that preprocessing? Why can't the data be 
-used as is? I think we need to explain this in one sentence. Otherwise it sounds a bit like if the ground truth was specifically tuned to make our approach look better.}
-\ch{Good point. I added a sentence to clarify this.}
+This was done to ensure that the network was trained on tracks with a sufficient number of time stamps. In software development of tracking systems, it is common to use a threshold value to filter tracks that are too short to allow a meaningful prediction. %[MD: Citation?]
+The track lengths vary from a minimum of 4 frames to a maximum of 643 frames (Sequence 20, ID 12).
 
 To enhance model generalization and foster convergence during training, we normalized the state values of tracks at time $t$ (predictors) and at time $t+1$ (targets) in accordance with the methodology outlined in {\cite{DL_book.2019}}.
 This normalization process aimed to standardize the distribution of both predictors and targets to have a mean of zero and a unit variance.
@@ -359,12 +355,9 @@ The factor of $\frac{1}{2}$ simplifies the calculation of the gradient during ba
 	loss = \frac{1}{2T} \sum_{j=1}^{T}\sum_{i=1}^{m}{({y_{ij}}-{\hat{y}_{ij}})}^2.
 \end{equation}
 During training, the average loss is calculated using the observations in the mini-batch, so $T$ equals the mini-batch length.
-\ch{I deleted the sentences with the results here and moved them to the results section.}
 
 \subsection{Single Association Network (SANT)}
 The association network facilitates a data-driven methodology to address the combinatorial optimization challenge of data association, which is known to be NP-hard {\cite{DA_hungarian.1955,DA_JPDA.1993}}, which means that the calculation of optimal solutions can involve exponential effort.
-\menz{is it? needs a reference}
-\ch{I added references and a sentence to clarify this.}
 Unlike traditional association methods referenced in \cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}, our SANT model innovates by not relying on a predefined distance matrix as input.
 Instead, it processes the extant tracks alongside each newly measured sensor object directly.
 SANT is designed to match a singular sensor object to one of multiple track objects.
@@ -484,10 +477,9 @@ Then, all scalars obtained per time step are summarized and divided by the numbe
 \paragraph{Network architecture}
 The schematic representation {\ref{pic::MantaArch}} shows the developed network architecture for the simultaneous association of a large number of sensor objects to a large number of tracks.
 This is what we call a \ac{MANTa}.
-\ch{Scalling the picture down to 0.5 for debugging mode.}
-%MD: Auch hier gerne mehr Erklärung in die Unterschrift.
+
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=0.5\linewidth]{figs/MANTa_network_arch.png}}
+	\centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_network_arch.png}}
 	\caption{Schematic representation of the generic network structure of MANTa.}
 	\label{pic::MantaArch}
 \end{figure}
@@ -501,21 +493,21 @@ This means that a single assignment can be realized for each track.
 The vectors 1 to $T_{max}$ are linked together in the Concatenation Layer.
 This creates a vector with 288 elements, whereby 18 elements each represent the most probable assignment of a measurement to a track.
 
-\section{Experimental evaluation}
-\menz{\begin{itemize}
-	\item introduce the dataset
-	\item not sure if the specific data preprocessing should be here or in the previous section \dots
-	\ch{me neither, I would keep / put it in the previous section}
-	\item explain the metrics and evaluation methodology
-	\item experimental results: why is only SPENT included in the results table and not the others?
-	\ch{Added Results for SANT and MANTa in text. Should we add the results in the table as well? Proposal inserted: confusion matrix and values.} 
-	\item I (Markus) do not understand the RMSE on "Training"!?
-	\ch{Should we delete the training column? and just show the validation and test results?}
-	\item I think the main point where reviewers might/will complain is the lack of state-of-the-art baselines. A plain KF seems like an easy baseline, 
-	      particularly given the nice discussion on related work earlier on. As a reviewer, I would like to see a more competitive baseline. Not sure though,
-		  if this can be done quickly. We can also ignore, submit as is and see what the feedback is.
-	\ch{Based on the small number of training samples, we suggested to use a simple baseline. I am not sure if its possible to implement a more competitive baseline in the short time.}
-\end{itemize}}
+% \section{Experimental evaluation}
+% \menz{\begin{itemize}
+% 	\item introduce the dataset
+% 	\item not sure if the specific data preprocessing should be here or in the previous section \dots
+% 	\ch{me neither, I would keep / put it in the previous section}
+% 	\item explain the metrics and evaluation methodology
+% 	\item experimental results: why is only SPENT included in the results table and not the others?
+% 	\ch{Added Results for SANT and MANTa in text. Should we add the results in the table as well? Proposal inserted: confusion matrix and values.}
+% 	\item I (Markus) do not understand the RMSE on "Training"!?
+% 	\ch{Should we delete the training column? and just show the validation and test results?}
+% 	\item I think the main point where reviewers might/will complain is the lack of state-of-the-art baselines. A plain KF seems like an easy baseline,
+% 	      particularly given the nice discussion on related work earlier on. As a reviewer, I would like to see a more competitive baseline. Not sure though,
+% 		  if this can be done quickly. We can also ignore, submit as is and see what the feedback is.
+% 	\ch{Currenlty no other work was found. If we find one, we will include it.}
+% \end{itemize}}
 
 The developed networks can be modularly integrated into the Tracking-by-Detection framework, effectively replacing classical heuristic algorithms.
 SPENT substitutes the state predictions of the Kalman Filter.
@@ -555,14 +547,13 @@ SANT can replace algorithms for calculating a distance metric and assignment pro
 Based on a defined validation dataset with approximately 2700 samples, SANT achieves an accuracy of 95\%.
 \ch{Confusion matrix must be updated. Just a first suggestion for further discussion.}
 
-\begin{figure}[htbp]
-	\centerline{\includegraphics[width=0.95\linewidth]{figs/SANT_confusion_mat.png}}
-	\centerline{\includegraphics[width=0.55\linewidth]{figs/SANT_confusion_mat_values.png}}
-	\caption{Confusion matrix for the SANT network.}
-	\label{pic::SantConfusion}
-\end{figure}
+% \begin{figure}[htbp]
+% 	\centerline{\includegraphics[width=0.95\linewidth]{figs/SANT_confusion_mat.png}}
+% 	\centerline{\includegraphics[width=0.55\linewidth]{figs/SANT_confusion_mat_values.png}}
+% 	\caption{Confusion matrix for the SANT network.}
+% 	\label{pic::SantConfusion}
+% \end{figure}
 
-\ch{Moved the following part from the MANTa section to the results section.}
 % Detailed data analysis identified limitations affecting network performance.
 % Verification results indicate that MANTa achieves an assignment accuracy of 95\% for the six most frequently occurring association sets.
 MANTa is an advancement of SANT and addresses the limitation of individual assignment.
@@ -597,6 +588,7 @@ The primary advantage of MANTa over SANT is its ability to assign multiple senso
 
 \section{Conclusion}
 \menz{What about a discussion section, where the experimental results are critically analyzed and future ideas for improvement are outlined? }
+\md{Most important results, critical analysis (optional), future work: attention vs LSTMs?, größere Datensätz, association probabilities?}
 
 \section*{Acknowledgments}
 We would like to express our sincere thanks to the organizations that provided financial support for this research project, namely the Daimler Truck AG and the Baden-Württemberg Cooperative State University (DHBW) Stuttgart.
