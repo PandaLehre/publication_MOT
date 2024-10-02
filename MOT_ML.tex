@@ -281,7 +281,7 @@ A GT track encapsulates the temporal evolution of an object, delineating its tra
 For preprocessing, we extracted all tracks of the selected object classes (cars and vans) per sequence and stored them in a unified dataset.
 Through this iterative process, 635 tracks (cars and vans) were extracted from the entire KITTI dataset.
 Tracks with a short temporal length were filtered using a threshold of 3 frames, resulting in a final dataset comprising 624 tracks.
-This was done to ensure that the network was trained on tracks with a sufficient number of time stamps. In software development of tracking systems, it is common to use a threshold value to filter tracks that are too short to allow a meaningful prediction. %[MD: Citation?]
+This was done to ensure that the network was trained on tracks with a sufficient number of time stamps. In software development of tracking systems, it is common to use a threshold value to filter tracks that are too short to allow a meaningful prediction \cite{DL_DetTrack.2024}.
 The track lengths vary from a minimum of 4 frames to a maximum of 643 frames (Sequence 20, ID 12).
 
 To enhance model generalization and foster convergence during training, we normalized the state values of tracks at time $t$ (predictors) and at time $t+1$ (targets) in accordance with the methodology outlined in {\cite{DL_book.2019}}.
@@ -446,6 +446,14 @@ For the defined test case with cars and vans, the KITTI data set results in $T_{
 There are seven tracks in the time step of the sequence shown.
 Each track receives a new measurement in this time step, and an additional object was detected (new sensor object).
 
+The GT assignment is displayed at the bottom of the section.
+The assignment output can be thought of a matrix with dimensions maximum number of tracks $T_{max}=16$ and the number of possible assignment classes $C=18$.
+Where each field can either be zero (no assignment) or one (assignment).
+For numerical reasons, we unfold this matrix to a one-hot vector of dimension $OH_{max}=288=16 \cdot 18$.
+The assignment classes result from the described index class 1 to 16 and additional degrees of freedom.
+One degree of freedom of the assignment represents the case that no measurement exists, another that the measurement should not be assigned.
+The section of the one-hot vector shown (1:18) thus shows the GT assignment of the first sensor object to the track at position two.
+
 \begin{strip}
 	\includegraphics[width=\linewidth]{figs/MANTa_data.png}
 	\captionof{figure}{MANTa, data structure, shows the non-noisy sensor objects to enable a visual assignment and increase understanding of the association procedure.
@@ -454,14 +462,6 @@ Each track receives a new measurement in this time step, and an additional objec
 	The one-hot vector shows the GT assignment of the first sensor object to the track at position two.}
 	\label{pic::MantaData}
 \end{strip}
-
-The GT assignment is displayed at the bottom of the section.
-The assignment output can be thought of a matrix with dimensions maximum number of tracks $T_{max}=16$ and the number of possible assignment classes $C=18$.
-Where each field can either be zero (no assignment) or one (assignment).
-For numerical reasons, we unfold this matrix to a one-hot vector of dimension $OH_{max}=288=16 \cdot 18$.
-The assignment classes result from the described index class 1 to 16 and additional degrees of freedom.
-One degree of freedom of the assignment represents the case that no measurement exists, another that the measurement should not be assigned.
-The section of the one-hot vector shown (1:18) thus shows the GT assignment of the first sensor object to the track at position two.
 
 As for SANT the cross-entropy cost function calculates the cross-entropy loss between network predictions $Y_{k,i}$ and target values $T_{k,i}$ for the unique assignment task for mutually exclusive classes.
 The already introduced one-hot vector is used to represent the class in binary form in a vector and thus generate a 1-to-$OH_{max}$ code.
@@ -493,21 +493,7 @@ This means that a single assignment can be realized for each track.
 The vectors 1 to $T_{max}$ are linked together in the Concatenation Layer.
 This creates a vector with 288 elements, whereby 18 elements each represent the most probable assignment of a measurement to a track.
 
-% \section{Experimental evaluation}
-% \menz{\begin{itemize}
-% 	\item introduce the dataset
-% 	\item not sure if the specific data preprocessing should be here or in the previous section \dots
-% 	\ch{me neither, I would keep / put it in the previous section}
-% 	\item explain the metrics and evaluation methodology
-% 	\item experimental results: why is only SPENT included in the results table and not the others?
-% 	\ch{Added Results for SANT and MANTa in text. Should we add the results in the table as well? Proposal inserted: confusion matrix and values.}
-% 	\item I (Markus) do not understand the RMSE on "Training"!?
-% 	\ch{Should we delete the training column? and just show the validation and test results?}
-% 	\item I think the main point where reviewers might/will complain is the lack of state-of-the-art baselines. A plain KF seems like an easy baseline,
-% 	      particularly given the nice discussion on related work earlier on. As a reviewer, I would like to see a more competitive baseline. Not sure though,
-% 		  if this can be done quickly. We can also ignore, submit as is and see what the feedback is.
-% 	\ch{Currenlty no other work was found. If we find one, we will include it.}
-% \end{itemize}}
+\section{Experimental evaluation}
 
 The developed networks can be modularly integrated into the Tracking-by-Detection framework, effectively replacing classical heuristic algorithms.
 SPENT substitutes the state predictions of the Kalman Filter.
@@ -517,22 +503,20 @@ thereby achieving accurate state predictions without external correction.
 The model is suitable for real-time applications and represents a viable alternative to classical prediction methods.
 Within the context of the KITTI dataset, encompassing both cars and vans, our model attained a Root Mean Square Error of 0.029 for the positional prediction of all objects within the test dataset, representing 31 Tracks (see Table \ref{tab::SpentRmseComparison}).
 This performance metric translates to an average deviation of 0.42 meters for predictions pertaining to the X coordinate and 0.23 meters for those related to the Y coordinate.
-Using an inhouse implemented Kalman Filter carried by Daimler Truck Research Group following \cite{KF_BoundingBD.2023,KF_Bewley.2016}, an RMSE of 0.066 was achieved on the same data set.
+Using an inhouse implemented Kalman Filter carried by Research Group following \cite{KF_BoundingBD.2023,KF_Bewley.2016}, an RMSE of 0.066 was achieved on the same data set.
+
 \begin{table}[htbp]
-    %\sffamily %ME: I'd keep that in the regular LaTeX font ...
     \centering
-    \caption{Comparison of RMSE values for the SPENT and Kalman Filter implemented by Daimler Truck Research Group.}
-	% The KITTI dataset filtered for cars and vans objects was used and split into training, validation, and test datasets.
-	% 90\% of the data with 624 Tracks was used for training, 5\% for validation, and 5\% for testing.}
+    \caption{Comparison of RMSE values for the SPENT and Kalman Filter implemented by Research Group.}
     \resizebox{0.48\textwidth}{!}{%
     \begin{tabular}{|l|c|c|c|}
         \hline
         \textbf{-- Dataset --} & \textbf{Training} & \textbf{Validation} & \textbf{Testing} \\
-		Number of tracks & 562 & 31 & 31 \\
+        Number of tracks & 562 & 31 & 31 \\
         \hline
-		\hline
+        \hline
         \textbf{Model} & \multicolumn{3}{c|}{\textbf{RMSE}} \\
-		\hline
+        \hline
         SPENT & 0.025 & 0.027 & 0.029 \\
         \hline
         KF & 0.066 & 0.065 & 0.066 \\
@@ -545,50 +529,62 @@ Using an inhouse implemented Kalman Filter carried by Daimler Truck Research Gro
 For another primary task of the TbD MOT method, data association, SANT was developed as a replacement for the classical Global Nearest Neighbor (GNN) method.
 SANT can replace algorithms for calculating a distance metric and assignment procedures such as the Hungarian Algorithm (HA) with a learned, data-driven assignment logic.
 Based on a defined validation dataset with approximately 2700 samples, SANT achieves an accuracy of 95\%.
-\ch{Confusion matrix must be updated. Just a first suggestion for further discussion.}
 
-% \begin{figure}[htbp]
-% 	\centerline{\includegraphics[width=0.95\linewidth]{figs/SANT_confusion_mat.png}}
-% 	\centerline{\includegraphics[width=0.55\linewidth]{figs/SANT_confusion_mat_values.png}}
-% 	\caption{Confusion matrix for the SANT network.}
-% 	\label{pic::SantConfusion}
-% \end{figure}
-
-% Detailed data analysis identified limitations affecting network performance.
-% Verification results indicate that MANTa achieves an assignment accuracy of 95\% for the six most frequently occurring association sets.
 MANTa is an advancement of SANT and addresses the limitation of individual assignment.
 This network extension is capable of assigning a set of sensor objects ($m$) to a set of tracks ($n$).
 This means MANTa is trained to assign a list of sensor objects (SOs) to a list of tracks in a single operational step on the same dataset as SANT and achieved an assignment accuracy of 95\% for the six most frequently occurring association sets.
 Thus are sets with one to six tracks per time step.
 
+\begin{table}[htbp]
+    \centering
+    \caption{Data association results for the SANT and MANTa networks.}
+    \resizebox{0.48\textwidth}{!}{
+    \begin{tabular}{|p{0.1\textwidth}|p{0.1\textwidth}|p{0.1\textwidth}|}
+        \hline
+        \textbf{Data} & \multicolumn{2}{c|}{\textbf{Simultaneous Tracks per timestep}} \\
+        \textbf{--  --} & \textbf{1 to 6} & \textbf{7 to 16} \\
+        \hline
+        \hline
+        \textbf{Model} & \multicolumn{2}{c|}{\textbf{Association Accuracy}} \\
+        \hline
+        \ac{SANT} & 95\% & 95\% \\
+        \hline
+        \ac{MANTa} & 95\% & 70\% \\
+        \hline
+    \end{tabular}
+    }
+    \label{tab::SpentRmseComparison}
+\end{table}
+In the context of the entire KITTI dataset, which includes both cars and vans objects,
+MANTa achieves an average association accuracy of 70\%.
+This limitation was primarily attributed to the characteristics of the extracted data.
+As illustrated in Figure {\ref{pic::MantaTracks}}, the distribution of the numberof existing tracks per time step reveals significant insights.
+
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_tracks.png}}
+    \centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_tracks.png}}
 	\caption{The diagram shows the distribution of the number of existing tracks per time step.
 		For the KITTI dataset, which includes both car and van objects. It reveals that time steps containing one to six tracks constitute 81.5\% of the samples (6374 of 7827).
 		The ledgend shows the absolute number of samples which contain the respective number of tracks.
 		In 29.9\% of the samples, the data contains one track, in 14,7\% two tracks. Only 18.5\% of the samples contain more than six tracks, which leads to an unbalanced dataset (1448 of 7827 samples).}
 	\label{pic::MantaTracks}
 \end{figure}
-
-In the context of the entire KITTI dataset, which includes both cars and vans objects,
-MANTa achieves an average association accuracy of 70\%.
-This limitation was primarily attributed to the characteristics of the extracted data.
-As illustrated in Figure {\ref{pic::MantaTracks}}, the distribution of the numberof existing tracks per time step reveals significant insights.
 Notably, time steps containing at least one track constitute nearly one-third of the entire dataset, accounting for 29.9\% of the data, which corresponds to an absolute count of 2315 samples.
 Time steps containing one to six tracks constitute 81.5\% of the samples and are therefore 6374 of 7827 samples.
-%MD: Du schreibst using a reduced dataset, aber wie denn reduced? Das muss direkt in diesen Satz.
-%CH: Habe ich so eingefügt.
 Consequently, tests were conducted using a reduced dataset with one to six tracks per time step to demonstrate the multi-association capability of the network.
 MANTa correctly assigns 95\% of the dataset for time steps containing one to six tracks.
 This result confirms MANTa's proficiency in handling data with the appropriate dataset, as SANT also achieves a validation accuracy of approximately 95\% across the entire KITTI dataset (including cars and vans).
 The primary advantage of MANTa over SANT is its ability to assign multiple sensor objects to multiple tracks in a single operational step.
-%MD: Über den Absatz hier drüber lohnt es nochmal zu sprechen.
-
 
 
 \section{Conclusion}
-\menz{What about a discussion section, where the experimental results are critically analyzed and future ideas for improvement are outlined? }
-\md{Most important results, critical analysis (optional), future work: attention vs LSTMs?, größere Datensätz, association probabilities?}
+In this work, we have developed and evaluated two neural network models, SPENT and SANT, as replacements for classical heuristic algorithms in the Tracking-by-Detection framework. SPENT effectively substitutes the state predictions of the Kalman Filter, achieving a Root Mean Square Error (RMSE) of 0.029 for positional predictions on the KITTI dataset, significantly outperforming the traditional Kalman Filter which achieved an RMSE of 0.066.
+
+SANT, designed for data association tasks, replaces the classical Global Nearest Neighbor (GNN) method and achieves an impressive accuracy of 95\% on a validation dataset with approximately 2700 samples. Furthermore, MANTa, an extension of SANT, addresses the limitation of individual assignment by assigning sets of sensor objects to tracks in a single operational step, maintaining a high accuracy of 95\% for the most frequently occurring association sets.
+
+Our results demonstrate that the developed models are suitable for real-time applications and represent viable alternatives to classical prediction and data association methods.
+While the models show significant improvements over traditional methods, there are areas that require further investigation. The performance of MANTa on larger datasets and its ability to handle more complex association probabilities need to be explored.
+Future research will focus on comparing the performance of attention mechanisms versus LSTMs in the context of state prediction and data association.
+And also on evaluating the models on larger datasets to ensure scalability and robustness.
 
 \section*{Acknowledgments}
 We would like to express our sincere thanks to the organizations that provided financial support for this research project, namely the Daimler Truck AG and the Baden-Württemberg Cooperative State University (DHBW) Stuttgart.
