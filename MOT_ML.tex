@@ -314,9 +314,9 @@ The cost function is evaluated for several sequences, each with numerous time st
 For our prediction network the cost function is half the mean-square-error of the predictions added up for each time stamp in the training set, normalized by the total number of all time stamps $T$ in the used sequences.
 The factor of $\frac{1}{2}$ simplifies the gradient during backpropagation:
 \begin{equation}
-	cost = \frac{1}{2}\frac{1}{T} \sum_{t=1}^{T}\frac{1}{k}\sum_{i=1}^{k}{({Y_{(t),i}}-{\hat{Y}_{(t),i}})}^2,
+	cost = \frac{1}{2}\frac{1}{T} \sum_{t=1}^{T}\frac{1}{k}\sum_{i=1}^{k}{({Y_{t,i}}-{\hat{Y}_{t,i}})}^2,
 \end{equation}
-where $Y_{(t),i}$ refers to the $i$-th entry in the state vector at time stamp $t$. During training, the average cost is calculated using the observations in the mini-batch, so $T$ is given by the mini-batch length.
+where $Y_{t,i}$ refers to the $i$-th entry in the state vector at time stamp $t$. During training, the average cost is calculated using the observations in the mini-batch, so $T$ is given by the mini-batch length.
 
 \subsection{Single Association Network (SANT)}
 Our association network uses a data-driven approach to solve the NP-hard data association problem {\cite{DA_hungarian.1955,DA_JPDA.1993}}, which traditionally requires significant computational effort for optimal solutions {\cite{DA_hungarian.1955}}.
@@ -327,17 +327,17 @@ In the formulation of \ac{SANT}, we conceptualized data association as a tempora
 For \ac{SANT} we focus on the association of a singular sensor object, denoted as $Z_{(t,1)}$, with a collection of tracks, represented as $X_{(t,1:n)}$.
 These tracks were carefully curated from the KITTI dataset, which comprises annotated camera recordings.
 We note, however, that genuine \ac{GT} data for the specific association problem at hand is not available.
-To guarantee the unambiguity of assigning a \ac{SO} to a single track, each \ac{SO} was synthetically generated at a given time stamp from the pre-existing track set of that time stamp. 
+To guarantee the unambiguity of assigning a \ac{SO} to a single track, each \ac{SO} was synthetically generated at a given time stamp from the pre-existing track set of that time stamp.
 %MD: Hier muss noch ergänzt werden, wie genau die erzeugt wurden!
 %CH: die Beschreibung in den folgednen Sätzen ist nicht ausreichend?
 Furthermore, to simulate realistic sensor data from the \ac{GT} data, artificial noise was introduced.
 This process was designed to reflect the inherent inaccuracies and uncertainties present in real-world sensor measurements.
 To achieve this, we add noise with a maximum of 3\% to each of the current state vector values.
-The data set was created in 7 iterations, so that the noise intensity was increased by 0.5\% per iteration.
+The data set was created in 6 iterations, so that the noise intensity was increased by 0.5\% per iteration.
 As shown in figure {\ref{pic::SantArch}} the data format was created accordingly to enable index-based track assignment for \ac{SANT}.
 The size of the input matrix therefore corresponds to $k \times n + 1$.
 With $k = 5$ as the number of state values for our work and $n=16$ as the maximum number of tracks per time stamp.
-The actual number of tracks can vary between 0 and a maximum of 16 objects, as is given by the KITTI data set using our selected objects (cars and vans) {\cite{Geiger2012CVPR}}. %MD: Add Kitti citation! %CH: done
+The actual number of tracks can vary between 0 and a maximum of 16 objects, as is given by the KITTI data set using our selected objects (cars and vans) {\cite{Geiger2012CVPR}}.
 A comprehensive analysis of the data is presented in the \ac{MANTa} section.
 
 \paragraph{Network architecture}
