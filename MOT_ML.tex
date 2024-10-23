@@ -387,11 +387,11 @@ To manage varying sequence lengths, we pad shorter sequences with special tokens
 We used zeros as padding tokens, added to the end of sequences as needed, allowing efficient batch processing and consistent training without affecting model performance due to varying sequence lengths.
 As noted by Reddy et al. {\cite{DL_padding.2019}}, while padding introduces noise, it is crucial for aligning sequences in mini-batches for \ac{LSTM} training.
 To reduce this noise, we sorted the training dataset by sequence length before applying mini-batch padding.
-This method, illustrated in Figure {\ref{pic::Padding}}, significantly minimizes the padding (shown in turquoise) required for each mini-batch, which was essential for achieving convergence during training.
+This method, illustrated in figure {\ref{pic::Padding}}, significantly minimizes the padding (shown in turquoise) required for each mini-batch, which was essential for achieving convergence during training.
 
 
 \paragraph{Network architecture}
-As depicted in Figure \ref{pic::SpentArch}, the schematic illustration of the generic structure of the prediction network illustrates how the architecture is adeptly designed to address the challenges of real-time state prediction.
+As depicted in figure \ref{pic::SpentArch}, the schematic illustration of the generic structure of the prediction network illustrates how the architecture is adeptly designed to address the challenges of real-time state prediction.
 This representation highlights the strategic deployment of the \ac{LSTM} layer for storing and processing object-specific information, facilitating accurate and timely predictions of object states.
 
 \begin{figure}[bp]
@@ -413,7 +413,7 @@ This representation highlights the strategic deployment of the \ac{LSTM} layer f
 % The dimensionality of the final FC layer is meticulously aligned with the number of response variables required by the output layer, as elucidated in \cite{DL_FC.2010}.
 The foundational layer of our \ac{SPENT} is an \ac{LSTM} layer, where hidden states are dynamically updated at each timestep based on incoming measurement data.
 This mechanism allows continuous correction throughout each track's sequence, enhancing predictive accuracy.
-The number of hidden units correlates with the amount of information retained over time, as shown in Figure \ref{pic::SpentArch}.
+The number of hidden units correlates with the amount of information retained over time, as shown in figure \ref{pic::SpentArch}.
 These hidden states encapsulate information from all preceding timesteps, ensuring comprehensive temporal understanding.
 Following the \ac{LSTM} layer, we incorporate a Batch-Normalization layer which accelerates training and promotes convergence by mitigating internal covariate shift \cite{DL_batch_norm.2015}.
 Next ist a Relu layer, which applies a non-linear threshold operation, setting values below zero to zero.
@@ -459,16 +459,17 @@ Furthermore, to simulate realistic sensor data from the \ac{GT} data, artificial
 This process was designed to reflect the inherent inaccuracies and uncertainties present in real-world sensor measurements.
 To achieve this, we add noise with a maximum of 3\% to each of the current state vector values.
 The data set was created in 7 iterations, so that the noise intensity was increased by 0.5\% per iteration.
-As shown in Figure {\ref{pic::SantArch}} the data format was created accordingly to enable index-based track assignment for \ac{SANT}.
+As shown in figure {\ref{pic::SantArch}} the data format was created accordingly to enable index-based track assignment for \ac{SANT}.
 The size of the input matrix therefore corresponds to $k \times n + 1$.
 With $k = 5$ as the number of state values for our work and $n=16$ as the maximum number of tracks per time step.
 The actual number of tracks can vary between 0 and a maximum of 16 objects, as is given by the KITTI data set using our selected objects (cars and vans). %MD: Add Kitti citation!
 A comprehensive analysis of the data is presented in the \ac{MANTa} section.
 
 \paragraph{Network architecture}
-The network as depicted in fig. \ref{pic::SantArch} is designed as a sequence-to-classification network.
-At each time step, a matrix is passed as input holding both, the information of the one to-be-assigned \ac{SO} and the currently multiple tracked objects.
+The network as depicted in figure \ref{pic::SantArch} is designed as a sequence-to-classification network.
+At each time step, a matrix is passed as input holding both, the information of the one to-be-assigned \ac{SO} and the multiple currently-tracked objects.
 
+%MD: da wir m unten nutzen für die verschiedenen Assoziationen und du oben k als Anzahl an Einträge für den state Vector eingefügt hast, muss bei Z_t,m das m mit einem k ersetzt werden. Dazu ist Z noch nicht italic, im Text ist es überall italic.
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=0.95\linewidth]{figs/SANT_network_arch.png}}
 	\caption{Schematic representation of the generic network structure of SANT.}
@@ -476,7 +477,7 @@ At each time step, a matrix is passed as input holding both, the information of 
 \end{figure}
 Architectures with \ac{RNN}, \ac{GRU}, \ac{LSTM} and \ac{BILSTM} layers were tested.
 As part of these investigations, the best association performance was achieved with the BILSTM layer.
-The network shown in Figure {\ref{pic::SantArch}} achieved the best performance in comparison with a Validation Accuracy of 95\%.
+The network shown in figure {\ref{pic::SantArch}} achieved the best performance in comparison with a Validation Accuracy of 95\%.
 By combining the outputs of two LSTM layers that pass the information in opposite directions, {\cite{DL_LSTM.1997}} demonstrates the ability to capture the context from both ends of the sequence.
 The resulting architecture is called \ac{BILSTM}.
 The output mode has been configured in the \ac{BILSTM} layer, so that the layer is able to receive a sequence as input and output value vector.
@@ -650,7 +651,7 @@ Thus are sets with one to six tracks per time step.
 In the context of the entire KITTI dataset, which includes both cars and vans objects,
 MANTa achieves an average association accuracy of 70\%.
 This limitation was primarily attributed to the characteristics of the extracted data.
-As illustrated in Figure {\ref{pic::MantaTracks}}, the distribution of the numberof existing tracks per time step reveals significant insights.
+As illustrated in figure {\ref{pic::MantaTracks}}, the distribution of the numberof existing tracks per time step reveals significant insights.
 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_tracks.png}}
