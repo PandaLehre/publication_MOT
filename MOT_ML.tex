@@ -12,7 +12,8 @@
 \usepackage{graphicx}
 \usepackage{cite}
 \usepackage{enumerate}
-
+\usepackage{float}
+\usepackage{stfloats}
 \usepackage{acro}
 
 \usepackage{capt-of}
@@ -159,9 +160,6 @@ However, development for automated driving is highly complex~{\cite{AD_Overview.
 
 In the automotive industry, tracking systems are typically developed as platform software designed to support a range of vehicle models, each of which may have varying sensor placements, system configurations, or even entirely different sensor suites. These systems must perform reliably across a wide spectrum of driving scenarios, which can introduce performance challenges in specific situations. Traditional solutions often rely on heuristics and manual parameter tuning, making the software cumbersome to maintain and difficult to extend. Moreover, these hand-engineered methods lack automated optimization, resulting in suboptimal performance in complex driving conditions. To address these limitations, we propose a data-driven tracking framework that allows for fine-tuning for specific configurations, thereby improving both maintainability and adaptability.
 
-
-%MD: ich würde bei allen Tu und Tc, jeweils das u oder das c hochstellen. Es ist total ungewöhnlich eine Variable mit ZWEI Charactern abzukürzen
-%CH: done. Bild und Texte angepasst.
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=0.99\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
 	\caption{
@@ -324,7 +322,7 @@ Unlike conventional methods {\cite{DL_RNN_mot.2016, DL_RNN_data_association.2019
 
 \paragraph{Data preprocessing}
 In the formulation of \ac{SANT}, we conceptualized data association as a temporally structured challenge, adopting a sequence-to-vector paradigm.
-For \ac{SANT} we focus on the association of a singular sensor object, denoted as $Z_{(t,1)}$, with a collection of tracks, represented as $X_{(t,1:n)}$.
+For \ac{SANT} we focus on the association of a singular sensor object ($m=1$), denoted as $Z_{(t,m=1)}$, with a collection of $n$ tracks, represented as $X_{(t,1:n)}$.
 These tracks were carefully curated from the KITTI dataset, which comprises annotated camera recordings.
 We note, however, that genuine \ac{GT} data for the specific association problem at hand is not available.
 To guarantee the unambiguity of assigning a \ac{SO} to a single track, each \ac{SO} was synthetically generated at a given time stamp from the pre-existing track set of that time stamp.
@@ -335,8 +333,10 @@ This process was designed to reflect the inherent inaccuracies and uncertainties
 To achieve this, we add noise with a maximum of 3\% to each of the current state vector values.
 The data set was created in 6 iterations, so that the noise intensity was increased by 0.5\% per iteration.
 As shown in figure {\ref{pic::SantArch}} the data format was created accordingly to enable index-based track assignment for \ac{SANT}.
-The size of the input matrix therefore corresponds to $k \times n + 1$.
+The size of the input matrix therefore corresponds to $k \times (n + 2)$.
 With $k = 5$ as the number of state values for our work and $n=16$ as the maximum number of tracks per time stamp.
+%CH: Erklärung für +2 hinzugefügt.
+To give the network the freedom to set up new tracks and also the option to not associate or set up a new track, the size $n + 2$ must be defined.
 The actual number of tracks can vary between 0 and a maximum of 16 objects, as is given by the KITTI data set using our selected objects (cars and vans) {\cite{Geiger2012CVPR}}.
 A comprehensive analysis of the data is presented in the \ac{MANTa} section.
 
@@ -344,8 +344,6 @@ A comprehensive analysis of the data is presented in the \ac{MANTa} section.
 The network as depicted in figure {\ref{pic::SantArch}} is designed as a sequence-to-classification network.
 At each time stamp, a matrix is passed as input holding both, the information of the one to-be-assigned \ac{SO} and the multiple currently-tracked objects.
 
-%MD: da wir m unten nutzen für die verschiedenen Assoziationen und du oben k als Anzahl an Einträge für den state Vector eingefügt hast, muss bei Z_t,m das m mit einem k ersetzt werden. Dazu ist Z noch nicht italic, im Text ist es überall italic.
-%CH: habe es nochmal geprüft, ich denke es passt so (wie in Teams geschrieben) Powerpoint: alle Formeln in Cambria Math (entspicht italic)
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=0.95\linewidth]{figs/SANT_network_arch.png}}
 	\caption{Schematic representation of the generic network structure of \ac{SANT}.}
@@ -366,32 +364,34 @@ This approach employs one-hot encoding to transform class representations into b
 
 The cross-entropy loss for each prediction, relative to its corresponding target value, is computed as follows in the cost function:
 \begin{equation}
-    cost = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{C} T_{ij} \log(Y_{ij}),
+    cost = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{C} T_{i,j} \log(Y_{i,j}),
 \end{equation}
-where $N$ denotes the total number of samples, $C$ represents the number of class categories, $T_{ij}$ is the GT indicator for whether class $j$ is the correct classification for sample $i$, and $Y_{ij}$ is the predicted probability that sample $i$ belongs to class $j$, as derived from the softmax function output.
+where $N$ denotes the total number of association samples, $C$ represents the number of class categories, $T_{i,j}$ is the GT indicator for whether class $j$ is the correct classification for sample $i$, and $Y_{i,j}$ is the predicted probability that sample $i$ belongs to class $j$, as derived from the softmax function output.
 
 \subsection{Multi-Association Network (MANTa)}
-The development of the SANT demonstrated that data-driven association logic can be effectively learned by a deep learning model.
+The development of the \ac{SANT} demonstrated that data-driven association logic can be effectively learned by a deep learning model.
 Building upon this foundation, the objective was to create a network capable of associating multiple sensor objects ($m$ SOs) with multiple tracks ($n$ tracks) in a single operational step.
 Unlike the \ac{SANT}, MANTa is specifically designed to handle the simultaneous association of multiple sensor objects to multiple tracks.
 To address this complex task, MANTa was developed to solve the following association scenarios:
 
+%CH: es könnte auch dargestellt werden, was mit MANTa adressiert wurde (m to x)
 \begin{itemize}
-    \item \textbf{1 to n} - one sensor object (SO) with $n$ tracks
+    \item \textbf{1 to n} - one sensor object (SO) with $n$ tracks %(as \ac{SANT})
     \item \textbf{m to 1} - $m$ sensor objects (SOs) with one track
     \item \textbf{m to n} - $m$ sensor objects (SOs) with $n$ tracks
     \item \textbf{m to 0} - $m$ sensor objects (SOs) with no tracks
-    \item \textbf{0 to n} - no sensor objects (SOs) with $n$ tracks
-    \item \textbf{0 to 0} - no sensor objects (SOs) with no tracks
 \end{itemize}
+    % \item \textbf{0 to n} - no sensor objects (SOs) with $n$ tracks %(as \ac{SANT})
+    % \item \textbf{0 to 0} - no sensor objects (SOs) with no tracks %(as \ac{SANT})
+% \end{itemize}
 
-
-Being able to cover these scenarios enables \ac{MANTa} to adeptly manage the complexities inherent in \ac{MOT}, providing a robust and scalable solution for real-world applications.
-With the integration of \ac{MANTa} into a \ac{MOT} framework, the question can be asked whether a 0 to n and 0 to 0 assignment is a task to be solved.
-If no new \ac{SO} is detected, the prediction of the last operation step can be continued until the track is deleted on the basis of the decreasing probability of existence within the track management module.
-The association algorithm or the \ac{MANTa} does not need to be called if no tracks and \acp{SO} are detected.
-Although these assignment options can therefore be resolved via the programme structure in the \ac{MOT} framework, these options are also taken into account.
-This is intended to ensure that the network also learns to deal with \acp{SO} and tracks that are no longer available and capture information over time when no data is available.
+%CH: habe ich jetzt komplett rausgenommen 
+% Being able to cover these scenarios enables \ac{MANTa} to adeptly manage the complexities inherent in \ac{MOT}, providing a robust and scalable solution for real-world applications.
+% With the integration of \ac{MANTa} into a \ac{MOT} framework, the question can be asked whether a 0 to n and 0 to 0 assignment is a task to be solved.
+% If no new \ac{SO} is detected, the prediction of the last operation step can be continued until the track is deleted on the basis of the decreasing probability of existence within the track management module.
+% The association algorithm or the \ac{MANTa} does not need to be called if no tracks and \acp{SO} are detected.
+% Although these assignment options can therefore be resolved via the programme structure in the \ac{MOT} framework, these options are also taken into account.
+% This is intended to ensure that the network also learns to deal with \acp{SO} and tracks that are no longer available and capture information over time when no data is available.
 
 \paragraph{Data preprocessing}
 The training, validation and test data set of \ac{MANTa} was created according to the described objective.
@@ -399,6 +399,8 @@ Figure {\ref{pic::MantaData}} shows the input data structure with corresponding 
 The respective tracks per time stamp were extracted across all sequences.
 All extracted tracks were each modified with noise as in the \ac{SANT} development and then normalized.
 Figure {\ref{pic::MantaData}} shows the non-noisy \acp{SO} to enable a example assignment (given by the one-hot vector at the bottom) and increase understanding of the association procedure.
+The values obtained in this way were arranged as measurements (sensor objects) in a pseudo-random order per time stamp in an $F_{total} \cdot T_{\max}$ matrix.
+The one-hot vector shown in figure {\ref{pic::MantaData}} shows the GT assignment of the first sensor object to the track at position two.
 \begin{strip}
 	\includegraphics[width=\linewidth]{figs/MANTa_data.png}
 	\captionof{figure}{MANTa, data structure, shows the non-noisy \acp{SO} to enable a visual assignment and increase understanding of the association procedure.
@@ -408,39 +410,37 @@ Figure {\ref{pic::MantaData}} shows the non-noisy \acp{SO} to enable a example a
 	\label{pic::MantaData}
 \end{strip}
 
-The values obtained in this way were arranged as measurements (sensor objects) in a pseudo-random order per time stamp in an $F_{total} \cdot T_{max}$ matrix.
-The one-hot vector shown in figure \ref{pic::MantaData} shows the GT assignment of the first sensor object to the track at position two.
-Where $F_{total}$ represents the total number of features and $T_{max}$ stands for the maximum number of existing tracks per time stamp.
+Where $F_{total}$ represents the total number of features and $T_{\max}$ stands for the maximum number of existing tracks per time stamp.
 The total number of features results from the status values per track and SO set.
 (here, $F_{total} = 2 \cdot m$, with $m=5$ being the number of state values in this investigation).
-For the defined test case with cars and vans, the KITTI data set results in $T_{max}=16$.
+For the defined test case with cars and vans, the KITTI data set results in $T_{\max}=16$.
 There are seven tracks in the time stamp of the sequence shown.
-Each track receives a new measurement in this time stamp, and an additional object was detected (new \ac{SO}).
+Each track receives a new measurement in this time stamp, and an additional object was detected (new \ac{SO}), leads to a amount of 8 sensor objects.
 
 The \ac{GT} assignment is displayed at the bottom of the section.
-The assignment output can be thought of a matrix with dimensions maximum number of tracks $T_{max}=16$ and the number of possible assignment classes $C=18$.
+The assignment output can be thought of a matrix with dimensions maximum number of tracks $T_{\max}=16$ and the number of possible assignment classes $C=18$.
 Where each field can either be zero (no assignment) or one (assignment).
-For numerical reasons, we unfold this matrix to a one-hot vector of dimension $O_{max}=288=16 \cdot 18$.
+For numerical reasons, we unfold this matrix to a one-hot vector of dimension $O_{\max}=288=16 \cdot 18$.
 The assignment classes result from the described index class 1 to 16 and additional degrees of freedom.
 One degree of freedom of the assignment represents the case that no measurement exists, another that the measurement should not be assigned.
 The section of the one-hot vector shown (1:18) thus shows the GT assignment of the first sensor object to the track at position two.
 
-As for SANT, the cross-entropy cost function calculates the cross-entropy loss between network predictions $Y_{k,i}$ and target values $T_{k,i}$ for the unique assignment task for mutually exclusive classes.
-The already introduced one-hot vector is used to represent the class in binary form in a vector and thus generate a 1-to-$O_{max}$ code.
+As for SANT, the cross-entropy cost function calculates the cross-entropy loss between network predictions $Y_{i,j}$ and target values $T_{i.j}$ for the unique assignment task for mutually exclusive classes.
+The already introduced one-hot vector is used to represent the class in binary form in a vector and thus generate a 1-to-$O_{\max}$ code.
 The following formula is used to calculate the cross-entropy loss values for each time stamp $t$:
 \begin{equation}
-    loss_t = \sum_{i=1}^{O_{max}} \left( T_{n,i} \ln(Y_{n,i}) + (1 - T_{n,i}) \ln(1 - Y_{n,i}) \right)
+    loss_t = \sum_{i=1}^{O_{\max}} \left( T_{i,j} \ln(Y_{i,j}) + (1 - T_{i,j}) \ln(1 - Y_{i,j}) \right)
 \end{equation}
 Then, all scalars obtained per time stamp are summarized and divided by the number of samples $N$ of a minibatch for the cost function:
 \begin{equation}
-    cost = -\frac{1}{X} \sum_{x=1}^{S} loss_t
+    cost = -\frac{1}{N} \sum_{x=1}^{N} loss_t
 \end{equation}
 
 \paragraph{Network architecture}
 The schematic representation {\ref{pic::MantaArch}} shows the developed network architecture for the simultaneous association of a large number of sensor objects to a large number of tracks.
 This is what we call a \ac{MANTa}.
 
-\begin{figure}[htbp]
+\begin{figure}[h]
 	\centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_network_arch.png}}
 	\caption{Schematic representation of the generic network structure of MANTa.}
 	\label{pic::MantaArch}
@@ -449,10 +449,10 @@ This is what we call a \ac{MANTa}.
 The \ac{BILSTM} layer processes the input data as already explained for \ac{SANT}\@.
 The task of associating a \ac{SO} list with a track list requires a separate network part for each track.
 This extension is labelled accordingly in figure {\ref{pic::MantaArch}}.
-For each track (from 1 to $T_{max}=16$), the MANTa has been developed with the fully connected, softmax stack that was introduced for \ac{SANT}.
-Each softmax output consists of a vector with $C=18$ elements,n which represents the most probable assignment.
+For each track (from 1 to $T_{\max}=16$), the MANTa has been developed with the fully connected, softmax stack that was introduced for \ac{SANT}.
+Each softmax output consists of a vector with $C=18$ elements, which represents the most probable assignment.
 This means that a single assignment can be realized for each track.
-The vectors 1 to $T_{max}$ are linked together in the Concatenation Layer.
+The vectors 1 to $T_{\max}$ are linked together in the Concatenation Layer.
 This creates a vector with 288 elements, whereby 18 elements each represent the most probable assignment of a measurement to a track.
 
 \section{Experimental Evaluation}
