@@ -11,6 +11,7 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{cite}
+\usepackage{enumerate}
 
 \usepackage{acro}
 
@@ -127,10 +128,8 @@
 % - A Streamlined Approach to Multi-Object Tracking: Data-Based Prediction and Association Techniques
 % - Enhancing Tracking: Integrating Modular Neural Networks into a Kalman Framework
 % - Data-Driven Multi-Object Tracking: Integrating Modular Neural Networks in a Kalman Framework
-% Data-Driven Object Tracking: Integrating Modular Neural Networks into a Kalman Framework
 % CH:
-% MD:Neuer Titelvorschlag
-\title{Empirical Object Tracking: Integrating Modular Neural Networks into a Kalman Framework}
+\title{Data-Driven Object Tracking: Integrating Modular Neural Networks into a Kalman Framework}
 
 \author{Christian Alexander Holz, Christian Bader, Markus Enzweiler, Matthias Drüppel
 	\thanks{C. Holz is with Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany}
@@ -211,14 +210,19 @@ In the automotive industry, tracking systems are typically developed as platform
 % Together, they enable adaptive tracking, overcoming limitations of traditional methods like the \ac{KF} and heuristic-based algorithms.
 %%%%%%% CH: changed caption %%%%%%%
 A schematic representation shows the integration of two \acp{NN} (highlighted in dark blue) within a TbD framework.
-The Association Network can be implemented using either \ac{SANT} or \ac{MANTa}, and works in tandem with the Prediction Network \ac{SPENT}, which predicts object states $X_{t,1:n}$ across time steps based on tracked objects $Tc_{t,1:n}$, which are then associated with sensor observations $Z_{t,1:m}$ by \ac{SANT} or \ac{MANTa}.
+The Association Network can be implemented using either \ac{SANT} or \ac{MANTa}, and works in tandem with the prediction network \ac{SPENT}, which predicts object states $X_{t,1:n}$ across time steps based on tracked objects $Tc_{t,1:n}$, which are then associated with sensor observations $Z_{t,1:m}$ by \ac{SANT} or \ac{MANTa}.
 }
 	\label{pic::MotFramework}
 \end{figure}
 
 \section{Contributions and overview}
-Our primary contribution is the development and evaluation of three \ac{NN} that we label:
-(i) the \ac{SPENT}, (ii) the \ac{SANT}, and (iii) the \ac{MANTa}.
+Our primary contribution is the development, single evaluation and joint integration of three novel \ac{NN} that we label:
+\begin{enumerate}[(i)]
+    \item SPENT (Single-Prediction Network) which predicts the states of tracked objects.
+    \item SANT (Single-Association-Network) which associates one incoming sensor objects to all currently tracked objects.
+    \item MANTa (Multi-Association Network) which associates multiple incoming sensor objects to all currently tracked objects.
+\end{enumerate}
+
 Figure {\ref{pic::MotFramework}} provides an overview of our approach in which the association network can be implemented using either \ac{SANT} or \ac{MANTa}.
 The input for the proposed prediction network (i) are the \acp{SO} $Z_{t,1:m}$ in every time step.
 If new objects are detected by the sensors, these are stored in a $k$-dimensional state vector containing information such as object position $(x,y)$, yaw angle and object dimensions
@@ -273,7 +277,7 @@ In the context of this work, we put forward the hypothesis that a \ac{GRU}-based
 % Therefore, most recent approaches for tracking multiple objects rely on online methods that do not depend on future sensor information.
 % Online methods use various features to estimate the similarity between the recognized objects and the existing tracks.
 % This can be done on the basis of their predicted positions or even similarities in appearance.
-Tracking systems for ADAS run on embedded devices in real-time. They must provide  immediate state prediction of objects directly after their first detection {\cite{KF_Bewley.2016,DL_Wojke.2017}}, making offline tracking methods unsuitable {\cite{offline_mot.2017}}. Consequently, modern multi-object tracking approaches rely on online methods, which cannot use future sensor data. These methods estimate object-track similarity based on predicted positions or object features like appearance.
+Tracking systems for ADAS run on embedded devices in real-time. They must provide  immediate state prediction of objects directly after their first detection {\cite{KF_Bewley.2016,DL_Wojke.2017}}, making offline tracking methods like {\cite{offline_mot.2017}} unsuitable. Consequently, modern multi-object tracking approaches rely on online methods, which do not have access to future sensor data. These methods estimate object-track similarity based on predicted positions or object features like appearance.
 
 \paragraph{Kalman Filter based tracker}
 %%%%%%% CH: Following part - changed / chatGPT shorted based on CB approches %%%%%%%
@@ -290,10 +294,10 @@ Our \ac{ML} models are integrated into a \ac{KF}-based tracking system, widely u
 Similar to our methodologies, RNN-based approaches for online multi-target tracking have been introduced in~{\cite{DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_RNN_data_association.2020}}.
 Specifically, the work by Mertz et al. {\cite{DL_RNN_data_association.2019}} focuses on data association within a TbD framework.
 Their proposed DeepDA model, a Long Short-Term Memory (LSTM)-based Deep Data Association Network, is designed to learn and execute the task of associating objects across frames.
-This model's ability to discern association patterns directly from data enables the achievement of robust and reliable tracking outcomes, even in environments with significant disturbances.
-Mertz et al. employ a distance matrix, derived from the Euclidean distance measure, as the input for the DeepDA network.
+This model's ability to discern association patterns directly from data enables a robust and reliable tracking outcome, even in environments with significant disturbances.
+Mertz et al. employ a distance matrix, derived from the euclidean distance measure, as the input for the DeepDA network.
 This innovative approach effectively supersedes traditional association algorithms, such as the Hungarian Algorithm.
-It is inferred that the Euclidean distance measure served as a foundation not only for generating the ground truth (GT) training data (i.e., distance matrices) but also for the subsequent evaluation process.
+It is inferred that the euclidean distance measure served as a foundation not only for generating the ground truth (GT) training data (i.e., distance matrices) but also for the subsequent evaluation process.
 However, this is not explicitly stated.
 In our work, we want to enable the network to follow a completely data-driven association logic without forcing a concrete distance metric.
 
@@ -307,14 +311,14 @@ In our work, we want to enable the network to follow a completely data-driven as
 % In tracking tasks, data is processed in real-time, and sequences may not be excessively long.
 % \acp{RNN} can process sequences efficiently without the overhead of attention-based methods, which require calculating attention weights across all time steps for every input \cite{ML_Attention.2017}.
 % For short to medium-length sequences, this can make \acp{RNN} computationally more efficient.
-In our work, we analyze tracks using \ac{LSTM}-based models.
-An alternative is the attention mechanism {\cite{ML_Attention.2017}}, utilized in various studies {\cite{DL_ATT_mot_sot_based.2017,DL_ATT_CNN_mot_sot_based.2017,DL_ATT_CNN_soda.2020,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022}}.
+In this paper, we analyze tracks using \ac{LSTM}-based models.
+An alternative architecture would be the attention mechanism {\cite{ML_Attention.2017}}, utilized in various studies {\cite{DL_ATT_mot_sot_based.2017,DL_ATT_CNN_mot_sot_based.2017,DL_ATT_CNN_soda.2020,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022}}.
 Hung et al. {\cite{DL_ATT_CNN_soda.2020}} focus on soft data association (SoDA), enabling probabilistic associations and accounting for uncertainties by aggregating information from all detections within a temporal window.
 This approach allows the model to learn long-term, interactive relationships from large datasets without complex heuristics.
 However, since tracking tasks involve real-time data processing with relatively short sequences, \acp{RNN} can efficiently handle this without the overhead of calculating attention weights for every input, making them more computationally efficient for short to medium-length sequences.
 
 \section{Tracking with \ac{ML}-based Prediction and Association Networks}
-We apply the tracking-by-detection paradigm, in which a tracker fuses object detections to generate object tracks that are consistent over time. In our study a Kalman Filter framework was implemented following the computational ideas of Vo et al. {\cite{KF_framework.2013}}.
+We apply the \ac{TbD} paradigm, in which a tracker fuses object detections to generate object tracks that are consistent over time. In our study a \ac{KF} framework was implemented following the computational ideas of Vo et al. {\cite{KF_framework.2013}}.
 To enable our models to incorporate temporal information, we use LSTM {\cite{DL_LSTM.1997}} and bidirectional Long Short-Term Memory (BILSTM) network layers {\cite{DL_BILSTM.1997}}, both for the prediction and the association of the sensor objects to the existing tracks.
 
 \subsection{Single Prediction Network (SPENT)}
@@ -334,18 +338,21 @@ In the development of our model, \ac{GT} data comprising vehicle tracks (cars an
 % Tracks with a short temporal length were filtered using a threshold of 3 frames, resulting in a final dataset comprising 624 tracks.
 % This was done to ensure that the network was trained on tracks with a sufficient number of time stamps. In software development of tracking systems, it is common to use a threshold value to filter tracks that are too short to allow a meaningful prediction \cite{DL_DetTrack.2024}.
 We extracted 635 tracks, filtering out shorter tracks using a 3-frame threshold, resulting in 624 tracks for training.
-This ensures the network receives tracks with sufficient time stamps, a common practice in tracking systems to filter out tracks too short for reliable predictions \cite{DL_DetTrack.2024}.
+This ensures the network receives tracks with sufficient time stamps, a common practice in tracking systems \cite{DL_DetTrack.2024}.
 The track lengths vary from a minimum of 4 frames to a maximum of 643 frames (Sequence 20, ID 12).
 
 To enhance model generalization and foster convergence during training, we normalized the state values of tracks at time $t$ (predictors) and at time $t+1$ (targets) in accordance with the methodology outlined in {\cite{DL_book.2019}}.
-This normalization process aimed to standardize the distribution of both predictors and targets to have a mean of zero and a unit variance.
-The mean value $\mu$ and standard deviation $\sigma$ for each state variable were computed across all tracks, employing the subsequent equations:
+This normalization process standardizes the distribution of both predictors and targets to have a mean of zero and a unit variance.
+The mean values $\vec{\mu}$ and standard deviations $\vec{\sigma}$ for each state in the state vectors $\vec{X}_t$ were computed across all tracks. For this, all tracks were joined together, leading to one pseudo-track with total number of time stamps $m$:
+
 \begin{equation}
-	\mu = \frac{1}{m} \sum_{i = 1}^{m} S_i
+	\vec{\mu} = \frac{1}{m} \sum_{t = 1}^{m} \vec{X}_t
 \quad\text{and}\quad
-	\sigma = \sqrt{{\frac{1}{m - 1}} \sum_{i = 1}^{m} |S_i - \mu|^2}
+	\vec{\sigma} = \sqrt{{\frac{1}{m - 1}} \sum_{t = 1}^{m} (\vec{X}_t - \vec{\mu})^{2^*}},
 \end{equation}
-where $S_i$ the total number of all time stamps of all tracks and $m$ is the number of states per track.
+where for $\vec{\sigma}$, the square $(...)^{2^*}$ and the square-root must be applied element wise.
+
+
 
 %%%%%%% CH: Following part - changed / chatGPT shorted based on CB approches %%%%%%%
 % In our approach, we incorporate pre-padding as delineated by Reddy et al. in {\cite{DL_padding.2019}}, where the authors elucidate the effect of padding strategies on the performance of neural networks in sequence-oriented tasks.
@@ -356,6 +363,20 @@ where $S_i$ the total number of all time stamps of all tracks and $m$ is the num
 In our approach, we apply pre-padding as described by Reddy et al. {\cite{DL_padding.2019}}, who examined the impact of padding strategies on sequence-based \acp{NN}.
 They highlight that while both pre-padding and post-padding are feasible, the choice significantly affects performance, especially for \ac{LSTM}-based networks, where maintaining sequence context is critical.
 To manage varying sequence lengths, we pad shorter sequences with special tokens, ensuring all sequences in a batch have uniform length.
+
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=0.9\linewidth]{figs/padding2.png}}
+	% \caption{Analysis of Sequence Padding: Unsorted vs. Sorted Data.
+	% 		Delineates the differential impact of padding on LSTM network training,
+	% 		contingent upon whether the input data sequences are sorted by length.
+	% 		In the upper panel, unsorted data necessitates extensive padding to equalize
+	% 		the sequence lengths within a batch, thereby augmenting the computational overhead.
+	% 		Conversely, the lower panel illustrates that sorting data by sequence length prior
+	% 		to batching significantly curtails the requisite padding.}
+    \caption{Analysis of sequence padding: unsorted vs. sorted data. This figure illustrates the impact of sequence padding on LSTM training based on the sorting of input data. The upper panel shows that unsorted data requires extensive padding to equalize batch sequence lengths, increasing computational overhead. In contrast, the lower panel demonstrates that sorting data by length before batching significantly reduces the necessary padding.}
+	\label{pic::Padding}
+\end{figure}
+
 %%%%%%% CH: Following part - changed / chatGPT shorted based on CB approches %%%%%%%
 % We used zeros as padding tokens, which were appended to the end of a sequence as needed.
 % This allows for efficient batch processing and ensures consistent training of the network without the model performance being affected by the varying sequence lengths.
@@ -367,24 +388,13 @@ We used zeros as padding tokens, added to the end of sequences as needed, allowi
 As noted by Reddy et al. {\cite{DL_padding.2019}}, while padding introduces noise, it is crucial for aligning sequences in mini-batches for \ac{LSTM} training.
 To reduce this noise, we sorted the training dataset by sequence length before applying mini-batch padding.
 This method, illustrated in Figure {\ref{pic::Padding}}, significantly minimizes the padding (shown in turquoise) required for each mini-batch, which was essential for achieving convergence during training.
-\begin{figure}[htbp]
-	\centerline{\includegraphics[width=0.9\linewidth]{figs/padding2.png}}
-	% \caption{Analysis of Sequence Padding: Unsorted vs. Sorted Data.
-	% 		Delineates the differential impact of padding on LSTM network training,
-	% 		contingent upon whether the input data sequences are sorted by length.
-	% 		In the upper panel, unsorted data necessitates extensive padding to equalize
-	% 		the sequence lengths within a batch, thereby augmenting the computational overhead.
-	% 		Conversely, the lower panel illustrates that sorting data by sequence length prior
-	% 		to batching significantly curtails the requisite padding.}
-    \caption{Analysis of Sequence Padding: Unsorted vs. Sorted Data. This figure illustrates the impact of sequence padding on LSTM training based on the sorting of input data. The upper panel shows that unsorted data requires extensive padding to equalize batch sequence lengths, increasing computational overhead. In contrast, the lower panel demonstrates that sorting data by length before batching significantly reduces the necessary padding.}
-	\label{pic::Padding}
-\end{figure}
+
 
 \paragraph{Network architecture}
-As depicted in Figure \ref{pic::SpentArch}, the schematic illustration of the generic structure of the Prediction Network elucidates how the architecture is adeptly designed to address the challenges of real-time state prediction.
+As depicted in Figure \ref{pic::SpentArch}, the schematic illustration of the generic structure of the prediction network illustrates how the architecture is adeptly designed to address the challenges of real-time state prediction.
 This representation highlights the strategic deployment of the \ac{LSTM} layer for storing and processing object-specific information, facilitating accurate and timely predictions of object states.
 
-\begin{figure}[htbp]
+\begin{figure}[bp]
 	\centerline{\includegraphics[width=0.95\linewidth]{figs/SPENT_network_arch.png}}
 	\caption{Schematic representation of the generic structure of \ac{SPENT}.}
 	\label{pic::SpentArch}
@@ -403,29 +413,30 @@ This representation highlights the strategic deployment of the \ac{LSTM} layer f
 % The dimensionality of the final FC layer is meticulously aligned with the number of response variables required by the output layer, as elucidated in \cite{DL_FC.2010}.
 The foundational layer of our \ac{SPENT} is an \ac{LSTM} layer, where hidden states are dynamically updated at each timestep based on incoming measurement data.
 This mechanism allows continuous correction throughout each track's sequence, enhancing predictive accuracy.
-The number of hidden units correlates with the amount of information retained over timesteps, as shown in Figure \ref{pic::SpentArch}.
+The number of hidden units correlates with the amount of information retained over time, as shown in Figure \ref{pic::SpentArch}.
 These hidden states encapsulate information from all preceding timesteps, ensuring comprehensive temporal understanding.
-Following the \ac{LSTM} layer, we incorporate a Batch-Normalization layer to standardize the output before transitioning to the Relu layer.
-This normalization accelerates training and promotes convergence by mitigating internal covariate shift \cite{DL_batch_norm.2015}.
-The Relu layer applies a non-linear threshold operation, setting values below zero to zero.
+Following the \ac{LSTM} layer, we incorporate a Batch-Normalization layer which accelerates training and promotes convergence by mitigating internal covariate shift \cite{DL_batch_norm.2015}.
+Next ist a Relu layer, which applies a non-linear threshold operation, setting values below zero to zero.
 During training, a Dropout layer randomly nullifies input elements with a specified probability, regularizing the model and preventing overfitting \cite{DL_dropout.2014}.
-The architecture concludes with a Fully Connected (FC) Layer, which integrates insights from previous layers, with its dimensionality aligned to the number of required response variables {\cite{DL_FC.2010}}.
+The architecture concludes with a Fully Connected (FC) Layer, which integrates insights from previous layers, with its dimensionality aligned to the number of required output variables {\cite{DL_FC.2010}}.
 
 Our model’s loss function is based on the Mean Squared Error (MSE) metric, which is calculated for each state value prediction.
 The MSE quantifies the average squared discrepancy between the predicted and actual target values.
 We chose MSE because it provides a clear and direct measure of how closely our predictions align with the true states, making it an effective metric for optimizing the accuracy of our model's state predictions.
 
+
+For one single prediction the \ac{MSE} is given by
 \begin{equation}
-	MSE = \frac{1}{k}\sum_{i=1}^{k}{(y_i-\hat{y}_i)}^2,
+	MSE = \frac{1}{k}\sum_{i=1}^{k}{({Y}_i-{\hat{Y}}_i)}^2,
 \end{equation}
-where $k$ is the size of the predicted state vector, $y_i$ is the ground truth value (KITTI cars and vans tracks) and $\hat{y}_i$ is the prediction of the network for training set sample $i$.
-The loss is evaluated for several sequences, each with numerous time stamps.
-For our prediction network the loss function is half the mean-square-error of the predictions added up for each time step in the training set, normalized by the total number of all time stamps in the used sequences $T$.
-The factor of $\frac{1}{2}$ simplifies the calculation of the gradient during backpropagation, making the derivative of the loss function with respect to the network’s predictions easier to compute:
+where $k$ is the length of the predicted state vector (here $k=5$), $\vec{Y}$ is the ground truth state vector (KITTI cars and vans tracks) and $\vec{\hat{Y}}$ is the predicted state vector from our network.
+The cost function is evaluated for several sequences, each with numerous time stamps.
+For our prediction network the cost function is half the mean-square-error of the predictions added up for each time stamp in the training set, normalized by the total number of all time stamps $T$ in the used sequences.
+The factor of $\frac{1}{2}$ simplifies the gradient during backpropagation:
 \begin{equation}
-	loss = \frac{1}{2T} \sum_{j=1}^{T}\sum_{i=1}^{m}{({y_{ij}}-{\hat{y}_{ij}})}^2.
+	cost = \frac{1}{2}\frac{1}{T} \sum_{t=1}^{T}\frac{1}{k}\sum_{i=1}^{k}{({Y_{(t),i}}-{\hat{Y}_{(t),i}})}^2,
 \end{equation}
-During training, the average loss is calculated using the observations in the mini-batch, so $T$ equals the mini-batch length.
+where $Y_{(t),i}$ refers to the $i$-th entry in the state vector at time stamp $t$. During training, the average cost is calculated using the observations in the mini-batch, so $T$ is given by the mini-batch length.
 
 \subsection{Single Association Network (SANT)}
 %%%%%%% CH: Following part - changed / chatGPT shorted based on CB approches %%%%%%%
@@ -440,18 +451,18 @@ Unlike conventional methods {\cite{DL_RNN_mot.2016, DL_RNN_data_association.2019
 
 \paragraph{Data preprocessing}
 In the formulation of \ac{SANT}, we conceptualized data association as a temporally structured challenge, adopting a sequence-to-vector paradigm.
-This framework posits the association of a singular sensor object, denoted as $Z_{(t,1)}$, with a collection of tracks, represented as $X_{(t,1:n)}$.
-These tracks were meticulously curated from the KITTI dataset, which comprises annotated camera recordings.
-It is imperative to note, however, that genuine ground truth data for the specific association problem at hand are not available.
-To guarantee the unambiguity of assigning a \ac{SO} to a single track within a specified set of tracks, each \ac{SO} was synthetically generated at a given timestep from the pre-existing track set of that timestep.
+For \ac{SANT} we focus on the association of a singular sensor object, denoted as $Z_{(t,1)}$, with a collection of tracks, represented as $X_{(t,1:n)}$.
+These tracks were carefully curated from the KITTI dataset, which comprises annotated camera recordings.
+We note, however, that genuine \ac{GT} data for the specific association problem at hand is not available.
+To guarantee the unambiguity of assigning a \ac{SO} to a single track, each \ac{SO} was synthetically generated at a given timestep from the pre-existing track set of that timestep. %MD: Hier muss noch ergänzt werden, wie genau die erzeugt wurden!
 Furthermore, to simulate realistic sensor data from the \ac{GT} data, artificial noise was introduced.
-This process was meticulously designed to reflect the inherent inaccuracies and uncertainties present in real-world sensor measurements.
-To achieve this, a maximum of 3\% of the value of the current state vector was randomly subtracted or added to each value.
+This process was designed to reflect the inherent inaccuracies and uncertainties present in real-world sensor measurements.
+To achieve this, we add noise with a maximum of 3\% to each of the current state vector values.
 The data set was created in 7 iterations, so that the noise intensity was increased by 0.5\% per iteration.
 As shown in Figure {\ref{pic::SantArch}} the data format was created accordingly to enable index-based track assignment for \ac{SANT}.
-The size of the input matrix therefore corresponds to $m \times n + 1$.
-With $m = 5$ as the number of state values for our work and $n=16$ as the maximum number of tracks per time step.
-The actual number of tracks can vary between 0 and a maximum of 16 objects in relation to the KITTI data set and the selected objects (cars and vans).
+The size of the input matrix therefore corresponds to $k \times n + 1$.
+With $k = 5$ as the number of state values for our work and $n=16$ as the maximum number of tracks per time step.
+The actual number of tracks can vary between 0 and a maximum of 16 objects, as is given by the KITTI data set using our selected objects (cars and vans). %MD: Add Kitti citation!
 A comprehensive analysis of the data is presented in the \ac{MANTa} section.
 
 \paragraph{Network architecture}
