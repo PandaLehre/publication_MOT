@@ -245,6 +245,7 @@ We apply the \ac{TbD} paradigm, in which a tracker fuses object detections to ge
 To enable our models to incorporate temporal information, we use LSTM {\cite{DL_LSTM.1997}} and bidirectional Long Short-Term Memory (BILSTM) network layers {\cite{DL_BILSTM.1997}}, both for the prediction and the association of the sensor objects to the existing tracks.
 
 \subsection{Single Prediction Network (SPENT)}
+\label{ssec:spent}
 Our approach uses the hidden states of the \ac{LSTM} layer as an information repository for each object. {\ac{SPENT}} operates in an open-loop manner, predicting future states based on past data.
 This allows the network to predict the most likely state of an object for the next timestamp.
 
@@ -256,24 +257,27 @@ The track lengths vary from a minimum of 4 frames to a maximum of 643 frames (Se
 
 To enhance model generalization and foster convergence during training, we normalized the state values of tracks at time $t$ (predictors) and at time $t+1$ (targets) in accordance with the methodology outlined in {\cite{DL_book.2019}}.
 This normalization process standardizes the distribution of both predictors and targets to have a mean of zero and a unit variance.
-The mean values $\vec{\mu}$ and standard deviations $\vec{\sigma}$ for each state in the state vectors $\vec{X}_t$ were computed across all tracks. For this, all tracks were joined together, leading to one pseudo-track with total number of time stamps $m$.
-where for $\vec{\sigma}$, the square $(...)^{2^*}$ and the square-root must be applied element wise:
+The mean values $\vec{\mu}$ and standard deviations $\vec{\sigma}$ for each state in the state vectors $\vec{X}_t$ were computed across all tracks. For this, all tracks were joined together, leading to one pseudo-track with a total number of time stamps $N$:
 
 \begin{equation}
-	\vec{\mu} = \frac{1}{m} \sum_{t = 1}^{m} \vec{X}_t
+	\vec{\mu} = \frac{1}{N} \sum_{t = 1}^{N} \vec{X}_t
 \quad\text{and}\quad
-	\vec{\sigma} = \sqrt{{\frac{1}{m - 1}} \sum_{t = 1}^{m} (\vec{X}_t - \vec{\mu})^{2^*}},
+	\vec{\sigma} = \sqrt{{\frac{1}{N - 1}} \sum_{t = 1}^{N} (\vec{X}_t - \vec{\mu})^{2^*}},
 \end{equation}
+
+where for $\vec{\sigma}$, the square $(...)^{2^*}$ and the square-root must be applied element wise.
+
+\begin{figure}[b!]
+	\centerline{\includegraphics[width=0.91\linewidth]{figs/padding2.png}}
+    \caption{Analysis of sequence padding: unsorted vs. sorted data. This figure illustrates the impact of sequence padding on LSTM training based on the sorting of input data. The upper panel shows that unsorted data requires extensive padding to equalize batch sequence lengths, increasing computational overhead. In contrast, the lower panel demonstrates that sorting data by length before batching significantly reduces the necessary padding.}
+	\label{pic::Padding}
+\end{figure}
+
 
 In our approach, we apply pre-padding as described by Reddy et al. {\cite{DL_padding.2019}}, who examined the impact of padding strategies on sequence-based \acp{NN}.
 They highlight that while both pre-padding and post-padding are feasible, the choice significantly affects performance, especially for \ac{LSTM}-based networks, where maintaining sequence context is critical.
 To manage varying sequence lengths, we pad shorter sequences with special tokens, ensuring all sequences in a batch have uniform length.
 
-\begin{figure}[htbp]
-	\centerline{\includegraphics[width=0.91\linewidth]{figs/padding2.png}}
-    \caption{Analysis of sequence padding: unsorted vs. sorted data. This figure illustrates the impact of sequence padding on LSTM training based on the sorting of input data. The upper panel shows that unsorted data requires extensive padding to equalize batch sequence lengths, increasing computational overhead. In contrast, the lower panel demonstrates that sorting data by length before batching significantly reduces the necessary padding.}
-	\label{pic::Padding}
-\end{figure}
 
 We used zeros as padding tokens, added to the end of sequences as needed, allowing efficient batch processing and consistent training without affecting model performance due to varying sequence lengths.
 As noted by Reddy et al. {\cite{DL_padding.2019}}, while padding introduces noise, it is crucial for aligning sequences in mini-batches for \ac{LSTM} training.
@@ -307,85 +311,80 @@ For one single prediction the \ac{MSE} is given by
 \begin{equation}
 	MSE = \frac{1}{k}\sum_{i=1}^{k}{({Y}_i-{\hat{Y}}_i)}^2,
 \end{equation}
-where $k$ is the length of the predicted state vector (here $k=5$), $\vec{Y}$ is the ground truth state vector (KITTI cars and vans tracks) and $\vec{\hat{Y}}$ is the predicted state vector from our network.
-The cost function is evaluated for several sequences, each with numerous time stamps.
-For our prediction network the cost function is half the mean-square-error of the predictions added up for each time stamp in the training set, normalized by the total number of all time stamps $T$ in the used sequences.
+where $k$ is the length of the predicted state vector (here $k=5$), $Y_i$ are the entries of the ground truth state vector (KITTI cars and vans tracks) and $\hat{Y}_i$ the respective entries of the predicted state vector from our network.
+During training, the cost function is evaluated for one mini-batch with several sequences and a total number of $N$ time stamps.
+It is calculated as half the mean-square-error of the predictions added up for each time stamp, normalized over all time stamps.
 The factor of $\frac{1}{2}$ simplifies the gradient during backpropagation:
 \begin{equation}
-	cost = \frac{1}{2}\frac{1}{T} \sum_{t=1}^{T}\frac{1}{k}\sum_{i=1}^{k}{({Y_{t,i}}-{\hat{Y}_{t,i}})}^2,
+	cost = \frac{1}{2}\frac{1}{N} \sum_{t=1}^{N}\frac{1}{k}\sum_{i=1}^{k}{({Y_{t,i}}-{\hat{Y}_{t,i}})}^2,
 \end{equation}
-where $Y_{t,i}$ refers to the $i$-th entry in the state vector at time stamp $t$. During training, the average cost is calculated using the observations in the mini-batch, so $T$ is given by the mini-batch length.
+where $Y_{t,i}$ refers to the $i$-th entry in the state vector at time stamp $t$.
 
 \subsection{Single Association Network (SANT)}
 Our association network uses a data-driven approach to solve the NP-hard data association problem {\cite{DA_hungarian.1955,DA_JPDA.1993}}, which traditionally requires significant computational effort for optimal solutions {\cite{DA_hungarian.1955}}.
 Unlike conventional methods {\cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}}, our \ac{SANT} model eliminates the need for a predefined distance matrix. Instead, it directly processes the current tracks and newly detected sensor objects, matching each new object to a track. This allows the network to autonomously learn its association strategy from training data, replacing the Hungarian Algorithm with a learning-based method.
 
 \paragraph{Data preprocessing}
-In the formulation of \ac{SANT}, we conceptualized data association as a temporally structured challenge, adopting a sequence-to-vector paradigm.
-For \ac{SANT} we focus on the association of a singular sensor object ($m=1$), denoted as $Z_{(t,m=1)}$, with a collection of $n$ tracks, represented as $X_{(t,1:n)}$.
+In the formulation of \ac{SANT}, we conceptualized data association as a temporally structured challenge, adopting a sequence-to-vector paradigm. In general, $m$ incoming sensor objects need to be associated to $n$ tracks.
+For \ac{SANT} we focus on the association of a singular sensor object ($m=1$), denoted as $Z_{(t,m=1)}$, to $n$ tracks, represented as $X_{(t,1:n)}$.
 These tracks were carefully curated from the KITTI dataset, which comprises annotated camera recordings.
-We note, however, that genuine \ac{GT} data for the specific association problem at hand is not available.
-To guarantee the unambiguity of assigning a \ac{SO} to a single track, each \ac{SO} was synthetically generated at a given time stamp from the pre-existing track set of that time stamp.
-%MD: Hier muss noch ergänzt werden, wie genau die erzeugt wurden!
-%CH: die Beschreibung in den folgednen Sätzen ist nicht ausreichend?
-Furthermore, to simulate realistic sensor data from the \ac{GT} data, artificial noise was introduced.
+%MD: Ich habe die Erklärung umgeschrieben, damit jemand anderes versteht was wir tun.
+We note, however, that genuine hand-labelled \ac{GT} data for this specific association problem is not available. We rather use the existing tracks to  generate synthetical \ac{GT} data for the data association. The input to \ac{SANT} consists of a sensor object $Z_{(t,m=1)}$ and a set of tracks $X_{(t,1:n)}$ (see top part of figure \ref{pic::SantArch}). The output is a one-hot vector encoding the association of the incoming \ac{SO} to one of the tracks, or to none. To generate the synthetical \ac{GT}, we take a set of tracks, then randomly chose one of them and take the next state vector at the next time stamp of that single track as the incoming new \ac{SO}. The association result can be extracted from the corresponding track that it was taken out of.
+Furthermore, to simulate more realistic sensor data, artificial noise was introduced.
 This process was designed to reflect the inherent inaccuracies and uncertainties present in real-world sensor measurements.
-To achieve this, we add noise with a maximum of 3\% to each of the current state vector values.
-The data set was created in 6 iterations, so that the noise intensity was increased by 0.5\% per iteration.
-As shown in figure {\ref{pic::SantArch}} the data format was created accordingly to enable index-based track assignment for \ac{SANT}.
-The size of the input matrix therefore corresponds to $k \times (n + 2)$.
-With $k = 5$ as the number of state values for our work and $n=16$ as the maximum number of tracks per time stamp.
+To achieve this, we add noise to the state vector of the incoming \ac{SO}s with a maximum of 3\%.
+% The data set was created in 6 iterations, so that the noise intensity was increased by 0.5\% per iteration.
+As shown in figure {\ref{pic::SantArch}} the data format was created accordingly to enable index-based track assignment for \ac{SANT}. The actual number of tracks can vary between 0 and a maximum of $n=16$ objects, as is given by the KITTI data set using our selected objects (cars and vans) {\cite{Geiger2012CVPR}}. The size of the input matrix therefore corresponds to $k \times (n + 2)$, where $k = 5$ is the number of state values for our work.
 %CH: Erklärung für +2 hinzugefügt.
+%MD: Das verstehe ich nicht. Was soll denn eine Änderung des Inputs dafür bewirken? Was steht denn in dem input n + 2 drin? Wahrscheinlich nichts. Das Netzwerk würde doch auch keine neuen Tracks erstellen, sondern wenn dann ausgeben, dass das SO nicht assoziiert wurde. Hinzu kommt, dass du in dem ersten Satz hier zwei mal direkt das gleiche sagst "set up new tracks" kommt zwei mal vor... So etwas meine ich mit "veröffentlichungsfertig".
 To give the network the freedom to set up new tracks and also the option to not associate or set up a new track, the size $n + 2$ must be defined.
-The actual number of tracks can vary between 0 and a maximum of 16 objects, as is given by the KITTI data set using our selected objects (cars and vans) {\cite{Geiger2012CVPR}}.
-A comprehensive analysis of the data is presented in the \ac{MANTa} section.
+
+A deeper analysis of our data is presented in the \ac{MANTa} section.
 
 \paragraph{Network architecture}
 The network as depicted in figure {\ref{pic::SantArch}} is designed as a sequence-to-classification network.
 At each time stamp, a matrix is passed as input holding both, the information of the one to-be-assigned \ac{SO} and the multiple currently-tracked objects.
 
-\begin{figure}[htbp]
+\begin{figure}[b!]
 	\centerline{\includegraphics[width=0.95\linewidth]{figs/SANT_network_arch.png}}
-	\caption{Schematic representation of the generic network structure of \ac{SANT}.}
+	\caption{Schematic representation of the network structure of \ac{SANT}. Here $m=1$, so one \ac{SO} is associated to $m$ existing tracks.}
 	\label{pic::SantArch}
 \end{figure}
 Architectures with \ac{RNN}, \ac{GRU}, \ac{LSTM} and \ac{BILSTM} layers were tested.
-As part of these investigations, the best association performance was achieved with the BILSTM layer.
-The network shown in figure {\ref{pic::SantArch}} achieved the best performance in comparison with a Validation Accuracy of 95\%.
-By combining the outputs of two LSTM layers that pass the information in opposite directions, {\cite{DL_LSTM.1997}} demonstrates the ability to capture the context from both ends of the sequence.
+The best association performance was achieved with a \ac{BILSTM} layer.
+The best performing architecture is depicted in figure {\ref{pic::SantArch}}. It achieved a validation accuracy of 95\%. %MD: Nirgendwo schreiben wir, wie groß die trainings und validation sets waren für die Association. Das machst du unten nur für die Prediction. Sind die gleich? Irdendwo müssen wir das noch schreiben. Und: Haben wir auch eine test accuracy für die Association?
+We are using the work introduced by Hochreiter et al. {\cite{DL_LSTM.1997}}, who demonstrated the ability to capture the context from both ends of the sequence by combining the outputs of two LSTM layers that pass the information in opposite directions.
 The resulting architecture is called \ac{BILSTM}.
-The output mode has been configured in the \ac{BILSTM} layer, so that the layer is able to receive a sequence as input and output value vector.
-This form of dimension reduction is necessary in order to carry out a corresponding classification.
-The FC layer specifies the number of classes via the number of output values.
-The classes are calculated in the softmax layer by applying the softmax function resulting in a probability distribution.
-The softmax function converts all $z_i$ values into a probability vector with $i$ values.
+The output mode has been configured in the \ac{BILSTM} layer, so that the layer is able to receive a sequence as input and calculate an output vector.
+This form of dimension reduction is necessary in order to carry the classification.
+The final FC layer specifies the number of classes via the number of output values.
+The class probabilities are calculated in the softmax layer by applying the softmax function.
 The cross-entropy cost function is utilized to quantify the discrepancy between the network's probabilistic predictions and the ground truth values, a method particularly suited for tasks involving categorically exclusive classes.
-This approach employs one-hot encoding to transform class representations into binary vector formats, thus enabling the delineation of each class within a 1-to-n coding scheme.
+This approach employs one-hot encoding to transform class representations into binary vector formats.
 
-The cross-entropy loss for each prediction, relative to its corresponding target value, is computed as follows in the cost function:
+We calculate the cost function as the average of the cross-entropy losses for each prediction, relative to its corresponding target value:
 \begin{equation}
-    cost = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{C} T_{i,j} \log(Y_{i,j}),
+    cost = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{C} y_{i,j} \log(\hat{y}_{i,j}),
 \end{equation}
-where $N$ denotes the total number of association samples, $C$ represents the number of class categories, $T_{i,j}$ is the GT indicator for whether class $j$ is the correct classification for sample $i$, and $Y_{i,j}$ is the predicted probability that sample $i$ belongs to class $j$, as derived from the softmax function output.
+where $N$ denotes the total number of association samples, $C$ represents the number of class categories, $y_{i,j}\in [0,1]$ is the GT indicator for whether class $j$ is the correct classification for sample $i$, and $\hat{y}_{i,j}$ is the predicted probability that sample $i$ belongs to class $j$, as derived from the softmax function output. Note that we are using non-capital $y$ to separate the notation from the state vectors $\vec{Y_{t}}$.
 
 \subsection{Multi-Association Network (MANTa)}
 The development of the \ac{SANT} demonstrated that data-driven association logic can be effectively learned by a deep learning model.
-Building upon this foundation, the objective was to create a network capable of associating multiple sensor objects ($m$ SOs) with multiple tracks ($n$ tracks) in a single operational step.
-Unlike the \ac{SANT}, MANTa is specifically designed to handle the simultaneous association of multiple sensor objects to multiple tracks.
-To address this complex task, MANTa was developed to solve the following association scenarios:
+Building upon this foundation, we developed MANTa with the objective to create a network capable of associating multiple sensor objects ($m$ SOs) with multiple tracks ($n$ tracks) in a single operational step.
+With MANTa, the following association scenarios can be addressed:
 
 %CH: es könnte auch dargestellt werden, was mit MANTa adressiert wurde (m to x)
 \begin{itemize}
-    \item \textbf{1 to n} - one sensor object (SO) with $n$ tracks %(as \ac{SANT})
-    \item \textbf{m to 1} - $m$ sensor objects (SOs) with one track
-    \item \textbf{m to n} - $m$ sensor objects (SOs) with $n$ tracks
-    \item \textbf{m to 0} - $m$ sensor objects (SOs) with no tracks
+    \item \textbf{1 to n} - one sensor object (SO) to $n$ tracks %(as \ac{SANT})
+    \item \textbf{m to 1} - $m$ sensor objects (SOs) to one track
+    \item \textbf{m to n} - $m$ sensor objects (SOs) to $n$ tracks
+    \item \textbf{m to 0} - $m$ sensor objects (SOs) to no tracks
 \end{itemize}
     % \item \textbf{0 to n} - no sensor objects (SOs) with $n$ tracks %(as \ac{SANT})
     % \item \textbf{0 to 0} - no sensor objects (SOs) with no tracks %(as \ac{SANT})
 % \end{itemize}
 
-%CH: habe ich jetzt komplett rausgenommen 
+%CH: habe ich jetzt komplett rausgenommen
 % Being able to cover these scenarios enables \ac{MANTa} to adeptly manage the complexities inherent in \ac{MOT}, providing a robust and scalable solution for real-world applications.
 % With the integration of \ac{MANTa} into a \ac{MOT} framework, the question can be asked whether a 0 to n and 0 to 0 assignment is a task to be solved.
 % If no new \ac{SO} is detected, the prediction of the last operation step can be continued until the track is deleted on the basis of the decreasing probability of existence within the track management module.
@@ -395,25 +394,21 @@ To address this complex task, MANTa was developed to solve the following associa
 
 \paragraph{Data preprocessing}
 The training, validation and test data set of \ac{MANTa} was created according to the described objective.
-Figure {\ref{pic::MantaData}} shows the input data structure with corresponding association tasks for time stamp 85 of sequence 20 of the KITTI data set.
-The respective tracks per time stamp were extracted across all sequences.
-All extracted tracks were each modified with noise as in the \ac{SANT} development and then normalized.
-Figure {\ref{pic::MantaData}} shows the non-noisy \acp{SO} to enable a example assignment (given by the one-hot vector at the bottom) and increase understanding of the association procedure.
-The values obtained in this way were arranged as measurements (sensor objects) in a pseudo-random order per time stamp in an $F_{total} \cdot T_{\max}$ matrix.
-The one-hot vector shown in figure {\ref{pic::MantaData}} shows the GT assignment of the first sensor object to the track at position two.
-\begin{strip}
+Figure {\ref{pic::MantaData}} shows the input data structure with corresponding association tasks for time stamp 85 of sequence 20 of the KITTI data set. Equivalent data points were extracted across all sequences.
+All extracted tracks were each modified with noise as described in section \ref{ssec:spent} and then normalized.
+Figure {\ref{pic::MantaData}} shows an assignment example with non-noisy \acp{SO}s. The association result is given by the one-hot vector at the bottom. Each sensor object is given a 1:18 one-hot vector as its association result. For a maximum of $T_{\max}=16$ tracks, this results in an output vector of size $16\cdot 18 = 288$. The ordering of the \ac{SO}s is randomized per time stamp and the resulting association input matrix has dimension $F_{total} \cdot T_{\max}$, where $F_{total}$ represents the total number of features (here $2\cdot k=10$, with $k$ being the number of values per state vector). The one-hot vector shown in figure {\ref{pic::MantaData}} shows the GT assignment of the first sensor object to the track at position two.
+
+%MD: Hier war einfach Text im PDF verdeckt, wenn du strip benutzt. Bitte schau ins PDF, das sehen auch die Leser nachher.
+\begin{figure*}
 	\includegraphics[width=\linewidth]{figs/MANTa_data.png}
 	\captionof{figure}{MANTa, data structure, shows the non-noisy \acp{SO} to enable a visual assignment and increase understanding of the association procedure.
-	Seven tracks are extracted from the KITTI data set for the time stamp of sequence 20.
-	Eight sensor objects are generated and pseudo-random ordered.
+	Seven tracks are extracted from the KITTI data set for the given time stamp of sequence 20.
+	Eight sensor objects are generated in pseudo-random order.
 	The one-hot vector shows the GT assignment of the first sensor object to the track at position two.}
 	\label{pic::MantaData}
-\end{strip}
+\end{figure*}
 
-Where $F_{total}$ represents the total number of features and $T_{\max}$ stands for the maximum number of existing tracks per time stamp.
-The total number of features results from the status values per track and SO set.
-(here, $F_{total} = 2 \cdot m$, with $m=5$ being the number of state values in this investigation).
-For the defined test case with cars and vans, the KITTI data set results in $T_{\max}=16$.
+%MD: Bis hier hin habe ich gelesen , hier stand noch m anstatt k =================================
 There are seven tracks in the time stamp of the sequence shown.
 Each track receives a new measurement in this time stamp, and an additional object was detected (new \ac{SO}), leads to a amount of 8 sensor objects.
 
