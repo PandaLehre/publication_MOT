@@ -420,15 +420,15 @@ The assignment classes result from the described index class 1 to 16 and additio
 One degree of freedom of the assignment represents the case that no measurement exists, another that the measurement should not be assigned.
 The section of the one-hot vector shown (1:18) thus shows the GT assignment of the first sensor object to the track at position two.
 
-As for SANT, the cross-entropy cost function calculates the cross-entropy loss between network predictions $Y_{i,j}$ and target values $T_{i.j}$ for the unique assignment task for mutually exclusive classes.
+As for SANT, the cross-entropy cost function calculates the cross-entropy loss between network predictions $\hat{y}_{i,j}$ and target values $y_{i.j}$ for the unique assignment task for mutually exclusive classes.
 The already introduced one-hot vector is used to represent the class in binary form in a vector and thus generate a 1-to-$O_{\max}$ code.
 The following formula is used to calculate the cross-entropy loss values for each time stamp $t$:
 \begin{equation}
-    loss_t = \sum_{i=1}^{O_{\max}} \left( T_{i,j} \ln(Y_{i,j}) + (1 - T_{i,j}) \ln(1 - Y_{i,j}) \right)
+    loss_t = -\sum_{i=1}^{O_{\max}} \left[ y_{i,j} \ln(\hat{y}_{i,j}) + (1 - y_{i,j}) \ln(1 - \hat{y}_{i,j}) \right]
 \end{equation}
 Then, all scalars obtained per time stamp are summarized and divided by the number of samples $N$ of a minibatch for the cost function:
 \begin{equation}
-    cost = -\frac{1}{N} \sum_{x=1}^{N} loss_t
+    cost = \frac{1}{N} \sum_{t=1}^{N} loss_t
 \end{equation}
 
 \paragraph{Network architecture}
