@@ -329,17 +329,17 @@ In the formulation of \ac{SANT}, we conceptualized data association as a tempora
 For \ac{SANT} we focus on the association of a singular sensor object ($m=1$), denoted as $Z_{(t,m=1)}$, to $n$ tracks, represented as $X_{(t,1:n)}$.
 These tracks were carefully curated from the KITTI dataset, which comprises annotated camera recordings.
 %MD: Ich habe die Erklärung umgeschrieben, damit jemand anderes versteht was wir tun.
-We note, however, that genuine hand-labelled \ac{GT} data for this specific association problem is not available. We rather use the existing tracks to  generate synthetical \ac{GT} data for the data association. The input to \ac{SANT} consists of a sensor object $Z_{(t,m=1)}$ and a set of tracks $X_{(t,1:n)}$ (see top part of figure \ref{pic::SantArch}). The output is a one-hot vector encoding the association of the incoming \ac{SO} to one of the tracks, or to none. To generate the synthetical \ac{GT}, we take a set of tracks, then randomly chose one of them and take the next state vector at the next time stamp of that single track as the incoming new \ac{SO}. The association result can be extracted from the corresponding track that it was taken out of.
+We note, however, that genuine hand-labelled \ac{GT} data for this specific association problem is not available. We rather use the existing tracks to  generate synthetical \ac{GT} data for the data association. The input to \ac{SANT} consists of a sensor object $Z_{(t,m=1)}$ and a set of tracks $X_{(t,1:n)}$ (see top part of figure \ref{pic::SantArch}).
+The output is a one-hot vector encoding the association of the incoming \ac{SO} to one of the tracks, or to none. To generate the synthetical \ac{GT}, we take a set of tracks, then randomly chose one of them and take the next state vector at the next time stamp of that single track as the incoming new \ac{SO}.
+The association result can be extracted from the corresponding track that it was taken out of.
 Furthermore, to simulate more realistic sensor data, artificial noise was introduced.
 This process was designed to reflect the inherent inaccuracies and uncertainties present in real-world sensor measurements.
 To achieve this, we add noise to the state vector of the incoming \ac{SO}s with a maximum of 3\%.
-% The data set was created in 6 iterations, so that the noise intensity was increased by 0.5\% per iteration.
-As shown in figure {\ref{pic::SantArch}} the data format was created accordingly to enable index-based track assignment for \ac{SANT}. The actual number of tracks can vary between 0 and a maximum of $n=16$ objects, as is given by the KITTI data set using our selected objects (cars and vans) {\cite{Geiger2012CVPR}}. The size of the input matrix therefore corresponds to $k \times (n + 2)$, where $k = 5$ is the number of state values for our work.
-%CH: Erklärung für +2 hinzugefügt.
-%MD: Das verstehe ich nicht. Was soll denn eine Änderung des Inputs dafür bewirken? Was steht denn in dem input n + 2 drin? Wahrscheinlich nichts. Das Netzwerk würde doch auch keine neuen Tracks erstellen, sondern wenn dann ausgeben, dass das SO nicht assoziiert wurde. Hinzu kommt, dass du in dem ersten Satz hier zwei mal direkt das gleiche sagst "set up new tracks" kommt zwei mal vor... So etwas meine ich mit "veröffentlichungsfertig".
-To give the network the freedom to set up new tracks and also the option to not associate or set up a new track, the size $n + 2$ must be defined.
-
-A deeper analysis of our data is presented in the \ac{MANTa} section.
+As shown in figure {\ref{pic::SantArch}} the data format was created accordingly to enable index-based track assignment for \ac{SANT}.
+The actual number of tracks can vary between 0 and a maximum of $n=16$ objects, as is given by the KITTI data set using our selected objects (cars and vans) {\cite{Geiger2012CVPR}}.
+The size of the input matrix therefore corresponds to $k \times (n + 1)$, where $k = 5$ is the number of state values for our work.
+The matrix is structured such that the first column contains the state vector of the incoming sensor object $Z_{(t,m=1)}$, while the remaining columns hold the state vectors of the existing tracks $X_{(t,1:n)}$. This matrix is then passed to the \ac{SANT} network for association.
+A more detailed analysis of our association data is presented in section \ac{MANTA}.
 
 \paragraph{Network architecture}
 The network as depicted in figure {\ref{pic::SantArch}} is designed as a sequence-to-classification network.
@@ -398,7 +398,6 @@ Figure {\ref{pic::MantaData}} shows the input data structure with corresponding 
 All extracted tracks were each modified with noise as described in section \ref{ssec:spent} and then normalized.
 Figure {\ref{pic::MantaData}} shows an assignment example with non-noisy \acp{SO}s. The association result is given by the one-hot vector at the bottom. Each sensor object is given a 1:18 one-hot vector as its association result. For a maximum of $T_{\max}=16$ tracks, this results in an output vector of size $16\cdot 18 = 288$. The ordering of the \ac{SO}s is randomized per time stamp and the resulting association input matrix has dimension $F_{total} \cdot T_{\max}$, where $F_{total}$ represents the total number of features (here $2\cdot k=10$, with $k$ being the number of values per state vector). The one-hot vector shown in figure {\ref{pic::MantaData}} shows the GT assignment of the first sensor object to the track at position two.
 
-%MD: Hier war einfach Text im PDF verdeckt, wenn du strip benutzt. Bitte schau ins PDF, das sehen auch die Leser nachher.
 \begin{figure*}
 	\includegraphics[width=\linewidth]{figs/MANTa_data.png}
 	\captionof{figure}{MANTa, data structure, shows the non-noisy \acp{SO} to enable a visual assignment and increase understanding of the association procedure.
@@ -408,7 +407,7 @@ Figure {\ref{pic::MantaData}} shows an assignment example with non-noisy \acp{SO
 	\label{pic::MantaData}
 \end{figure*}
 
-%MD: Bis hier hin habe ich gelesen , hier stand noch m anstatt k =================================
+%MD: Bis hier hin habe ich gelesen =================================
 There are seven tracks in the time stamp of the sequence shown.
 Each track receives a new measurement in this time stamp, and an additional object was detected (new \ac{SO}), leads to a amount of 8 sensor objects.
 
