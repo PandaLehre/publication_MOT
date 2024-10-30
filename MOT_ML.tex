@@ -150,7 +150,7 @@ Our evaluation, conducted on the public KITTI tracking dataset, demonstrates sig
 
 \section{Introduction}
 \IEEEPARstart{T}{he}
-ongoing evolution of Advanced Driver Assistance Systems has brought the need for precise and reliable Multi Object Tracking into the spotlight {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023, DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022, DL_ATT_CNN_soda.2020}}.
+ongoing evolution of Advanced Driver Assistance Systems has brought the need for precise and reliable Multi Object Tracking into the spotlight {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023, DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022, DL_ATT_CNN_soda.2020, Zhang2021ByteTrackMT,Zhang2020FairMOTOT, liu2020deepmtt}}.
 In complex and dynamic environments, as encountered in urban traffic, it is crucial to accurately capture and predict the positions of multiple objects already in the early time stamps of detection -- a key challenge in automated driving.
 In the commonly used \ac{TbD} paradigm, a tracker fuses detected \ac{SO} to create consistent object tracks over time.
 A crucial step within this paradigm is the association of the incoming measured \ac{SO} with their corresponding existing object tracks to update their properties.
@@ -226,7 +226,7 @@ Tracking systems for ADAS run on embedded devices in real-time. They must provid
 Our \ac{ML} models are integrated into a \ac{KF}-based tracking system, widely used for its robust performance and interpretability {\cite{KF_Wan.2000,KF_Ristic.2004,KF_Julier.2004,KF_framework.2013,KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023}}. Bewley et al. {\cite{KF_Bewley.2016}} introduced an efficient multi-object tracking method combining a KF with the Hungarian Algorithm. Seidenschwarz et al. {\cite{KF_simple_cues.2022}} proposed a simpler approach based on visual cues like color, shape, and motion for object tracking and frame-to-frame association, avoiding the complexity of many modern trackers.
 
 \paragraph{Recurrent Neural Network based Tracker}
-Similar to our methodologies, RNN-based approaches for online multi-target tracking have been introduced in~{\cite{DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_RNN_data_association.2020}}.
+Similar to our methodologies, RNN-based approaches for online multi-target tracking have been introduced in~{\cite{DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_RNN_data_association.2020,liu2020deepmtt}}.
 Specifically, the work by Mertz et al. {\cite{DL_RNN_data_association.2019}} focuses on data association within a TbD framework.
 Their proposed DeepDA model, a Long Short-Term Memory (LSTM)-based Deep Data Association Network, is designed to learn and execute the task of associating objects across frames.
 This model's ability to discern association patterns directly from data enables a robust and reliable tracking outcome, even in environments with significant disturbances.
@@ -238,7 +238,7 @@ In our work, we want to enable the network to follow a completely data-driven as
 
 \paragraph{Attention Mechanism based Tracker}
 In this paper, we analyze tracks using \ac{LSTM}-based models.
-An alternative architecture would be the attention mechanism {\cite{ML_Attention.2017}}, utilized in various studies {\cite{DL_ATT_mot_sot_based.2017,DL_ATT_CNN_mot_sot_based.2017,DL_ATT_CNN_soda.2020,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022}}.
+An alternative architecture would be the attention mechanism {\cite{ML_Attention.2017}}, utilized in various studies {\cite{DL_ATT_mot_sot_based.2017,DL_ATT_CNN_mot_sot_based.2017,DL_ATT_CNN_soda.2020,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022,Carion2020EndtoEndOD}}.
 Hung et al. {\cite{DL_ATT_CNN_soda.2020}} focus on soft data association (SoDA), enabling probabilistic associations and accounting for uncertainties by aggregating information from all detections within a temporal window.
 This approach allows the model to learn long-term, interactive relationships from large datasets without complex heuristics.
 However, since tracking tasks involve real-time data processing with relatively short sequences, \acp{RNN} can efficiently handle this without the overhead of calculating attention weights for every input, making them more computationally efficient for short to medium-length sequences.
@@ -318,7 +318,7 @@ During training, the cost function is evaluated for one mini-batch with several 
 It is calculated as half the mean-square-error of the predictions added up for each time stamp, normalized over all time stamps.
 The factor of $\frac{1}{2}$ simplifies the gradient during backpropagation:
 \begin{equation}
-	cost = \frac{1}{2}\frac{1}{N} \sum_{t=1}^{N}\frac{1}{k}\sum_{i=1}^{k}{({Y_{t,i}}-{\hat{Y}_{t,i}})}^2,
+	cost = -\frac{1}{2}\frac{1}{N} \sum_{t=1}^{N}\frac{1}{k}\sum_{i=1}^{k}{({Y_{t,i}}-{\hat{Y}_{t,i}})}^2,
 \end{equation}
 where $Y_{t,i}$ refers to the $i$-th entry in the state vector at time stamp $t$.
 
@@ -328,7 +328,6 @@ Unlike conventional methods {\cite{DL_RNN_mot.2016, DL_RNN_data_association.2019
 
 \paragraph{Data preprocessing}
 In the formulation of \ac{SANT}, we conceptualized data association as a temporally structured challenge, adopting a sequence-to-vector paradigm. 
-%CH: Zitat TUM Paper
 In general, $m$ incoming sensor objects need to be associated to $n$ tracks.
 For \ac{SANT} we focus on the association of a singular sensor object ($m=1$), denoted as $Z_{(t,m=1)}$, to $n$ tracks, represented as $X_{(t,1:n)}$.
 These tracks were extracted from the KITTI dataset.
