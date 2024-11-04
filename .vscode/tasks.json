@@ -15,7 +15,7 @@
             },
             "problemMatcher": [],
             "detail": "Builds the LaTeX document.",
-            "dependsOn": "Convert PDF to Image"
+            "dependsOn": ["Convert PDF to Image"]
         },
         {
             "label": "Convert PDF to Image",
@@ -24,7 +24,22 @@
             "args": [
                 "pdf_to_image.py"
             ],
-            "problemMatcher": []
+            "problemMatcher": [],
+            "dependsOn": ["Clean Build Files"]
+        },
+        {
+            "label": "Clean Build Files",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "Remove-Item -Force -ErrorAction Ignore MOT_ML.aux, MOT_ML.log, MOT_ML.bbl, MOT_ML.blg, MOT_ML.fdb_latexmk, MOT_ML.fls, MOT_ML.synctex.gz"
+            ],
+            "problemMatcher": [],
+            "detail": "Removes temporary LaTeX build files.",
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
         }
     ]
 }

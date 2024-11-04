@@ -126,6 +126,7 @@
 
 \begin{document}
 \title{Data-Driven Object Tracking: Integrating Modular Neural Networks into a Kalman Framework}
+%CH: Bitte prüfen, ob die groß und kleinschreibung so korrekt ist
 
 \author{Christian Alexander Holz, Christian Bader, Markus Enzweiler, Matthias Drüppel
 	\thanks{C. Holz is with Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany}
@@ -150,8 +151,8 @@ Our evaluation, conducted on the public KITTI tracking dataset, demonstrates sig
 
 \section{Introduction}
 \IEEEPARstart{T}{he}
-ongoing evolution of Advanced Driver Assistance Systems has brought the need for precise and reliable Multi Object Tracking into the spotlight {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023, DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022, DL_ATT_CNN_soda.2020, Zhang2021ByteTrackMT,Zhang2020FairMOTOT, liu2020deepmtt}}.
-In complex and dynamic environments, as encountered in urban traffic, it is crucial to accurately capture and predict the positions of multiple objects already in the early time stamps of detection -- a key challenge in automated driving.
+ongoing evolution of \ac{ADAS} has brought the need for precise and reliable \ac{MOT} into the spotlight {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023, DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022, DL_ATT_CNN_soda.2020, Zhang2021ByteTrackMT,Zhang2020FairMOTOT, liu2020deepmtt}}.
+In complex and dynamic environments, as encountered in urban traffic, it is crucial to accurately capture and predict the positions of multiple objects already in the early time stamps of detection -- a key challenge in assisted and automated driving.
 In the commonly used \ac{TbD} paradigm, a tracker fuses detected \ac{SO} to create consistent object tracks over time.
 A crucial step within this paradigm is the association of the incoming measured \ac{SO} with their corresponding existing object tracks to update their properties.
 If no association can be made, new object tracks must be initialized {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023,OD_kampker.2018,OD_wu.2022}}.
@@ -159,18 +160,21 @@ Tracking frameworks form the heart of ADAS that are used in millions of vehicles
 The vast majority of these frameworks rely on classical approaches such as the \ac{KF} or its variants {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023}}.
 These classical tracking theories have the great benefit of being modular and interpretable.
 The task is split into clearly separated subtasks such as the prediction of currently tracked objects and the association with newly measured ones.
-However, development for automated driving is highly complex~{\cite{AD_Overview.2017}}.
+However, development for automated driving is highly complex~{\cite{AD_Overview.2017,AD_book.2024}}.
 
-In the automotive industry, tracking systems are typically developed as platform software designed to support a range of vehicle models, each of which may have varying sensor placements, system configurations, or even entirely different sensor suites. These systems must perform reliably across a wide spectrum of driving scenarios, which can introduce performance challenges in specific situations. Traditional solutions often rely on heuristics and manual parameter tuning, making the software cumbersome to maintain and difficult to extend. Moreover, these hand-engineered methods lack automated optimization, resulting in suboptimal performance in complex driving conditions. To address these limitations, we propose a data-driven tracking framework that allows for fine-tuning for specific configurations, thereby improving both maintainability and adaptability.
+In the automotive industry, tracking systems are typically developed as platform software designed to support a range of vehicle models, each of which may have varying sensor placements, system configurations, or even entirely different sensor suites. These systems must perform reliably across a wide spectrum of driving scenarios, which can introduce performance challenges in specific situations. 
+Traditional solutions often rely on heuristics and manual parameter tuning, making the software cumbersome to maintain and difficult to extend. 
+Moreover, these hand-engineered methods lack automated optimization, resulting in suboptimal performance in complex driving conditions. To address these limitations, we propose a data-driven tracking framework that allows for fine-tuning for specific configurations, thereby improving both maintainability and adaptability.
 
-\begin{figure}[htbp]
+\begin{figure}[hbp]
 	\centerline{\includegraphics[width=0.99\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
 	\caption{
 A schematic representation shows the integration of two \acp{NN} (highlighted in dark blue) within a TbD framework.
-The Association Network can be implemented using either \ac{SANT} or \ac{MANTa}, and works in tandem with the prediction network \ac{SPENT}, which predicts object states $X_{t,1:n}$ across time stamps based on tracked objects ${T^c}_{t,1:n}$, which are then associated with sensor observations $Z_{t,1:m}$ by \ac{SANT} or \ac{MANTa}.
+The Association network can be implemented using either \ac{SANT} or \ac{MANTa}, and works in tandem with the prediction network \ac{SPENT}, which predicts object states $X_{t,1:n}$ across time stamps based on tracked objects ${T^c}_{t,1:n}$, which are then associated with sensor observations $Z_{t,1:m}$ by \ac{SANT} or \ac{MANTa}.
 }
 	\label{pic::MotFramework}
 \end{figure}
+
 
 \section{Contributions and overview}
 Our primary contribution is the development, single evaluation and joint integration of three novel \ac{NN} that we label:
@@ -228,7 +232,7 @@ Our \ac{ML} models are integrated into a \ac{KF}-based tracking system, widely u
 \paragraph{Recurrent Neural Network based Tracker}
 Similar to our methodologies, RNN-based approaches for online multi-target tracking have been introduced in~{\cite{DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_RNN_data_association.2020,liu2020deepmtt}}.
 Specifically, the work by Mertz et al. {\cite{DL_RNN_data_association.2019}} focuses on data association within a TbD framework.
-Their proposed DeepDA model, a Long Short-Term Memory (LSTM)-based Deep Data Association Network, is designed to learn and execute the task of associating objects across frames.
+Their proposed DeepDA model, a Long Short-Term Memory (LSTM)-based Deep Data Association (DeepDA) Network, is designed to learn and execute the task of associating objects across frames.
 This model's ability to discern association patterns directly from data enables a robust and reliable tracking outcome, even in environments with significant disturbances.
 Mertz et al. employ a distance matrix, derived from the euclidean distance measure, as the input for the DeepDA network.
 This innovative approach effectively supersedes traditional association algorithms, such as the Hungarian Algorithm.
