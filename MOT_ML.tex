@@ -389,11 +389,11 @@ With MANTa, the following association scenarios can be addressed:
 
 \paragraph{Data preprocessing}
 The association data set of \ac{MANTa} was created according to the described objective.
-Fig. {\ref{pic::MantaData}} shows the input data structure with corresponding association tasks for time stamp 85 of sequence 20 of the KITTI data set. Equivalent data points were extracted across all sequences.
+Fig. {\ref{pic::MantaData}} shows the input data structure with corresponding association tasks for time stamp 85 of sequence 20 of the KITTI data set. Equivalent data were extracted across all sequences.
 All extracted tracks were each modified with noise as described in section \ref{ssec:spent} and then normalized.
 Fig. {\ref{pic::MantaData}} shows an assignment example with non-noisy \acp{SO}. The association result is given by the one-hot vector at the bottom.
 Each sensor object is given a $1 \times 18$ one-hot vector as its association result. 
-For a maximum of $T_{\max}=16$ tracks, this results in an output vector of size $16 \times 18 = 288$. 
+For a maximum of $T_{\max}=16$ tracks, this results in an output vector of size $16 \times 18$. 
 The ordering of the \ac{SO}s is randomized per time stamp and the resulting association input matrix has dimension $F_{total} \times T_{\max}$, where $F_{total}$ represents the total number of features (here $2 \times k=10$, with $k$ being the number of values per state vector). 
 The one-hot vector depicted in Fig. {\ref{pic::MantaData}} shows the GT assignment of the first sensor object to the track at position two.
 
@@ -421,7 +421,7 @@ As for SANT, the cross-entropy cost function calculates the cross-entropy loss b
 The already introduced one-hot vector is used to represent the class in binary form in a vector and thus generate a 1-to-$O_{\max}$ code.
 The following formula is used to calculate the cross-entropy loss values for each time stamp $t$:
 \begin{equation}
-    loss_t = \sum_{i=1}^{O_{\max}} \left[ y_{i,j} \ln(\hat{y}_{i,j}) + (1 - y_{i,j}) \ln(1 - \hat{y}_{i,j}) \right]
+    loss_t = \sum_{i=1}^{T_{\max}} \sum_{j=1}^{C} \left[ y_{i,j} \ln(\hat{y}_{i,j}) + (1 - y_{i,j}) \ln(1 - \hat{y}_{i,j}) \right]
 \end{equation}
 Then, all scalars obtained per time stamp are summarized and divided by the number of samples $N$ of a minibatch for the cost function:
 \begin{equation}
@@ -472,12 +472,12 @@ The developed networks were modularly integrated into the Tracking-by-Detection 
     \label{tab::SpentRmseComparison}
 \end{table}
 Our recurrent network updates its internal hidden states at each time stamp, capturing temporal dependencies and enabling accurate state predictions without external correction. 
-This approach, well-suited for real-time applications with minimal latency, presents a strong alternative to traditional methods. 
+This approach, well-suited for real-time applications presents a strong alternative to traditional methods. 
 Using the KITTI dataset, focusing on vehicle tracks (cars and vans) divided into training, validation, and testing sets, we evaluated \ac{SPENT}'s performance.
 Our model achieved a \ac{RMSE} of 0.029 on the testing set for positional predictions across 31 tracks (Table {\ref{tab::SpentRmseComparison}}), with average deviations of 0.42 meters on the X-axis and 0.23 meters on the Y-axis
 Using an inhouse implemented \ac{KF} carried by Research Group following {\cite{KF_BoundingBD.2023,KF_Bewley.2016}}, an RMSE of 0.066 was achieved on the same data set.
 
-For another primary task of the \ac{TbD} \ac{MOT} method, namely the association of sensor objects to existing tracks, we developed \ac{SANT} to replace the classical \ac{GNN} method. By substituting the distance metric and the Hungarian assignment procedure with a learned, data-driven assignment logic, \ac{SANT} achieves an impressive accuracy of 95\% on a testing dataset with approximately 391 samples (representing 5\% of the total dataset with 7827 association samples). This approach not only simplifies the assignment process but also allows for adaptability in diverse scenarios, where classical methods may lack flexibility.
+For another primary task of the \ac{TbD} \ac{MOT} method, namely the association of sensor objects to existing tracks, we developed \ac{SANT} to replace the classical \ac{GNN} method. By substituting the distance metric and the Hungarian assignment procedure with a learned, data-driven assignment logic, \ac{SANT} achieves an impressive accuracy of 95\% on a testing dataset with 391 samples (representing 5\% of the total dataset with 7827 association samples). This approach not only simplifies the assignment process but also allows for adaptability in diverse scenarios, where classical methods may lack flexibility.
 
 Expanding on \ac{SANT}, \ac{MANTa} addresses the limitations of a single object to track assignment by enabling multi object assignments within each time stamp.
 This means \ac{MANTa} is trained to assign a list of \acp{SO} to a list of tracks in a single operational step on the same dataset as \ac{SANT} and achieved an assignment accuracy of 95\% for the six most frequently occurring association sets.
@@ -515,7 +515,7 @@ As illustrated in Fig. {\ref{pic::MantaTracks}}, the distribution of the numbero
 		In 29.9\% of the samples, the data contains one track, in 14,7\% two tracks. Only 18.5\% of the samples contain more than six tracks, which leads to an unbalanced dataset (1448 of 7827 samples).}
 	\label{pic::MantaTracks}
 \end{figure}
-Notably, time stamps containing at least one track constitute nearly one-third of the entire dataset, accounting for 29.9\% of the data, which corresponds to an absolute count of 2315 samples.
+Notably, time stamps containing exactly one track constitute nearly one-third of the entire dataset, accounting for 29.9\% of the data, which corresponds to an absolute count of 2315 samples.
 time stamps containing one to six tracks constitute 81.5\% of the samples and are therefore 6374 of 7827 samples.
 Consequently, tests were conducted using a reduced dataset with one to six tracks per time stamp to demonstrate the multi-association capability of the network.
 \ac{MANTa} correctly assigns 95\% of the dataset for time stamps containing one to six tracks.
