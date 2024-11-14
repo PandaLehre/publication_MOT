@@ -4,7 +4,7 @@ Authors: Christian Alexander Holz, Christian Bader, Markus Enzweiler, Matthias D
 Creating and managing the paper.
 ![PDF Preview](preview.png)
 
-## Figures
+<!-- ## Figures
 ### Schematic representation of the two integrated networks in a tracking-by-detection (TbD) framework.
 <img src="figs/MOT_Framework_Integration_SPENT_SANT.png" alt="Schmatic representation of the two integrated networks in a tracking-by-detection (TbD) framework." width="50%">
 
@@ -15,4 +15,4 @@ Creating and managing the paper.
 <img src="figs/SANT_network_arch.png" alt="Schematic representation of the generic single association network (SANT) structure." width="50%">
 
 ### Schematic representation of the generic multi association network (MANTa) structure.
-<img src="figs/MANTa_network_arch.png" alt="Schematic representation of the generic multi association network (MANTa) structure." width="50%">
+<img src="figs/MANTa_network_arch.png" alt="Schematic representation of the generic multi association network (MANTa) structure." width="50%"> -->
