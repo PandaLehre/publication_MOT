@@ -1,5 +1,6 @@
 
 \documentclass[lettersize,journal]{IEEEtran}
+% \documentclass[letterpaper, 10 pt, conference]{IEEEconf}
 \usepackage{amsmath,amsfonts}
 \usepackage{algorithmic}
 \usepackage{algorithm}
@@ -143,7 +144,7 @@
 \begin{abstract}
 This paper presents novel \ac{ML} methodologies for \ac{MOT}, specifically designed to meet the increasing complexity and precision demands of \ac{ADAS}. We introduce three \ac{NN} models that address key challenges in MOT: (i) the \ac{SPENT} for trajectory prediction, (ii) the \ac{SANT} for mapping individual \ac{SO} to existing tracks, and (iii) the \ac{MANTa} for associating multiple SOs to multiple tracks. These models are seamlessly integrated into a traditional \ac{KF} framework, maintaining the system’s modularity by replacing relevant components without disrupting the overall architecture. Importantly, all three networks are designed to be run in a real-time, embedded environment. Each network contains less than 50k trainable parameters.
 
-Our evaluation, conducted on the public KITTI tracking dataset, demonstrates significant improvements in tracking performance. SPENT reduces the Root Mean Square Error (RMSE) by 50\% compared to a standard KF, while \ac{SANT} and MANTa achieve 95\% accuracy in sensor object-to-track assignments. These results underscore the effectiveness of incorporating task-specific NNs into traditional tracking systems, boosting performance and robustness while preserving modularity, maintainability, and interpretability.
+Our evaluation, conducted on the public KITTI tracking dataset, demonstrates significant improvements in tracking performance. SPENT reduces the Root Mean Square Error (RMSE) by 50\% compared to a standard KF, while \ac{SANT} and MANTa achieve 95\% and 80\% accuracy in sensor object-to-track assignments. These results underscore the effectiveness of incorporating task-specific NNs into traditional tracking systems, boosting performance and robustness while preserving modularity, maintainability, and interpretability.
 
 
 \end{abstract}
@@ -478,7 +479,7 @@ For the association of sensor objects to existing tracks, we developed \ac{SANT}
 
 \begin{table}[b]
     \centering
-    \caption{Data association results for the SANT and MANTa networks.}
+    \caption{Data association results for the SANT and MANTa networks. MANTa's average accuracy is 80\%.}
     \resizebox{0.48\textwidth}{!}{
     \begin{tabular}{|p{0.1\textwidth}|p{0.1\textwidth}|p{0.1\textwidth}|}
         \hline
@@ -498,12 +499,12 @@ For the association of sensor objects to existing tracks, we developed \ac{SANT}
 \end{table}
 
 Expanding on \ac{SANT}, \ac{MANTa} addresses the limitations of a single object to track assignment by enabling multi object assignments within each timestamp.
-This means \ac{MANTa} is trained to assign a list of \acp{SO} to a list of tracks in a single operational step on the same dataset as \ac{SANT} and also achieved an assignment accuracy of 95\% for the six most frequently occurring association sets, i.e., the sets with one to six tracks per timestamp. It performs worse for assignment scenarios with more tracks, which were less present in the training data.
+This means \ac{MANTa} is trained to assign a list of \acp{SO} to a list of tracks in a single operational step on the same dataset as \ac{SANT} and also achieved an assignment accuracy of 95\% for the six most frequently occurring association sets, i.e., the sets with one to six tracks per timestamp. It performs much worse (14\%) for assignment scenarios with more tracks, which were less present in the training data.
 
 In the context of the entire KITTI dataset, which includes both cars and vans objects,
 MANTa achieves an average association accuracy of 80\%.
-This limitation was primarily attributed to the characteristics of the extracted data.
-As illustrated in Fig. {\ref{pic::MantaTracks}}, the distribution of the numberof existing tracks per timestamp reveals significant insights.
+This polarized performance with limitations for seven or more tracks was primarily attributed to the characteristics of the extracted data.
+As illustrated in Fig. {\ref{pic::MantaTracks}}, the distribution of the number of existing tracks per timestamp reveals significant insights.
 
 Notably, timestamps containing exactly one track constitute nearly one-third of the entire dataset, accounting for 29.9\% of the data, which corresponds to an absolute count of 2315 samples.
 Timestamps containing one to six tracks constitute 81.5\% of the samples and are therefore 6374 of 7827 samples.
