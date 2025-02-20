@@ -1,5 +1,5 @@
 
-\documentclass[lettersize,journal]{IEEEtran}
+\documentclass[letterpaper, 10 pt, journal, twoside]{IEEEtran}
 % \documentclass[letterpaper, 10 pt, conference]{IEEEconf}
 \usepackage{amsmath,amsfonts}
 \usepackage{algorithmic}
@@ -136,16 +136,25 @@
     Baden-Württemberg Cooperative State University (DHBW), Stuttgart, Germany}
 }
 
-\markboth{Journal of \LaTeX\ Class Files,~Vol.~tbd, No.~tbd, tbd~2024}%
-{Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
+% \markboth{Journal of \LaTeX\ Class Files,~Vol.~tbd, No.~tbd, tbd~2024}%
+% {Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
 
 \maketitle
 
 \begin{abstract}
 This paper presents novel \ac{ML} methodologies for \ac{MOT}, specifically designed to meet the increasing complexity and precision demands of \ac{ADAS}. We introduce three \ac{NN} models that address key challenges in MOT: (i) the \ac{SPENT} for trajectory prediction, (ii) the \ac{SANT} for mapping individual \ac{SO} to existing tracks, and (iii) the \ac{MANTa} for associating multiple SOs to multiple tracks. These models are seamlessly integrated into a traditional \ac{KF} framework, maintaining the system’s modularity by replacing relevant components without disrupting the overall architecture. Importantly, all three networks are designed to be run in a real-time, embedded environment. Each network contains less than 50k trainable parameters.
 
-Our evaluation, conducted on the public KITTI tracking dataset, demonstrates significant improvements in tracking performance. SPENT reduces the Root Mean Square Error (RMSE) by 50\% compared to a standard KF, while \ac{SANT} and MANTa achieve 95\% and 80\% accuracy in sensor object-to-track assignments. These results underscore the effectiveness of incorporating task-specific NNs into traditional tracking systems, boosting performance and robustness while preserving modularity, maintainability, and interpretability.
+Our evaluation, conducted on the public KITTI tracking dataset, demonstrates significant improvements in tracking performance. SPENT reduces the Root Mean Square Error (RMSE) by 50\% compared to a standard KF, while \ac{SANT} and MANTa achieve up to 95\% accuracy in sensor object-to-track assignments. These results underscore the effectiveness of incorporating task-specific NNs into traditional tracking systems, boosting performance and robustness while preserving modularity, maintainability, and interpretability.
 
+% This paper presents novel Machine Learning methodologies for Multi-Object Tracking, specifically designed to meet the increasing complexity and precision demands of Advanced Driver Assistance Systems. We introduce three Neural Network models that address key challenges in Multi-Object Tracking: (i) the Single-Prediction Network (SPENT) for trajectory prediction, (ii) the Single-Association Network (SANT) for mapping individual Sensor Object (SO) to existing tracks, and (iii) the Multi-Association Network (MANTa) for associating multiple SOs to multiple tracks. These models are seamlessly integrated into a traditional Kalman Filter framework, maintaining the system’s modularity by replacing relevant components without disrupting the overall architecture. Importantly, all three networks are designed to be run in a real-time, embedded environment. Each network contains less than 50k trainable parameters.
+
+% Our evaluation, conducted on the public KITTI tracking dataset, demonstrates significant improvements in tracking performance. SPENT reduces the Root Mean Square Error by 50% compared to a standard Kalman Filter, while SANT and MANTa achieve up to 95% accuracy in sensor object-to-track assignments. These results underscore the effectiveness of incorporating task-specific NNs into traditional tracking systems, boosting performance and robustness while preserving modularity, maintainability, and interpretability.
+
+% Dear all,
+
+% please find attached a joined work of the Daimler Truck research department and the Universities of applied science in Esslingen and Stuttgart. We developed several novel neural networks that enable a data-driven performance boost in multi-object tracking for automated driving.
+
+% Au
 
 \end{abstract}
 
