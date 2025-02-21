@@ -169,9 +169,8 @@ Tracking frameworks form the heart of ADAS that are used in millions of vehicles
 The vast majority of these frameworks rely on classical approaches such as the \ac{KF} or its variants {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023}}.
 These classical tracking theories have the great benefit of being modular and interpretable.
 The task is split into clearly separated subtasks such as the prediction of currently tracked objects and the association with newly measured ones.
-However, development for automated driving is highly complex~{\cite{AD_Overview.2017,AD_book.2024}}.
 
-In the automotive industry, tracking systems are typically developed through a software platform that is designed to support a range of vehicle models, each of which will have varying sensor placements, system configurations, or even entirely different sensor suites. These systems must perform reliably across a wide spectrum of driving scenarios, which can introduce performance challenges in specific situations.
+However, development for automated driving is highly complex~{\cite{AD_Overview.2017,AD_book.2024}}. In the automotive industry, tracking systems are typically developed through a software platform that is designed to support a range of vehicle models, each of which will have varying sensor placements, system configurations, or even entirely different sensor suites. These systems must perform reliably across a wide spectrum of driving scenarios, which can introduce performance challenges in specific situations.
 Traditional solutions often rely on heuristics and manual parameter tuning, making the software cumbersome to maintain and difficult to extend.
 Moreover, these hand-engineered methods lack automated optimization, resulting in suboptimal performance in complex driving conditions. To address these limitations, we propose a data-driven tracking framework that allows for fine-tuning for specific configurations, thereby improving both maintainability and adaptability.
 \begin{figure}[!hbp]
@@ -229,7 +228,7 @@ While methods like the \ac{JPDA} {\cite{DA_JPDA.1993}} evaluate the likelihood o
 The temporal information in tracks can for example be leveraged through the attention mechanisms as used in {\cite{DL_ATT_CNN_soda.2020, DL_ATT_CNN_mot_sot_based.2017}} or \acp{RNN} as developed in {\cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}}.
 The latter is what we are also pursuing in this work.
 Similar to the problem statement by Mertz et al. {\cite{DL_RNN_data_association.2019}}, the aim of our work is to develop a data-based approach that can learn to completely solve the combinatorial non deterministic polynomial time (NP) hard optimization problem of data association.
-In the context of this work, we put forward the hypothesis that a \ac{GRU}-based association network can be designed and trained using an undefined distance measure, as discussed in the next chapter.
+In the context of this work, we put forward the hypothesis that a \ac{GRU}-based association network can be designed and trained without forcing a concrete distance metric, as discussed in the next chapter.
 
 \subsection{Real time applications}
 Tracking systems for ADAS run on embedded devices in real-time. They must provide  immediate state prediction of objects directly after their first detection {\cite{KF_Bewley.2016,DL_Wojke.2017}}, making offline tracking methods like {\cite{offline_mot.2017}} unsuitable. Consequently, modern multi-object tracking approaches rely on online methods, which do not have access to future sensor data. These methods estimate object-track similarity based on predicted positions or object features like appearance.
@@ -313,7 +312,7 @@ This mechanism allows continuous correction throughout each track's sequence, en
 The number of hidden units correlates with the amount of information retained over time, as shown in Fig. \ref{pic::SpentArch}.
 These hidden states encapsulate information from all preceding timestamps, ensuring comprehensive temporal understanding.
 Following the \ac{LSTM} layer, we incorporate a Batch-Normalization layer which accelerates training and promotes convergence by mitigating internal covariate shift \cite{DL_batch_norm.2015}.
-Next ist a Relu layer, which applies a non-linear threshold operation, setting values below zero to zero.
+Next ist a ReLU layer, which applies a non-linear threshold operation, setting values below zero to zero.
 During training, a Dropout layer randomly nullifies input elements with a specified probability, regularizing the model and preventing overfitting \cite{DL_dropout.2014}.
 The architecture concludes with a Fully Connected (FC) layer, which integrates insights from previous layers, with its dimensionality aligned to the number of required output variables {\cite{DL_FC.2010}}.
 
@@ -325,7 +324,7 @@ For one single prediction the \ac{MSE} is given by
 \begin{equation}
 	MSE = \frac{1}{k}\sum_{i=1}^{k}{({Z}_i-{{X}}_i)}^2,
 \end{equation}
-where $k$ is the length of the predicted state vector (here $k=5$), $Z_i$ are the entries of the ground truth state vector (KITTI cars and vans tracks) and ${X}_i$ the respective entries of the predicted state vector from our network.
+where $k$ is the length of the predicted state vector (here $k=5$: $x$, $y$, $\dot{x}$, $\dot{y}$, yaw angle), $Z_i$ are the entries of the ground truth state vector (KITTI cars and vans tracks) and ${X}_i$ the respective entries of the predicted state vector from our network.
 During training, the cost function is evaluated for one mini-batch with several sequences and a total number of $N$ timestamps.
 It is calculated as half the mean-square-error of the predictions added up for each timestamp, normalized over all timestamps.
 The factor of $\frac{1}{2}$ simplifies the gradient during backpropagation:
@@ -346,7 +345,7 @@ These tracks were extracted from the KITTI dataset.
 We note, however, that genuine hand-labelled \ac{GT} data for this specific association problem is not available. We rather use the existing tracks to  generate synthetical \ac{GT} data for the data association.
 The input to \ac{SANT} consists of a single sensor object and a set of tracks (see top part of Fig. \ref{pic::SantArch}).
 The output is a one-hot vector encoding the association of the incoming \ac{SO} to one of the tracks, or to none.
-To generate the synthetical \ac{GT}, we take a set of tracks, then randomly chose one of them and take the next state vector at the next timestamp of that single track as the incoming new \ac{SO}. %MD: Wenn wir das noch einen Timestamp nach vorne predicten, dann haben die anderen Objekte und das rausgesuchte zum SO erklärte ja nicht mehr den gleichen timestamp. Wie kann das sein?
+To generate the synthetical \ac{GT}, we take a set of tracks, then randomly choose one of them and take the next state vector at the next timestamp of that single track as the incoming new \ac{SO}. %MD: Wenn wir das noch einen Timestamp nach vorne predicten, dann haben die anderen Objekte und das rausgesuchte zum SO erklärte ja nicht mehr den gleichen timestamp. Wie kann das sein?
 The association result can be extracted from the corresponding track that it was taken out of.
 To simulate more realistic sensor data, artificial noise was introduced.
 This process was designed to reflect the inherent inaccuracies and uncertainties present in real-world sensor measurements.
@@ -451,7 +450,7 @@ This extension is labelled accordingly in Fig. {\ref{pic::MantaArch}}.
 For each track (from 1 to $T_{\max}=16$), the MANTa has been developed with the fully connected, softmax stack that was introduced for \ac{SANT}.
 Each softmax output consists of a vector with $C=18$ elements, which represents the most probable assignment.
 This means that a single assignment can be realized for each track.
-The vectors 1 to $T_{\max}$ are linked together in the Concatenation Layer.
+The vectors 1 to $T_{\max}$ are linked together in the Concatenation layer.
 This creates a vector with 288 elements, whereby 18 elements each represent the most probable assignment of a \ac{SO} to a track.
 
 \section{Experimental Evaluation}
