@@ -68,8 +68,8 @@
     short = LSTM,
     long = Long Short-Term Memory
 }
-\DeclareAcronym{BILSTM}{
-    short = BILSTM,
+\DeclareAcronym{BiLST}{
+    short = BiLST,
     long = Bidirectional Long Short-Term Memory
 }
 \DeclareAcronym{GRU}{
@@ -123,6 +123,10 @@
 \DeclareAcronym{RMSE}{
     short = RMSE,
     long  = Root Mean Square Error
+}
+\DeclareAcronym{ReLU}{
+    short = ReLU,
+    long  = Rectified Linear Unit
 }
 
 \begin{document}
@@ -187,12 +191,12 @@ The "Association network" can be implemented using either \ac{SANT} or \ac{MANTa
 Our primary contribution is the development, single evaluation and joint integration of three novel \ac{NN} that we label:
 \begin{enumerate}[(i)]
     \item SPENT (Single-Prediction Network) which predicts the states of tracked objects.
-    \item SANT (Single-Association-Network) which associates one incoming sensor objects to all currently tracked objects.
+    \item SANT (Single-Association-Network) which associates one incoming sensor object to all currently tracked objects.
     \item MANTa (Multi-Association Network) which associates multiple incoming sensor objects to all currently tracked objects.
 \end{enumerate}
 
 These networks were specifically designed for real-time, embedded inference. Each of them has fewer than 50k trainable parameters. Fig. {\ref{pic::MotFramework}} provides an overview of our approach in which the association network can be implemented using either \ac{SANT} or \ac{MANTa}.
-The input for the proposed prediction network (i) are up to $m$ \acp{SO} $Z_{t,1:m}$ at timestamp $t$.
+The input for the proposed prediction network (i) is up to $m$ \acp{SO} $Z_{t,1:m}$ at timestamp $t$.
 If new objects are detected by the sensors, these are stored in a $k$-dimensional state vector containing information such as object position $(x,y)$, yaw angle and object dimensions
 (length and width) (for $k=5$).
 \ac{SPENT} predicts all currently tracked objects $X_{t,1:n}$ (up to $n$) to the next timestamp where they are used as input to either the SANT or MANTa association networks.
@@ -203,7 +207,7 @@ The self-learning, data-driven approach enables adaptability to various scenario
 Many conventional tracking systems rely on static methods for data association.
 Commonly used algorithms like the \ac{HA} {\cite{DA_hungarian.1955}} require heuristics and fixed thresholds.
 (ii) Our proposed \ac{SANT} and (iii) \ac{MANTa} replace the calculation of a distance metric for the corresponding assignment by employing \ac{ML} in order to resolve situations unclear for traditional approaches.
-Both, our prediction network and our association networks can be developed and evaluated as stand-alone models.
+Both our prediction network and our association networks can be developed and evaluated as stand-alone models.
 For a throughout evaluation, we proceed by integrating them into an existing tracking system and demonstrate their performance through multiple tests and comparisons with established methods.
 This work provides new insights and advancement in the development of \ac{ADAS} tracking systems by applying \ac{ML}\@.
 
@@ -225,13 +229,15 @@ However, it only considers current observations, ignoring temporal continuity an
 While methods like the \ac{JPDA} {\cite{DA_JPDA.1993}} evaluate the likelihood of all possible assignments, they are computationally expensive.
 
 \ac{ML}-based approaches have been proposed to address these limitations.
-The temporal information in tracks can for example be leveraged through the attention mechanisms as used in {\cite{DL_ATT_CNN_soda.2020, DL_ATT_CNN_mot_sot_based.2017}} or \acp{RNN} as developed in {\cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}}.
+The temporal information in tracks can, for example, be leveraged through the attention mechanisms as used in {\cite{DL_ATT_CNN_soda.2020, DL_ATT_CNN_mot_sot_based.2017}} or \acp{RNN} as developed in {\cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}}.
 The latter is what we are also pursuing in this work.
-Similar to the problem statement by Mertz et al. {\cite{DL_RNN_data_association.2019}}, the aim of our work is to develop a data-based approach that can learn to completely solve the combinatorial non deterministic polynomial time (NP) hard optimization problem of data association.
+Similar to the problem statement by Mertz et al. {\cite{DL_RNN_data_association.2019}}, the aim of our work is to develop a data-based approach that can learn to completely solve the combinatorial non-deterministic polynomial time (NP) hard optimization problem of data association.
 In the context of this work, we put forward the hypothesis that a \ac{GRU}-based association network can be designed and trained without forcing a concrete distance metric, as discussed in the next chapter.
 
 \subsection{Real time applications}
-Tracking systems for ADAS run on embedded devices in real-time. They must provide  immediate state prediction of objects directly after their first detection {\cite{KF_Bewley.2016,DL_Wojke.2017}}, making offline tracking methods like {\cite{offline_mot.2017}} unsuitable. Consequently, modern multi-object tracking approaches rely on online methods, which do not have access to future sensor data. These methods estimate object-track similarity based on predicted positions or object features like appearance.
+Tracking systems for ADAS run on embedded devices in real-time.
+They must provide  immediate state prediction of objects directly after their first detection {\cite{KF_Bewley.2016,DL_Wojke.2017}}, making offline tracking methods like {\cite{offline_mot.2017}} unsuitable.
+Consequently, modern multi-object tracking approaches rely on online methods, which do not have access to future sensor data. These methods estimate object-track similarity based on predicted positions or object features like appearance.
 
 \paragraph{Kalman Filter based tracker}
 Our \ac{ML} models are integrated into a \ac{KF}-based tracking system, widely used for its robust performance and interpretability {\cite{KF_Wan.2000,KF_Ristic.2004,KF_Julier.2004,KF_framework.2013,KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023}}. Bewley et al. {\cite{KF_Bewley.2016}} introduced an efficient multi-object tracking method combining a KF with the Hungarian Algorithm. Seidenschwarz et al. {\cite{KF_simple_cues.2022}} proposed a simpler approach based on visual cues like color, shape, and motion for object tracking and frame-to-frame association, avoiding the complexity of many modern trackers.
@@ -256,10 +262,10 @@ However, since tracking tasks involve real-time data processing with relatively 
 
 \section{Tracking with \ac{ML}-based Prediction and Association Networks}
 We apply the \ac{TbD} paradigm, in which a tracker fuses object detections to generate object tracks that are consistent over time. In our study a \ac{KF} framework was implemented following the computational ideas of Vo et al. {\cite{KF_framework.2013}}.
-To enable our models to incorporate temporal information, we use LSTM {\cite{DL_LSTM.1997}} and bidirectional Long Short-Term Memory (BILSTM) network layers {\cite{DL_BILSTM.1997}}, both for the prediction and the association of the sensor objects to the existing tracks.
+To enable our models to incorporate temporal information, we use \ac{LSTM} {\cite{DL_LSTM.1997}} and \ac{BiLSTM} network layers {\cite{DL_BILSTM.1997}}, both for the prediction and the association of the sensor objects to the existing tracks.
 
 \subsection{Single Prediction Network (SPENT)}
-\label{ssec:spent}
+\label{sec::spent}
 Our approach uses the hidden states of the \ac{LSTM} layer as an information repository for each object. {\ac{SPENT}} operates in an open-loop manner, predicting future states based on past data.
 This allows the network to predict the most likely state of an object for the next timestamp.
 
@@ -267,7 +273,7 @@ This allows the network to predict the most likely state of an object for the ne
 In the development of our model, \ac{GT} data comprising vehicle tracks (cars and vans) from the KITTI dataset {\cite{Geiger2012CVPR}} was utilized.
 We extracted 635 tracks, filtering out shorter tracks using a 3-frame threshold, resulting in 624 tracks.
 This ensures the network receives tracks with sufficient timestamps, a common practice in tracking systems \cite{DL_DetTrack.2024}.
-The track lengths varies from a minimum of 4 frames to a maximum of 643 frames (Sequence 20, ID 12).
+The track lengths vary from a minimum of 4 frames to a maximum of 643 frames (Sequence 20, ID 12).
 
 
 \begin{figure}[b!]
@@ -290,7 +296,7 @@ where the square $(...)^{2^*}$ and the square-root must be applied element wise.
 
 In our approach, we apply pre-padding as described by Reddy et al. {\cite{DL_padding.2019}}, who examined the impact of padding strategies on sequence-based \acp{NN}.
 They highlight that while both pre-padding and post-padding are feasible, the choice significantly affects performance, especially for \ac{LSTM}-based networks, where maintaining sequence context is critical.
-To manage varying sequence lengths, we pad shorter sequences with special tokens, ensuring all sequences in a batch have uniform length.
+To manage varying sequence lengths, we pad shorter sequences with tokens, ensuring all sequences in a batch have uniform length.
 
 We used zeros as padding tokens, added to the end of sequences as needed, allowing efficient batch processing and consistent training without affecting model performance due to varying sequence lengths.
 As noted by Reddy et al. {\cite{DL_padding.2019}}, while padding introduces noise, it is crucial for aligning sequences in mini-batches for \ac{LSTM} training.
@@ -309,11 +315,11 @@ This representation highlights the strategic deployment of the \ac{LSTM} layer f
 
 The foundational layer of our \ac{SPENT} is an \ac{LSTM} layer, where hidden states are dynamically updated at each timestamp based on incoming measurement data.
 This mechanism allows continuous correction throughout each track's sequence, enhancing predictive accuracy.
-The number of hidden units correlates with the amount of information retained over time, as shown in Fig. \ref{pic::SpentArch}.
+The number of hidden units correlates with the amount of information retained over time, as shown in Fig.~\ref{pic::SpentArch}.
 These hidden states encapsulate information from all preceding timestamps, ensuring comprehensive temporal understanding.
-Following the \ac{LSTM} layer, we incorporate a Batch-Normalization layer which accelerates training and promotes convergence by mitigating internal covariate shift \cite{DL_batch_norm.2015}.
-Next ist a ReLU layer, which applies a non-linear threshold operation, setting values below zero to zero.
-During training, a Dropout layer randomly nullifies input elements with a specified probability, regularizing the model and preventing overfitting \cite{DL_dropout.2014}.
+Following the \ac{LSTM} layer, we incorporate a Batch-Normalization layer which accelerates training and promotes convergence by mitigating internal covariate shift~\cite{DL_batch_norm.2015}.
+Next is a \ac{ReLU} activation layer~\cite{DL_ReLU.2019}, which applies a non-linear threshold operation, setting values below zero to zero.
+During training, a Dropout layer randomly nullifies input elements with a specified probability, regularizing the model and preventing overfitting~\cite{DL_dropout.2014}.
 The architecture concludes with a Fully Connected (FC) layer, which integrates insights from previous layers, with its dimensionality aligned to the number of required output variables {\cite{DL_FC.2010}}.
 
 Our model’s loss function is based on the Mean Squared Error (MSE) metric, which is calculated for each state value prediction.
@@ -339,36 +345,36 @@ Unlike conventional methods {\cite{DL_RNN_mot.2016, DL_RNN_data_association.2019
 
 \paragraph{Data preprocessing}
 In the formulation of \ac{SANT}, we conceptualized data association as a temporally structured challenge, adopting a sequence-to-vector paradigm.
-In general, $m$ incoming sensor objects need to be associated to $n$ tracks.
+In general, $m$ incoming sensor objects need to be associated with $n$ tracks.
 For \ac{SANT} we focus on the association of a singular sensor object ($m=1$), denoted as $Z_{(t,m=1)}$, to $n$ tracks, represented as $X_{(t,1:n)}$.
 These tracks were extracted from the KITTI dataset.
 We note, however, that genuine hand-labelled \ac{GT} data for this specific association problem is not available. We rather use the existing tracks to  generate synthetical \ac{GT} data for the data association.
 The input to \ac{SANT} consists of a single sensor object and a set of tracks (see top part of Fig. \ref{pic::SantArch}).
 The output is a one-hot vector encoding the association of the incoming \ac{SO} to one of the tracks, or to none.
-To generate the synthetical \ac{GT}, we take a set of tracks, then randomly choose one of them and take the next state vector at the next timestamp of that single track as the incoming new \ac{SO}. %MD: Wenn wir das noch einen Timestamp nach vorne predicten, dann haben die anderen Objekte und das rausgesuchte zum SO erklärte ja nicht mehr den gleichen timestamp. Wie kann das sein?
+To generate the synthetic \ac{GT}, we take a set of tracks, then randomly choose one of them and take the next state vector at the next timestamp of that single track as the incoming new \ac{SO}. %MD: Wenn wir das noch einen Timestamp nach vorne predicten, dann haben die anderen Objekte und das rausgesuchte zum SO erklärte ja nicht mehr den gleichen timestamp. Wie kann das sein?
 The association result can be extracted from the corresponding track that it was taken out of.
 To simulate more realistic sensor data, artificial noise was introduced.
 This process was designed to reflect the inherent inaccuracies and uncertainties present in real-world sensor measurements.
 To achieve this, we add noise to the state vector of the incoming \ac{SO}s with a maximum of 3\%.
 As shown in Fig. {\ref{pic::SantArch}} the data format was created accordingly to enable index-based track assignment for \ac{SANT}.
-The actual number of tracks can vary between 0 and a maximum of $n=16$ objects, as is given by the KITTI data set using our selected objects (cars and vans) {\cite{Geiger2012CVPR}}.
+The actual number of tracks can vary between 0 and a maximum of $n=16$ objects, as is given by the KITTI dataset using our selected objects (cars and vans) {\cite{Geiger2012CVPR}}.
 The size of the input matrix therefore corresponds to $k \times (n + 1)$, where $k = 5$ is the number of state values for our work.
 The columns of the matrix contains the state vectors of the $n$ tracks and the state vector of the incoming sensor object.
 A deeper analysis of our data is presented in the \ac{MANTa} section.
 
 \paragraph{Network architecture}
 The network as depicted in Fig. {\ref{pic::SantArch}} is designed as a sequence-to-classification network.
-At each timestamp, a matrix is passed as input holding both, the information of the one to-be-assigned \ac{SO} and the multiple currently-tracked objects.
-Architectures with \ac{RNN}, \ac{GRU}, \ac{LSTM} and \ac{BILSTM} layers were tested.
-The best performing architecture was experimalty determined to be a \ac{BILSTM} layer as shown in Fig. {\ref{pic::SantArch}}.
+At each timestamp, a matrix is passed as input holding both the information of the one to-be-assigned \ac{SO} and the multiple currently-tracked objects.
+Architectures with \ac{RNN}, \ac{GRU}, \ac{LSTM} and \ac{BiLST} layers were tested.
+The best performing architecture was experimentally determined to be a \ac{BiLST} layer as shown in Fig. {\ref{pic::SantArch}}.
 \begin{figure}[t!]
 	\centerline{\includegraphics[width=0.95\linewidth]{figs/SANT_network_arch.png}}
 	\caption{Schematic representation of the network structure of \ac{SANT}. Here $m=1$, so one \ac{SO} is associated to $m$ existing tracks.}
 	\label{pic::SantArch}
 \end{figure}
 We are using the work introduced by Hochreiter et al. {\cite{DL_LSTM.1997}}, who demonstrated the ability to capture the context from both ends of the sequence by combining the outputs of two LSTM layers that pass the information in opposite directions.
-The resulting architecture is called \ac{BILSTM}.
-The output mode has been configured in the \ac{BILSTM} layer, so that the layer is able to receive a sequence as input and calculate an output vector.
+The resulting architecture is called \ac{BiLST}.
+The output mode has been configured in the \ac{BiLST} layer, so that the layer is able to receive a sequence as input and calculate an output vector.
 This form of dimension reduction is necessary in order to carry out the classification.
 The final FC layer specifies the number of classes via the number of output values.
 %CH: VIELLEICHT UMDREHEN?
@@ -395,9 +401,9 @@ With MANTa, the following association scenarios can be addressed:
 \end{itemize}
 
 \paragraph{Data preprocessing}
-The association data set of \ac{MANTa} was created according to the described objective.
-Fig. {\ref{pic::MantaData}} shows the input data structure with corresponding association tasks for timestamp 85 of sequence 20 of the KITTI data set. Equivalent data were extracted across all sequences.
-All extracted tracks were each modified with noise as described in section \ref{ssec:spent} and then normalized.
+The association dataset of \ac{MANTa} was created according to the described objective.
+Fig. {\ref{pic::MantaData}} shows the input data structure with corresponding association tasks for timestamp 85 of sequence 20 of the KITTI dataset. Equivalent data were extracted across all sequences.
+All extracted tracks were each modified with noise as described in section \ref{sec::spent} and then normalized.
 Fig. {\ref{pic::MantaData}} shows an assignment example with non-noisy \acp{SO}. The association result is given by the one-hot vector at the bottom.
 For each sensor object the network calculates a $1 \times 18$ one-hot vector containing its association result to the existing tracks.
 For a maximum of $T_{\max}=16$ tracks, this results in an output vector of size $16 \times 18$.
@@ -407,7 +413,7 @@ The one-hot vector depicted in Fig. {\ref{pic::MantaData}} shows the GT assignme
 \begin{figure*}
 	\includegraphics[width=\linewidth]{figs/MANTa_data.png}
 	\captionof{figure}{MANTa, data structure, shows the non-noisy \acp{SO} to enable a visual assignment and increase understanding of the association procedure.
-	Seven tracks are extracted from the KITTI data set for the given timestamp of sequence 20.
+	Seven tracks are extracted from the KITTI dataset for the given timestamp of sequence 20.
 	Eight sensor objects are generated in pseudo-random order.
 	The one-hot vector shows the GT assignment of the first sensor object to the track at position two.}
 	\label{pic::MantaData}
@@ -429,7 +435,7 @@ The following formula is used to calculate the cross-entropy loss values for eac
 \begin{equation}
     loss_t = - \sum_{i=1}^{T_{\max}} \sum_{j=1}^{C} \left[ y_{i,j} \ln(\hat{y}_{i,j}) + (1 - y_{i,j}) \ln(1 - \hat{y}_{i,j}) \right].
 \end{equation}
-Then, all scalars obtained per timestamp are summarized and divided by the number of samples $N$ of a minibatch for the cost function:
+Then, all scalars obtained per timestamp are summarized and divided by the number of samples $N$ of a mini-batch for the cost function:
 \begin{equation}
     cost = \frac{1}{N} \sum_{t=1}^{N} loss_t.
 \end{equation}
@@ -444,7 +450,7 @@ This is what we call a \ac{MANTa}.
 	\label{pic::MantaArch}
 \end{figure}
 
-The \ac{BILSTM} layer processes the input data as already explained for \ac{SANT}\@.
+The \ac{BiLST} layer processes the input data as already explained for \ac{SANT}\@.
 The task of associating a \ac{SO} list with a track list requires a separate network part for each track.
 This extension is labelled accordingly in Fig. {\ref{pic::MantaArch}}.
 For each track (from 1 to $T_{\max}=16$), the MANTa has been developed with the fully connected, softmax stack that was introduced for \ac{SANT}.
@@ -478,10 +484,11 @@ The developed networks were modularly integrated into the Tracking-by-Detection 
     \label{tab::SpentRmseComparison}
 \end{table}
 Our recurrent network updates its internal hidden states at each timestamp, capturing temporal dependencies and enabling accurate state predictions without external correction.
-This approach, well-suited for real-time applications presents a strong alternative to traditional methods.
+This approach, well-suited for real-time applications, presents a strong alternative to traditional methods.
 Using the KITTI dataset, focusing on vehicle tracks (cars and vans) divided into training, validation, and testing sets, we evaluated \ac{SPENT}'s performance.
-As first benchmark, we take a \ac{KF} framework implemented by the Daimler Truck Research Group following {\cite{KF_BoundingBD.2023,KF_Bewley.2016}}, which achieves a RMSE of 0.066 across 31 tracks (Table {\ref{tab::SpentRmseComparison}}) on the testing set.
-Our \ac{SPENT} model reduces the RMSE by more than half to 0.029 using the identical data sets. For positional predictions the average deviations is 42 centimeters on the x-axis and 23 centimeters on the y-axis.
+As first benchmark, we take a \ac{KF} framework implemented by the Daimler Truck Research Group following {\cite{KF_BoundingBD.2023,KF_Bewley.2016}}, which achieves an \ac{RMSE} of 0.066 across 31 tracks (Table {\ref{tab::SpentRmseComparison}}) on the testing set.
+Our \ac{SPENT} model reduces the RMSE by more than half to 0.029 using the identical datasets.
+For positional predictions the average deviation is 42 centimeters on the x-axis and 23 centimeters on the y-axis.
 
 For the association of sensor objects to existing tracks, we developed \ac{SANT} to replace classical methods like \ac{GNN}. By substituting the distance metric and the Hungarian assignment procedure with a learned, data-driven assignment logic, \ac{SANT} achieves an accuracy of 95\% on a testing dataset with 391 samples (representing 5\% of the total dataset with 7827 association samples). This approach not only simplifies the assignment process but also allows for adaptability in diverse scenarios, where classical methods may lack flexibility.
 
@@ -506,10 +513,10 @@ For the association of sensor objects to existing tracks, we developed \ac{SANT}
     \label{tab::SpentRmseComparison}
 \end{table}
 
-Expanding on \ac{SANT}, \ac{MANTa} addresses the limitations of a single object to track assignment by enabling multi object assignments within each timestamp.
+Expanding on \ac{SANT}, \ac{MANTa} addresses the limitations of a single object to track assignment by enabling multi-object assignments within each timestamp.
 This means \ac{MANTa} is trained to assign a list of \acp{SO} to a list of tracks in a single operational step on the same dataset as \ac{SANT} and also achieved an assignment accuracy of 95\% for the six most frequently occurring association sets, i.e., the sets with one to six tracks per timestamp. It performs much worse (14\%) for assignment scenarios with more tracks, which were less present in the training data.
 
-In the context of the entire KITTI dataset, which includes both cars and vans objects,
+In the context of the entire KITTI dataset, which includes both car and van objects,
 MANTa achieves an average association accuracy of 80\%.
 This polarized performance with limitations for seven or more tracks was primarily attributed to the characteristics of the extracted data.
 As illustrated in Fig. {\ref{pic::MantaTracks}}, the distribution of the number of existing tracks per timestamp reveals significant insights.
@@ -526,7 +533,7 @@ The primary advantage of \ac{MANTa} over \ac{SANT} is its ability to assign mult
 	\caption{The diagram shows the distribution of the number of existing tracks per timestamp.
 		For the KITTI dataset, which includes both car and van objects. It reveals that timestamps containing one to six tracks constitute 81.5\% of the samples (6374 of 7827).
 		The legend shows the absolute number of samples which contain the respective number of tracks.
-		In 29.9\% of the samples, the data contains one track, in 14,7\% two tracks. Only 18.5\% (1448 of 7827 samples) of the samples contain more than six tracks, which leads to an unbalanced dataset and makes learning the association for \ac{MANTa} for 6+ tracks harder.}
+		In 29.9\% of the samples, the data contains one track, in 14.7\% two tracks. Only 18.5\% (1448 of 7827 samples) of the samples contain more than six tracks, which leads to an unbalanced dataset and makes learning the association for \ac{MANTa} for 6+ tracks harder.}
 	\label{pic::MantaTracks}
 \end{figure}
 

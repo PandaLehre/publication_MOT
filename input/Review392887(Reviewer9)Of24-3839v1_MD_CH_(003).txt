@@ -1,0 +1,61 @@
+The paper proposes a set of neural networks for a multi object tracking
+framework. The networks are integrated into a standard Kalman filter
+based tracking by detection system as the prediction and association
+components. The aim of the neural networks is to enable use in
+real-time systems and demonstrate that learned modules have benefits
+over traditional methods such as the Hungarian method.
+
+While the underlying idea of the paper is valid there are significant
+issues in both the methodology and experimental aspects of the paper.
+
+The method describes the three different networks in some detail,
+though certain aspects remain unclear. For example, based on the
+description and Figure 6 it's unclear what if any fully connected
+layers exist in the MANTa network. Another example of a lack of clarity
+is the difference between Eq 4 and Eq5. Eq5 is the standard BCE loss
+and it's unclear why the two networks use a slightly different
+formulation. Additionally, below Eq4 the label y_i,j is likely
+misspecified as it uses [0, 1] for binary labels, which should be {0,
+1} to represent a set "{}" rather than a range of the real numbers
+"[]".
+MD-> Das sollten wir alles genau anschauen
+-> TO DO 
+
+A fundamental limitation of the approach also appears to be that it can
+only handle up to 16 tracks at once rather than an arbitrary number.
+This hard specification also appears to cause issues in the training as
+the experiments show. The MANTa network also does not appear to have
+any component that ensures unique assignments. While there is a mention
+of that aspect in the text (above Eq5) there is no mention if that is
+something the method can ensure and if so how.
+MD-> 16 Tracks: Hier müssen wir vlt darauf verweisen, dass das erweitert werden kann. Aber das umbauen ist denke ich relativ aufwändig. 
+MD-> Unique assignments: Das verstehe ich nichts. Kann also ein SO mehreren Tracks zugeordnet werden? Das denke ich doch nicht. Das sollten wir im Text nochmal genau rausschreiben.
+
+Finally, the novelty of the networks is unclear as they utilize very
+standard components (LSTM, BN, MLP) that would be the typical
+components one would attempt to use for such an approach, and it's not
+clear that this hasn't been used in a similar manner in other existing
+approaches.
+MD-> Hier sollten wir nochmal hervorheben, dass die Integration in das gesamt Kalman Konstrukt die Innovation ist. Jedes Netzwerk für sich ist sicherlich keine bahnbrechende Neuerung.
+-> TO DO 
+
+
+On the experimental side, very little information is provided, only an
+overall RMSE to a lightly specified baseline and association accuracy.
+Given that there are very well-established benchmarks for this problem,
+for example, https://motchallenge.net/, this is simply insufficient.
+
+Even if the method were not evaluated on the benchmark, one would
+expect a comparison to some of the methods mentioned in the related
+work section, several of which have open-source implementations
+available. Furthermore, using the metrics used in the MOT community
+would be expected such that one can get an idea of the approach's
+performance. A comparison to classical association methods is also
+missing despite this being a major motivation for this work. Finally,
+the paper motivated the use of low-complexity networks with real-time
+operation needs, yet runtime numbers are completely absent.
+MD-> Run time kriegen wir ja vlt noch rein. Hier wäre es dann natürlich auf einer völlig anderen Hardware als die Ziel Hardware, was die Zahl weniger aussagekräftig machen würde.
+MD-> Der Vergleich mit anderen Methoden ist hier denke ich der Haupt-Kritikpunkt. Ich denke es lohnt sich schon mal zu schauen, ob wir etwas finden auf dem wir benchmarken können.
+MD-> In dem Zug könnte man auch nochmal gucken, ob es Sinn macht noch andere Metriken einzubauen.
+-> TO DO 
+

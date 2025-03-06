@@ -1,0 +1,84 @@
+Data-Driven Object Tracking: Integrating Modular
+Neural Networks into a Kalman Framework
+
+The paper presents a multi-object tracking (MOT) method composed of
+three neural networks to represent the three main components of the
+common tracking-by-detection framework. Namely a network for single
+object hidden state prediction, a state update and track management
+network and finally a multiple object accusation network for assigning
+sensor detections to existing tracks. This framework follows the common
+framework of a Kalman-like filtering within a MOT setting.
+
+The biggest weakness of this paper is the lack of validation of the
+proposed approach on standard benchmarks, metrics or against common
+methods from the tracking literature. The only comparison is to another
+variant of the authors work or a propriety implementation of the KF (in
+Table I.
+MD-> Siehe erster Reviewer. Lohnt sich sicher, denn das kriegen wir wieder zurück geschickt. 
+
+Also the paper mentions a possible interesting study: "Architectures
+with RNN, GRU,
+LSTM and Bidirectional Long Short-Term Memory (BILSTM)
+layers were tested. The best performing architecture was
+experimalty determined to be a BILSTM layer as shown in
+Fig. 4." But Fig 4 only shows another network schematic and not the
+ablation study of the different architectures. I would suggest
+following a similar experimentation format to the DeepDA paper in
+addition to your own study as the later is hard to reproduce and
+validate the claims.
+MD-> Christian, kannst du hier auch mal rein schauen? 
+Ablation study ist natürlich etwas aufwendiger, da wird aber immer viel Wert drauf gelegt. 
+Vielleicht hast du ja noch ein paar Zahlen wie die Performance mit z.B. anderen Architekturen war. 
+-> TO DO
+
+Uncertain Generalizability: from the SANT architecture, it is not clear
+how this could work for any ordering of the input objects of if the
+same weights would work for different sequences where the positions of
+objects are swapped between sequences singe the weights are tied to the
+output positions (one hot indices). It would be nice to see a
+comparison to a permutation equivalent structure like a Transformer or
+using the traditional bi-partite matching as done in SORT.
+MD-> Vom ersten Gefühl Prio B. Christian, hast du hier mal was ausprobiert? 
+Ich denke aber der Vergleich ist wesentlich wichtiger.
+-> TO DO
+
+
+Some parts appear to be explaining the same thing but also
+contradictory, I.e. at the start of the page 4, there is "To manage
+varying sequence lengths, we pad shorter sequences with special tokens,
+ensuring all sequences in a batch have uniform length." And the very
+next paragraph says  "We used zeros as padding tokens, added to the end
+of sequences as needed,". Is it special padding or zero padding? If
+there is a difference between "special tokens" and zero tokens this
+section could be clearer to describe the novelty.
+MD-> Hier sollten wir die Aussagen nochmal prüfen.
+CH-> special rausgenommen
+
+
+Also remember to cite the ReLU paper and other methods such as
+BatchNorm.
+MD-> Das können wir einfach machen.
+CH-> done (batchnorm war schon drin)
+
+Regarding reference works with three or more authors, the standard is
+to use the last name of the first author, however in the text there are
+several mentions of Mertz et al. [5] where Mertz is the last author.
+-> TO DO
+
+Fix the references:
+I.e. Use the correct preference for the BiLSTM and not the LSTM.
+Also the paper for DeepDA was published at the International Conference
+on Information Fusion (FUSION)
+https://ieeexplore.ieee.org/document/9011217
+MD-> Das sind beides faire und wichtige Punkte.
+CH-> done
+
+The paper requires proofreading to address typos and Deutsch words
+mixed into the English text (e.g., "Next ist a Relu layer,"
+"experimalty determined").
+MD-> Für Typos können wir das ganze Paper einmal in Word kopieren.
+CH-> done
+
+By addressing these points, the authors can significantly strengthen
+the paper's contribution and make it more competitive for publication
+however in the current state it is below the expected quality for RAL.
