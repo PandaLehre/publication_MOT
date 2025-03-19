@@ -1,0 +1,10 @@
+The reviewers who examined this submission are unanimous in saying that
+the paper is substandard and not ready for publication. In particular
+(see their detailed comments), they pointed out a general lack of
+novelty and exposed serious weaknesses in the methodology and
+experimental validation (no comparison with existing benchmarks).
+
+MD
+-> Novelty können wir nicht ändern, nur vielleicht besser verkaufen
+-> Weaknesses in methodology müssten wir schauen
+-> Validation ist denke ich der lohnenswerteste Punkt. Das wird sicher auch von anderen Journals angemerkt
