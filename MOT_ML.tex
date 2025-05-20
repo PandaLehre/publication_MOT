@@ -47,10 +47,7 @@
     short = SO,
     long = Sensor Object
 }
-\DeclareAcronym{SOs}{
-    short = SOs,
-    long = Sensor Objects
-}
+
 \DeclareAcronym{SPENT}{
     short = SPENT,
     long = Single-Prediction Network
@@ -149,7 +146,7 @@
 \maketitle
 
 \begin{abstract}
-This paper presents novel \ac{ML} methodologies for \ac{MOT}, specifically designed to meet the increasing complexity and precision demands of \ac{ADAS}. We introduce three \ac{NN} models that address key challenges in MOT: (i) the \ac{SPENT} for trajectory prediction, (ii) the \ac{SANT} for mapping individual \ac{SOs} to existing tracks, and (iii) the \ac{MANTa} for associating multiple SOs to multiple tracks. These models are seamlessly integrated into a traditional \ac{KF} framework, maintaining the system’s modularity by replacing relevant components without disrupting the overall architecture. Importantly, all three networks are designed to be run in a real-time, embedded environment. Each network contains less than 50k trainable parameters.
+This paper presents novel \ac{ML} methodologies for \ac{MOT}, specifically designed to meet the increasing complexity and precision demands of \ac{ADAS}. We introduce three \ac{NN} models that address key challenges in MOT: (i) the \ac{SPENT} for trajectory prediction, (ii) the \ac{SANT} for mapping individual \acp{SO} to existing tracks, and (iii) the \ac{MANTa} for associating multiple SOs to multiple tracks. These models are seamlessly integrated into a traditional \ac{KF} framework, maintaining the system’s modularity by replacing relevant components without disrupting the overall architecture. Importantly, all three networks are designed to be run in a real-time, embedded environment. Each network contains less than 50k trainable parameters.
 
 Our evaluation, conducted on the public KITTI tracking dataset, demonstrates significant improvements in tracking performance. SPENT reduces the Root Mean Square Error (RMSE) by 50\% compared to a standard KF, while \ac{SANT} and MANTa achieve up to 95\% accuracy in sensor object-to-track assignments. These results underscore the effectiveness of incorporating task-specific NNs into traditional tracking systems, boosting performance and robustness while preserving modularity, maintainability, and interpretability.
 
@@ -180,7 +177,7 @@ The "Association network" can be implemented using either \ac{SANT} or \ac{MANTa
 \IEEEPARstart{T}{he}
 ongoing evolution of \acf{ADAS} has brought the need for precise and reliable \acf{MOT} into the spotlight {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023, DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022, DL_ATT_CNN_soda.2020, Zhang2021ByteTrackMT,Zhang2020FairMOTOT, liu2020deepmtt}}.
 In complex and dynamic environments, as encountered in urban traffic, it is crucial to accurately capture and predict the positions of multiple objects already in the early timestamps of detection -- a key challenge in assisted and automated driving.
-In the commonly used \ac{TbD} paradigm, a tracker fuses detected \acf{SOs} to create consistent object tracks over time.
+In the commonly used \ac{TbD} paradigm, a tracker fuses detected \acfp{SO} to create consistent object tracks over time.
 A crucial step within this paradigm is the association of the incoming measured \ac{SO} with their corresponding existing object tracks to update their properties.
 If no association can be made, new object tracks must be initialized {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023,OD_kampker.2018,OD_wu.2022}}.
 Tracking frameworks form the heart of ADAS that are used in millions of vehicles around the globe.
