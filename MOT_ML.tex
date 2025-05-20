@@ -246,10 +246,10 @@ Tracking systems for ADAS run on embedded devices in real-time.
 They must provide  immediate state prediction of objects directly after their first detection {\cite{KF_Bewley.2016,DL_Wojke.2017}}, making offline tracking methods like {\cite{offline_mot.2017}} unsuitable.
 Consequently, modern multi-object tracking approaches rely on online methods, which do not have access to future sensor data. These methods estimate object-track similarity based on predicted positions or object features like appearance.
 
-\paragraph{Kalman Filter based tracker}
+\paragraph{Kalman Filter-based tracker}
 Our \ac{ML} models are integrated into a \ac{KF}-based tracking system, widely used for its robust performance and interpretability {\cite{KF_Wan.2000,KF_Ristic.2004,KF_Julier.2004,KF_framework.2013,KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023}}. Bewley et al. {\cite{KF_Bewley.2016}} introduced an efficient multi-object tracking method combining a KF with the Hungarian Algorithm. Seidenschwarz et al. {\cite{KF_simple_cues.2022}} proposed a simpler approach based on visual cues like color, shape, and motion for object tracking and frame-to-frame association, avoiding the complexity of many modern trackers.
 
-\paragraph{Recurrent Neural Network based Tracker}
+\paragraph{Recurrent Neural Network-based Tracker}
 Similar to our methodologies, RNN-based approaches for online multi-target tracking have been introduced in~{\cite{DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_RNN_data_association.2020,liu2020deepmtt}}.
 Specifically, the work by Mertz et al. {\cite{DL_RNN_data_association.2019}} focuses on data association within a TbD framework.
 Their proposed DeepDA model, a Long Short-Term Memory (LSTM)-based Deep Data Association (DeepDA) Network, is designed to learn and execute the task of associating objects across frames.
@@ -260,7 +260,7 @@ It is inferred that the euclidean distance measure served as a foundation not on
 However, this is not explicitly stated.
 In our work, we want to enable the network to follow a completely data-driven association logic without forcing a concrete distance metric.
 
-\paragraph{Attention Mechanism based Tracker}
+\paragraph{Attention  based-Tracker}
 In this paper, we analyze tracks using \ac{LSTM}-based models.
 An alternative architecture would be the attention mechanism {\cite{ML_Attention.2017}}, utilized in various studies {\cite{DL_ATT_mot_sot_based.2017,DL_ATT_CNN_mot_sot_based.2017,DL_ATT_CNN_soda.2020,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022,Carion2020EndtoEndOD}}.
 Hung et al. {\cite{DL_ATT_CNN_soda.2020}} focus on soft data association (SoDA), enabling probabilistic associations and accounting for uncertainties by aggregating information from all detections within a temporal window.
