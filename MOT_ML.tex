@@ -396,7 +396,7 @@ We calculate the cost function as the average of the cross-entropy losses for ea
 where $N$ denotes the total number of association samples (i.e., total number of timestamps), $C$ represents the number of class categories, $y_{i,j}\in [0,1]$ is the GT indicator for whether class $j$ is the correct classification for sample $i$, and $\hat{y}_{i,j}$ is the predicted probability that sample $i$ belongs to class $j$, as derived from the softmax function output.
 
 \subsection{Multi-Association Network (MANTa)}
-The development of the \ac{SANT} demonstrated that data-driven association logic can be effectively learned by a deep learning model.
+The development of \ac{SANT} demonstrated that data-driven association logic can be effectively learned by a deep learning model.
 Building upon this foundation, we developed MANTa with the objective to create a network capable of associating multiple ($m$) sensor objects with multiple ($n$) tracks in a single operational step.
 With MANTa, the following association scenarios can be addressed:
 
@@ -497,7 +497,7 @@ As first benchmark, we take a \ac{KF} framework implemented by the Daimler Truck
 Our \ac{SPENT} model reduces the RMSE by more than half to 0.029 using the identical datasets.
 For positional predictions the average deviation is 42 centimeters on the x-axis and 23 centimeters on the y-axis.
 
-For the association of sensor objects to existing tracks, we developed \ac{SANT} to replace classical methods like \ac{GNN}. By substituting the distance metric and the Hungarian assignment procedure with a learned, data-driven assignment logic, \ac{SANT} achieves an accuracy of 95\% on a testing dataset with 391 samples (representing 5\% of the total dataset with 7827 association samples). This approach not only simplifies the assignment process but also allows for adaptability in diverse scenarios, where classical methods may lack flexibility.
+For the association of sensor objects to existing tracks, we developed \ac{SANT} to replace classical methods like \ac{GNN}. By substituting the distance metric and the Hungarian assignment procedure with a learned, data-driven assignment logic, \ac{SANT} achieves an accuracy of 95\% on a testing dataset with 391 samples (representing 5\% of the total dataset with 7827 association samples), as shown in Table~\ref{tab::dataAssociationComparison}. This approach not only simplifies the assignment process but also allows for adaptability in diverse scenarios, where classical methods may lack flexibility.
 
 \begin{table}[b]
     \centering
@@ -517,7 +517,7 @@ For the association of sensor objects to existing tracks, we developed \ac{SANT}
         \hline
     \end{tabular}
     }
-    \label{tab::SpentRmseComparison}
+    \label{tab::dataAssociationComparison}
 \end{table}
 
 Expanding on \ac{SANT}, \ac{MANTa} addresses the limitations of a single object to track assignment by enabling multi-object assignments within each timestamp.
