@@ -165,6 +165,17 @@ Our evaluation, conducted on the public KITTI tracking dataset, demonstrates sig
 
 \end{abstract}
 
+
+
+\begin{figure}[!ht]
+	\centerline{\includegraphics[width=0.95\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
+	\caption{
+This schematic representation shows the integration of two \acp{NN} (highlighted in dark blue) within a TbD framework.
+The "Association network" can be implemented using either \ac{SANT} or \ac{MANTa}. It works in tandem with the prediction network \ac{SPENT}, which takes tracked objects ${T^c}_{t,1:n}$ and predicts them to the next timestamp as $X_{t,1:n}$. The predicted objects are then associated with sensor observations $Z_{t,1:m}$ by \ac{SANT} or \ac{MANTa}.
+}
+	\label{pic::MotFramework}
+\end{figure}
+
 \section{Introduction}
 \IEEEPARstart{T}{he}
 ongoing evolution of \acf{ADAS} has brought the need for precise and reliable \acf{MOT} into the spotlight {\cite{KF_Bewley.2016,KF_simple_cues.2022,KF_BoundingBD.2023, DL_RNN_mot.2016,DL_RNN_data_association.2019,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022, DL_ATT_CNN_soda.2020, Zhang2021ByteTrackMT,Zhang2020FairMOTOT, liu2020deepmtt}}.
@@ -180,14 +191,7 @@ The task is split into clearly separated subtasks such as the prediction of curr
 However, development for automated driving is highly complex~{\cite{AD_Overview.2017,AD_book.2024}}. In the automotive industry, tracking systems are typically developed through a software platform that is designed to support a range of vehicle models, each of which will have varying sensor placements, system configurations, or even entirely different sensor suites. These systems must perform reliably across a wide spectrum of driving scenarios, which can introduce performance challenges in specific situations.
 Traditional solutions often rely on heuristics and manual parameter tuning, making the software cumbersome to maintain and difficult to extend.
 Moreover, these hand-engineered methods lack automated optimization, resulting in suboptimal performance in complex driving conditions. To address these limitations, we propose a data-driven tracking framework that allows for fine-tuning for specific configurations, thereby improving both maintainability and adaptability.
-\begin{figure}[!hbp]
-	\centerline{\includegraphics[width=0.95\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
-	\caption{
-This schematic representation shows the integration of two \acp{NN} (highlighted in dark blue) within a TbD framework.
-The "Association network" can be implemented using either \ac{SANT} or \ac{MANTa}. It works in tandem with the prediction network \ac{SPENT}, which takes tracked objects ${T^c}_{t,1:n}$ and predicts them to the next timestamp as $X_{t,1:n}$. The predicted objects are then associated with sensor observations $Z_{t,1:m}$ by \ac{SANT} or \ac{MANTa}.
-}
-	\label{pic::MotFramework}
-\end{figure}
+
 
 
 \section{Contributions and overview}
