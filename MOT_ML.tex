@@ -233,7 +233,7 @@ However, it only considers current observations, ignoring temporal continuity an
 While methods like the \ac{JPDA} {\cite{DA_JPDA.1993}} evaluate the likelihood of all possible assignments, they are computationally expensive.
 
 \ac{ML}-based approaches have been proposed to address these limitations.
-The temporal information in tracks can, for example, be leveraged through the attention mechanisms as used in {\cite{DL_ATT_CNN_soda.2020, DL_ATT_CNN_mot_sot_based.2017}} or \acp{RNN} as developed in {\cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}}.
+The temporal information in tracks can, for example, be leveraged through the attention mechanisms as used in {\cite{DL_ATT_CNN_soda.2020, DL_CNN_ATT_mot.2017}} or \acp{RNN} as developed in {\cite{DL_RNN_mot.2016, DL_RNN_data_association.2019}}.
 The latter is what we are also pursuing in this work.
 Similar to the problem statement by Mertz et al. {\cite{DL_RNN_data_association.2019}}, the aim of our work is to develop a data-based approach that can learn to completely solve the combinatorial non-deterministic polynomial time (NP) hard optimization problem of data association.
 In the context of this work, we put forward the hypothesis that a \ac{GRU}-based association network can be designed and trained without forcing a concrete distance metric, as discussed in the next chapter.
@@ -259,7 +259,7 @@ In our work, we want to enable the network to follow a completely data-driven as
 
 \paragraph{Attention-based Tracker}
 In this paper, we analyze tracks using \ac{LSTM}-based models.
-An alternative architecture would be the attention mechanism {\cite{ML_Attention.2017}}, utilized in various studies {\cite{DL_ATT_mot_sot_based.2017,DL_ATT_CNN_mot_sot_based.2017,DL_ATT_CNN_soda.2020,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022,Carion2020EndtoEndOD}}.
+An alternative architecture would be the attention mechanism {\cite{ML_Attention.2017}}, utilized in various studies {\cite{DL_CNN_ATT_mot.2017,DL_ATT_CNN_soda.2020,DL_CNN_ATT_mot.2017,DL_ATT_Trackformer.2022,Carion2020EndtoEndOD}}.
 Hung et al. {\cite{DL_ATT_CNN_soda.2020}} focus on soft data association (SoDA), enabling probabilistic associations and accounting for uncertainties by aggregating information from all detections within a temporal window.
 This approach allows the model to learn long-term, interactive relationships from large datasets without complex heuristics.
 However, since tracking tasks involve real-time data processing with relatively short sequences, \acp{RNN} can efficiently handle this without the overhead of calculating attention weights for every input, making them more computationally efficient for short to medium-length sequences.
@@ -546,7 +546,6 @@ The primary advantage of \ac{MANTa} over \ac{SANT} is its ability to assign mult
 In this paper, we introduced machine learning methodologies that enhance \ac{MOT} for \ac{ADAS} at the object list level. We designed, trained and evaluated three novel \ac{NN}s: (i) SPENT for the prediction of tracked objects, (ii) SANT for the association of one new \ac{SO} to a list of tracks and (iii) MANTa for the association of multiple SOs to a list of tracked objects. All networks were developed for real-time embedded applications with none having more than 50k trainable parameters.
 Our approach leaves the general structure of a \ac{KF} framework intact, preserving modularity, interpretability and the ability to test each component separately. This work lays a foundation for future \ac{ADAS} research, highlighting the potential of data-driven software development in overcoming the limitations of classical algorithms, which in practice often need to include heuristics.
 Future research topics will include: (a) testing of the models on other datasets, to evaluate their generalization capabilities, (b) the quantification of uncertainties to improve decision making and (c) the investigation of multitasking networks to optimize the context-dependent tracking of multiple objects.
-
 
 \section*{Acknowledgments}
 We would like to express our sincere thanks to the organizations that provided financial support for this research project, namely the Daimler Truck AG and the Baden-Württemberg Cooperative State University (DHBW) Stuttgart.
