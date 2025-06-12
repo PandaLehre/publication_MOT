@@ -1,7 +1,20 @@
+
+# Data-Driven Object Tracking: Integrating Modular Neural Networks into a Kalman Framework
+
 Authors: Christian Alexander Holz, Christian Bader, Markus Enzweiler, Matthias Drüppel
 
-## Description 
+## Description
+
 Creating and managing the paper.
+
+usfull bash commands to compile the paper:
+
+```bash
+pdflatex MOT_ML.tex; bibtex MOT_ML; pdflatex MOT_ML.tex; pdflatex MOT_ML.tex
+```
+
+## Paper Preview
+
 ![PDF Preview](preview.png)
 
 <!-- ## Figures
