@@ -177,7 +177,7 @@ In the automotive industry, tracking systems are typically developed through a s
 Traditional solutions often rely on heuristics and manual parameter tuning, making the software cumbersome to maintain and difficult to extend.
 Moreover, these hand-engineered methods lack automated optimization, resulting in suboptimal performance in complex driving conditions. To address these limitations, we propose a data-driven tracking framework that allows for fine-tuning for specific configurations, thereby improving both maintainability and adaptability.
 \begin{figure}[!hbp]
-	\centerline{\includegraphics[width=0.95\linewidth]{figs/MOT_Framework_Integration_SPENT_SANT.png}}
+	\centerline{\includegraphics[width=0.95\linewidth]{MOT_Framework_Integration_SPENT_SANT.png}}
 	\caption{
 This schematic representation shows the integration of two \acp{NN} (highlighted in dark blue) within a TbD framework.
 The "Association network" can be implemented using either \ac{SANT} or \ac{MANTa}. It works in tandem with the prediction network \ac{SPENT}, which takes tracked objects ${T^c}_{t,1:n}$ and predicts them to the next timestamp as $X_{t,1:n}$. The predicted objects are then associated with sensor observations $Z_{t,1:m}$ by \ac{SANT} or \ac{MANTa}.
@@ -274,7 +274,7 @@ The track lengths varies from a minimum of 4 frames to a maximum of 643 frames (
 
 
 \begin{figure}[b!]
-	\centerline{\includegraphics[width=0.91\linewidth]{figs/padding2.png}}
+	\centerline{\includegraphics[width=0.91\linewidth]{padding2.png}}
     \caption{Analysis of sequence padding: unsorted vs. sorted data. This figure illustrates the impact of sequence padding on LSTM training based on the sorting of input data. The upper panel shows that unsorted data requires extensive padding to equalize batch sequence lengths, increasing computational overhead. In contrast, the lower panel demonstrates that sorting data by length before batching significantly reduces the necessary padding.}
 	\label{pic::Padding}
 \end{figure}
@@ -305,7 +305,7 @@ As depicted in Fig. \ref{pic::SpentArch}, the schematic illustration of the gene
 This representation highlights the strategic deployment of the \ac{LSTM} layer for storing and processing object-specific information, facilitating accurate and timely predictions of object states.
 
 \begin{figure}[bp]
-	\centerline{\includegraphics[width=0.95\linewidth]{figs/SPENT_network_arch.png}}
+	\centerline{\includegraphics[width=0.95\linewidth]{SPENT_network_arch.png}}
 	\caption{Schematic representation of the generic structure of \ac{SPENT}.}
 	\label{pic::SpentArch}
 \end{figure}
@@ -365,7 +365,7 @@ At each timestamp, a matrix is passed as input holding both, the information of 
 Architectures with \ac{RNN}, \ac{GRU}, \ac{LSTM} and \ac{BILSTM} layers were tested.
 The best performing architecture was experimalty determined to be a \ac{BILSTM} layer as shown in Fig. {\ref{pic::SantArch}}.
 \begin{figure}[t!]
-	\centerline{\includegraphics[width=0.95\linewidth]{figs/SANT_network_arch.png}}
+	\centerline{\includegraphics[width=0.95\linewidth]{SANT_network_arch.png}}
 	\caption{Schematic representation of the network structure of \ac{SANT}. Here $m=1$, so one \ac{SO} is associated to $m$ existing tracks.}
 	\label{pic::SantArch}
 \end{figure}
@@ -408,7 +408,7 @@ The ordering of the \ac{SO}s is randomized per timestamp and the resulting assoc
 The one-hot vector depicted in Fig. {\ref{pic::MantaData}} shows the GT assignment of the first sensor object to the track at position two.
 
 \begin{figure*}
-	\includegraphics[width=\linewidth]{figs/MANTa_data.png}
+	\includegraphics[width=\linewidth]{MANTa_data.png}
 	\captionof{figure}{MANTa, data structure, shows the non-noisy \acp{SO} to enable a visual assignment and increase understanding of the association procedure.
 	Seven tracks are extracted from the KITTI data set for the given timestamp of sequence 20.
 	Eight sensor objects are generated in pseudo-random order.
@@ -442,7 +442,7 @@ The schematic representation Fig. {\ref{pic::MantaArch}} shows the developed net
 This is what we call a \ac{MANTa}.
 
 \begin{figure}[h]
-	\centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_network_arch.png}}
+	\centerline{\includegraphics[width=0.95\linewidth]{MANTa_network_arch.png}}
 	\caption{Schematic representation of the generic network structure of MANTa.}
 	\label{pic::MantaArch}
 \end{figure}
@@ -506,11 +506,11 @@ For the association of sensor objects to existing tracks, we developed \ac{SANT}
         \hline
     \end{tabular}
     }
-    \label{tab::SpentRmseComparison}
+    \label{tab::SANTMANTaAccuracy}
 \end{table}
 
 Expanding on \ac{SANT}, \ac{MANTa} addresses the limitations of a single object to track assignment by enabling multi object assignments within each timestamp.
-This means \ac{MANTa} is trained to assign a list of \acp{SO} to a list of tracks in a single operational step on the same dataset as \ac{SANT} and also achieved an assignment accuracy of 95\% for the six most frequently occurring association sets, i.e., the sets with one to six tracks per timestamp. It performs much worse (14\%) for assignment scenarios with more tracks, which were less present in the training data.
+This means \ac{MANTa} is trained to assign a list of \acp{SO} to a list of tracks in a single operational step on the same dataset as \ac{SANT} and also achieved an assignment accuracy of 95\% for the six most frequently occurring association sets, i.e., the sets with one to six tracks per timestamp. It performs much worse (14\%) for assignment scenarios with more tracks, which were less present in the training data. Accuracy results are summarized in Table \ref{tab::SANTMANTaAccuracy}.
 
 In the context of the entire KITTI dataset, which includes both cars and vans objects,
 MANTa achieves an average association accuracy of 80\%.
@@ -525,7 +525,7 @@ This result points to MANTa's proficiency in handling data given the appropriate
 The primary advantage of \ac{MANTa} over \ac{SANT} is its ability to assign multiple sensor objects to multiple tracks in a single operational step.
 
 \begin{figure}[t]
-    \centerline{\includegraphics[width=0.95\linewidth]{figs/MANTa_tracks.png}}
+    \centerline{\includegraphics[width=0.95\linewidth]{MANTa_tracks.png}}
 	\caption{The diagram shows the distribution of the number of existing tracks per timestamp.
 		For the KITTI dataset, which includes both car and van objects. It reveals that timestamps containing one to six tracks constitute 81.5\% of the samples (6374 of 7827).
 		The legend shows the absolute number of samples which contain the respective number of tracks.
