@@ -15,8 +15,8 @@
 \usepackage{float}
 \usepackage{acro}
 \usepackage{capt-of}
-% \usepackage{cuted}
-% \usepackage{stfloats}
+\usepackage{cuted}
+\usepackage{stfloats}
 
 \usepackage[font=small,labelfont=bf]{caption}
 % Hier sorgt font=small dafür, dass die Beschriftungen in einer kleineren Schriftgröße erscheinen, während labelfont=bf den Label-Text fett formatiert (wie z.B. "Abbildung" oder "Tabelle").
@@ -80,10 +80,6 @@
     short = GT,
     long = Ground Truth
 }
-\DeclareAcronym{NP}{
-    short = NP,
-    long = Non-deterministic Polynomial Time
-}
 \DeclareAcronym{GNN}{
     short = GNN,
     long = Global Nearest Neighbor
@@ -128,21 +124,20 @@
 \begin{document}
 \title{Tiny Neural Networks for Multi-Object Tracking in a Modular Kalman Framework}
 
-\author{Christian Alexander Holz, Christian Bader, Markus Enzweiler, Matthias Drüppel
-	\thanks{C. Holz is with Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany}
-	\thanks{C. Bader is with Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany}
-	\thanks{M. Enzweiler is with the Institute for Intelligent Systems, University of Applied Sciences, Esslingen, Germany}
-	\thanks{M. Drüppel is with the Center for Artificial Intelligence,
-    Baden-Württemberg Cooperative State University (DHBW), Stuttgart, Germany}
-}
+\author{Christian Holz\textsuperscript{1}, Christian Bader\textsuperscript{1}, Markus Enzweiler\textsuperscript{2}, Matthias Drüppel\textsuperscript{3*}
 
-% \markboth{Journal of \LaTeX\ Class Files,~Vol.~tbd, No.~tbd, tbd~2024}%
-% {Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
+\begin{small}
+\textsuperscript{1}Daimler Truck AG, Research and Advanced Development, Stuttgart, Germany \\
+\textsuperscript{2}Institute for Intelligent Systems, University of Applied Sciences, Esslingen, Germany \\
+\textsuperscript{3}Center for Artificial Intelligence, Baden-Württemberg Cooperative State University (DHBW), Stuttgart, Germany \\
+\textsuperscript{*}Corresponding author: matthias.drueppel@dhbw-stuttgart.de
+\end{small}
+
+}
 
 \maketitle
 
 \begin{abstract}
-
 
 We present a modular, production-ready approach that integrates compact \ac{NN} into a Kalman-filter-based multi-object tracking (MOT) pipeline. We design three tiny task-specific networks to retain modularity, interpretability and real-time suitability for embedded Automotive Driver Assistance Systems:
 \begin{enumerate}[(i)]
@@ -157,9 +152,13 @@ Each module has less than 50k trainable parameters. Furthermore, all three can b
 
 % This paper presents novel Machine Learning methodologies for Multi-Object Tracking, specifically designed to meet the increasing complexity and precision demands of Advanced Driver Assistance Systems. We introduce three Neural Network models that address key challenges in Multi-Object Tracking: (i) the Single-Prediction Network (SPENT) for trajectory prediction, (ii) the Single-Association Network (SANT) for mapping individual Sensor Object (SO) to existing tracks, and (iii) the Multi-Association Network (MANTa) for associating multiple SOs to multiple tracks. These models are seamlessly integrated into a traditional Kalman Filter framework, maintaining the system’s modularity by replacing relevant components without disrupting the overall architecture. Importantly, all three networks are designed to be run in a real-time, embedded environment. Each network contains less than 50k trainable parameters.
 % Our evaluation, conducted on the public KITTI tracking dataset, demonstrates significant improvements in tracking performance. SPENT reduces the Root Mean Square Error by 50% compared to a standard Kalman Filter, while SANT and MANTa achieve up to 95% accuracy in sensor object-to-track assignments. These results underscore the effectiveness of incorporating task-specific NNs into traditional tracking systems, boosting performance and robustness while preserving modularity, maintainability, and interpretability.
-
-
 \end{abstract}
+
+% Use 'Keywords' instead of the default 'Index Terms'
+\renewcommand{\IEEEkeywordsname}{Keywords}
+\begin{IEEEkeywords}
+\normalfont Multi-Object Tracking, Recurrent Neural Networks, Kalman Filter, Real-Time Embedded Systems, Tiny Neural Networks, Data-Driven Methods
+\end{IEEEkeywords}
 
 \section{Introduction}
 \IEEEPARstart{T}{he}
@@ -545,13 +544,25 @@ Our approach leaves the general structure of a \ac{KF} framework intact, preserv
 Future research topics will include: (a) testing of the models on other datasets, to evaluate their generalization capabilities, (b) the quantification of uncertainties to improve decision making and (c) the investigation of multitasking networks to optimize the context-dependent tracking of multiple objects.
 
 \section*{Declarations}
-\paragraph*{Availability of data and materials} All used datasets are publicly available, see {\cite{Geiger2012CVPR}} for details. Model parameters are available upon request. Since they were developed within Daimler Truck AG internal research, no direct download is provided.
-\paragraph*{Competing interests} None.
-\paragraph*{Acknowledgments and funding}
-We would like to express our sincere thanks to the organizations that provided financial support for this research project, namely the Daimler Truck AG and the Baden-Württemberg Cooperative State University (DHBW) Stuttgart.
-\paragraph*{Autors' contribution} Conceptualization (CH, CB, ME, MD), Investigation (CH, CB),  Software (CH, CB), Visualization (CH), Data curation (CH, CB), Original draft preparation (CH, MD), Reviewing (CH, CB, ME, MD), Editing (CH, CB, ME, MD)
+\small{
+\noindent
+\textbf{Abbreviations:} ADAS, Advanced Driver Assistance Systems; BILSTM, Bidirectional Long Short-Term Memory; FC, Fully Connected; GNN, Global Nearest Neighbor; GRU, Gated Recurrent Unit; GT, Ground Truth; HA, Hungarian Algorithm; JPDA, Joint Probabilistic Data Association; KF, Kalman Filter; LSTM, Long Short-Term Memory; MANTa, Multi-Association Network; MSE, Mean Squared Error; ML, Machine Learning; MOT, Multi-Object Tracking; NN, Neural Network; RMSE, Root Mean Square Error; RNN, Recurrent Neural Network; SANT, Single-Association Network; SO, Sensor Object; SoDA, Soft Data Association; SPENT, Single-Prediction Network; TbD, Tracking-by-Detection.
 
-% \menz{In some references, the author names are wrongly abbreviated.}
+\noindent
+\textbf{Availability of data and materials:} All used datasets are publicly available, see {\cite{Geiger2012CVPR}} for details. Requests for model parameters can be send to the authors. Since the models were developed within Daimler Truck AG internal research, no direct download is provided.
+
+\noindent
+\textbf{Competing interests:} All authors declare that there are no competing interests.
+
+\noindent
+\textbf{Funding:} Not applicable.
+
+\noindent
+\textbf{Acknowledgments:} Not applicable.
+
+\noindent
+\textbf{Autors' contribution:} All authors contributed to the study’s conception and design. CH and CB performed the implementations. CH performed the data preparation and experiments. The first draft of the manuscript was written by CH and MD. All authors commented on and extended the first version of the manuscript. All authors read and approved the final manuscript.
+}
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv, lit.bib}
